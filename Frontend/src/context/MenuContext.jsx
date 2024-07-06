@@ -3,6 +3,7 @@ import { createContext, useReducer } from 'react';
 import { MenuReducer } from '../reducer/MenuReducer';
 const initialState = {
 	menus: [],
+	categorys:[],
 	loading: false,
 	error: null,
 };

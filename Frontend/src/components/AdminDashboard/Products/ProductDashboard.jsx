@@ -1,19 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useContext, useState, useMemo } from 'react';
-import { FaSlash, FaCheck, FaEdit } from 'react-icons/fa';
+import { FaPause, FaPlay, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Table } from '../../Table.jsx';
 import Modals from '../../Modals.jsx';
 import ProductForm from './ProductForm.jsx';
 import { ProductContext } from '../../../context/ProductContext.jsx';
-import { Button } from 'react-bootstrap';
 import { useProductActions } from '../../../hooks/useProductActions.jsx';
+import '../../../css/Custom.css';
 
 export const ProductDashboard = () => {
 	const { state } = useContext(ProductContext);
-	const { dataProducts, disableProductAction, enableProductAction } =
-		useProductActions();
+	const {
+		dataProducts,
+		disableProductAction,
+		enableProductAction,
+		deleteProductAction,
+	} = useProductActions();
 	const [openEditModal, setOpenEditModal] = useState(false);
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const [rowId, setRowId] = useState(null);
@@ -30,6 +34,7 @@ export const ProductDashboard = () => {
 	const handleCloseModal = () => {
 		setOpenEditModal(false);
 		setOpenAddModal(false);
+		dataProducts();
 	};
 
 	useEffect(() => {
@@ -74,7 +79,9 @@ export const ProductDashboard = () => {
 				enableColumnOrdering: false,
 				size: 50,
 				Cell: ({ row }) => {
-					return row.original.status ? 'Habilitado' : 'Suspendido';
+					return row.original.status === true
+						? 'Habilitado'
+						: 'Suspendido';
 				},
 			},
 		],
@@ -84,23 +91,30 @@ export const ProductDashboard = () => {
 	const actions = [
 		{
 			text: 'Inhabilitar',
-			icon: <FaSlash />,
+			icon: <FaPause />,
 			onClick: (row) => {
-				disableProductAction(row.original.id);
+				disableProductAction(row.original._id);
 			},
 		},
 		{
 			text: 'Habilitar',
-			icon: <FaCheck />,
+			icon: <FaPlay />,
 			onClick: (row) => {
-				enableProductAction(row.original.id);
+				enableProductAction(row.original._id);
 			},
 		},
 		{
 			text: 'Editar',
 			icon: <FaEdit />,
 			onClick: (row) => {
-				handleOpenEditModal(row.original.id);
+				handleOpenEditModal(row.original._id);
+			},
+		},
+		{
+			text: 'Eliminar',
+			icon: <FaTrashAlt />,
+			onClick: (row) => {
+				deleteProductAction(row.original._id);
 			},
 		},
 	];
@@ -113,14 +127,14 @@ export const ProductDashboard = () => {
 
 	return (
 		<>
-			<div className='px-5 bg-slate-700 flex flex-wrap flex-row items-center justify-between'>
+			<div className='px-5 bg-slate-700 shadowIndex flex flex-wrap flex-row items-center justify-between rounded-t-md'>
 				<h3 className=' text-white text-xl font-semibold'>Productos</h3>{' '}
-				<Button
+				<button
 					onClick={handleOpenAddModal}
-					className='mx-3 my-3 bg-slate-600 border-1 border-white rounded-md text-white p-2  hover:text-slate-600 hover:bg-white'>
-					<i className='pe-2 fa-solid fa-circle-plus hover:text-slate-600'></i>
+					className='mx-3 my-3 border-1 border-white p-1 bg-slate-600 hover:text-slate-600 text-slate-50 hover:bg-white rounded-md'>
+					<i className='pe-2 fa-solid fa-plus hover:text-slate-600'></i>
 					Agregar Productos
-				</Button>
+				</button>
 			</div>
 			<div className='table-responsive'>
 				<ThemeProvider theme={darkTheme}>

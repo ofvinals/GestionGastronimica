@@ -37,14 +37,15 @@ export const Table = ({ columns, data, actions }) => {
 					if (row.original.rol === 'superAdmin') {
 						return null;
 					}
-					if (row.original.status) {
+					if (row.original.status === true) {
 						if (action.text === 'Inhabilitar') {
 							return (
 								<button
 									key={index}
 									className='flex  items-center justify-center'
-									onClick={() => action.onClick(row)}>
-									<span className='bg-red-700 text-center text-white rounded-xl border-2 p-2 hover:opacity-50'>
+									onClick={() => action.onClick(row)}
+									data-tip="Inhabilitar">
+									<span className='bg-yellow-600 text-center text-white rounded-xl border-2 p-2 hover:opacity-50'>
 										{action.icon}
 									</span>
 								</button>
@@ -71,6 +72,18 @@ export const Table = ({ columns, data, actions }) => {
 								className='flex items-center justify-center'
 								onClick={() => action.onClick(row)}>
 								<span className='bg-blue-700  text-center text-white rounded-xl border-2 p-2 hover:opacity-50'>
+									{action.icon}
+								</span>
+							</button>
+						);
+					}
+					if (action.text === 'Eliminar') {
+						return (
+							<button
+								key={index}
+								className='flex items-center justify-center'
+								onClick={() => action.onClick(row)}>
+								<span className='bg-red-700  text-center text-white rounded-xl border-2 p-2 hover:opacity-50'>
 									{action.icon}
 								</span>
 							</button>

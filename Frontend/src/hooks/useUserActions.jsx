@@ -1,123 +1,178 @@
 import { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
-import Swal from 'sweetalert2';
-// import { getUsers, disableUser, enableUser, editUser } from '../../hooks/useUsers';
+import { showAlert, confirmAction } from '../helpers/showAlert';
+import { apiURL } from '/api/apiURL.js';
 
 export const useUserActions = () => {
 	const { dispatch } = useContext(UserContext);
 
 	const dataUsers = async () => {
-		dispatch({ type: 'DATA_USERS_REQUEST' });
+		dispatch({ type: 'DATA_USERS_PENDING' });
 		try {
-			// const users = await getUsers();
-			const users = [
-				{
-					id: 0,
-					name: 'jose',
-					subname: 'perez',
-					rol: 'admin',
-					status: false,
-				},
-				{
-					id: 1,
-					name: 'mario',
-					subname: 'gomez',
-					rol: 'server',
-					status: false,
-				},
-			];
-			dispatch({ type: 'DATA_USERS', payload: users });
+			const token = localStorage.getItem('token');
+			const users = await apiURL.get('/api/users', {
+				withCredentials: true,
+				headers: { authorization: `Bearer ${token}` },
+			});
+			dispatch({ type: 'DATA_USERS_SUCCESS', payload: users.data });
+			return users.data;
 		} catch (error) {
-         console.error('Error al buscar el usuario:', error);		}
+			dispatch({ type: 'DATA_USERS_ERROR', payload: error.message });
+			console.error('Error al buscar el usuario:', error);
+			showAlert({
+				icon: 'error',
+				title: 'Error al buscar el usuario. Intente nuevamente!',
+			});
+		}
 	};
 
-	const addUserAction =async(user)=>{
+	const addUserAction = async (user) => {
+		dispatch({ type: 'ADD_USER_PENDING' });
 		try {
-			// const addUser = await addUser(user);
-			dispatch({ type: 'ADD_USER', payload: user });
-			Swal.fire({
+			const token = localStorage.getItem('token');
+			const res = await apiURL.post('/api/users', user, {
+				withCredentials: true,
+				headers: { authorization: `Bearer ${token}` },
+			});
+			dispatch({ type: 'ADD_USER_SUCCESS', payload: res.data });
+			showAlert({
 				icon: 'success',
 				title: 'Usuario registrado correctamente',
-				showConfirmButton: false,
-				timer: 2500,
 			});
+			return res.data;
 		} catch (error) {
-			console.error('Error al registra el usuario:', error);
+			dispatch({ type: 'ADD_USER_ERROR', payload: error.message });
+			console.error('Error al registrar el usuario:', error);
+			showAlert({
+				icon: 'error',
+				title: 'Error al registrar el usuario. Intente nuevamente!',
+			});
 		}
-	}
+	};
 
 	const disableUserAction = async (id) => {
-		const result = await Swal.fire({
-			title: 'Confirmas la inhabilitacion del usuario?',
+		const isConfirmed = await confirmAction({
+			title: 'Confirmas la suspension del usuario?',
 			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#d33',
-			cancelButtonColor: '#8f8e8b',
-			confirmButtonText: 'Sí, confirmar',
-			cancelButtonText: 'Cancelar',
 		});
-		if (result.isConfirmed) {
+		if (isConfirmed) {
+			dispatch({ type: 'DISABLE_USER_PENDING' });
 			try {
-				// const updatedUser = await disableUser(id);
-
-				dispatch({ type: 'DISABLE_USER', payload: id });
-				Swal.fire({
+				const updatedValues = { status: false };
+				const token = localStorage.getItem('token');
+				const updatedUser = await apiURL.put(
+					`/api/users/${id}`,
+					updatedValues,
+					{
+						withCredentials: true,
+						headers: { authorization: `Bearer ${token}` },
+					}
+				);
+				dispatch({ type: 'DISABLE_USER_SUCCESS', payload: id });
+				showAlert({
 					icon: 'success',
-					title: 'Usuario inhabilitado correctamente',
-					showConfirmButton: false,
-					timer: 2500,
+					title: 'Usuario suspendido correctamente',
 				});
+				return updatedUser.data;
 			} catch (error) {
+				dispatch({ type: 'DISABLE_USER_ERROR', payload: error.message });
 				console.error('Error al suspender al usuario:', error);
+				showAlert({
+					icon: 'error',
+					title: 'Error al suspender el usuario. Intente nuevamente!',
+				});
 			}
 		}
 	};
 
 	const enableUserAction = async (id) => {
-		const result = await Swal.fire({
-			title: 'Confirmas la habilitacion del usuario?',
+		const isConfirmed = await confirmAction({
+			title: 'Confirmas la habilitación del usuario?',
 			icon: 'warning',
-			showCancelButton: true,
 			confirmButtonColor: '#085718',
-			cancelButtonColor: '#8f8e8b',
-			confirmButtonText: 'Sí, confirmar',
-			cancelButtonText: 'Cancelar',
 		});
-		if (result.isConfirmed) {
+		if (isConfirmed) {
+			dispatch({ type: 'ENABLE_USER_PENDING' });
 			try {
-				// const updatedUser = await enableUser(id);
-				dispatch({ type: 'ENABLE_USER', payload: id });
-				Swal.fire({
+				const updatedValues = { status: true };
+				const token = localStorage.getItem('token');
+				const updatedUser = await apiURL.put(
+					`/api/users/${id}`,
+					updatedValues,
+					{
+						withCredentials: true,
+						headers: { authorization: `Bearer ${token}` },
+					}
+				);
+				dispatch({ type: 'ENABLE_USER_SUCCESS', payload: id });
+				showAlert({
 					icon: 'success',
 					title: 'Usuario habilitado correctamente',
-					showConfirmButton: false,
-					timer: 2500,
 				});
+				return updatedUser.data;
 			} catch (error) {
+				dispatch({ type: 'ENABLE_USER_ERROR', payload: error.message });
 				console.error('Error al habilitar el usuario:', error);
+				showAlert({
+					icon: 'error',
+					title: 'Error al habilitar el usuario. Intente nuevamente!',
+				});
 			}
 		}
 	};
 
-	const editUserAction = async (user) => {
+	const editUserAction = async (id, values) => {
+		dispatch({ type: 'EDIT_USER_PENDING' });
 		try {
-			// const updatedUser = await editUser(user);
-			const updatedUser = { ...user };
-			dispatch({ type: 'EDIT_USER', payload: updatedUser });
-			Swal.fire({
+			const token = localStorage.getItem('token');
+			const updatedUser = await apiURL.put(`/api/users/${id}`, values, {
+				withCredentials: true,
+				headers: { authorization: `Bearer ${token}` },
+			});
+			dispatch({ type: 'EDIT_USER_SUCCESS', payload: updatedUser.data });
+			showAlert({
 				icon: 'success',
 				title: 'Usuario editado correctamente',
-				showConfirmButton: false,
-				timer: 1500,
 			});
+			return updatedUser.data;
 		} catch (error) {
+			dispatch({ type: 'EDIT_USER_ERROR', payload: error.message });
 			console.error('Error al editar el usuario:', error);
-			Swal.fire({
+			showAlert({
 				icon: 'error',
 				title: 'Error al editar el usuario. Intente nuevamente!',
-				showConfirmButton: false,
-				timer: 1500,
 			});
+		}
+	};
+
+	const deleteUserAction = async (id) => {
+		const isConfirmed = await confirmAction({
+			title: 'Confirmas la eliminación del usuario?',
+			icon: 'warning',
+			confirmButtonColor: '#085718',
+		});
+		if (isConfirmed) {
+			dispatch({ type: 'DELETE_USER_PENDING' });
+			try {
+				const token = localStorage.getItem('token');
+				const deletedUser = await apiURL.delete(`/api/users/${id}`, {
+					withCredentials: true,
+					headers: { authorization: `Bearer ${token}` },
+				});
+				dispatch({ type: 'DELETE_USER_SUCCESS', payload: id });
+				showAlert({
+					icon: 'success',
+					title: 'Usuario eliminado correctamente',
+				});
+				return deletedUser.data;
+			} catch (error) {
+				dispatch({ type: 'DELETE_USER_ERROR', payload: error.message });
+				console.log(error);
+				showAlert({
+					icon: 'error',
+					title: 'Error al eliminar el usuario. Intente nuevamente!',
+				});
+			}
 		}
 	};
 
@@ -127,5 +182,6 @@ export const useUserActions = () => {
 		disableUserAction,
 		enableUserAction,
 		editUserAction,
+		deleteUserAction,
 	};
 };

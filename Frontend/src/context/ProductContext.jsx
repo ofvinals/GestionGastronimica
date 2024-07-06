@@ -1,8 +1,10 @@
 /* eslint-disable react/prop-types */
 import { createContext, useReducer } from 'react';
 import { ProductReducer } from '../reducer/ProductReducer';
+
 const initialState = {
 	products: [],
+	suppliers: [],
 	loading: false,
 	error: null,
 };

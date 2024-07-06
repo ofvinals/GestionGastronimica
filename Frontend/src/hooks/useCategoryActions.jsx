@@ -1,160 +1,195 @@
-import { useReducer } from 'react';
-import Swal from 'sweetalert2';
-import { CategoryReducer } from '../reducer/CetegoryReducer';
-
-const initialState = {
-	categorys: [],
-	loading: false,
-	error: null,
-};
+import { useContext } from 'react';
+import { apiURL } from '/api/apiURL.js';
+import { MenuContext } from '../context/MenuContext';
+import { showAlert, confirmAction } from '../helpers/showAlert';
 
 export const useCategoryActions = () => {
-	const [state, dispatch] = useReducer(CategoryReducer, initialState);
+	const { dispatch } = useContext(MenuContext);
 
 	const dataCategorys = async () => {
-		dispatch({ type: 'DATA_CATEGORYS_REQUEST' });
+		dispatch({ type: 'DATA_CATEGORYS_PENDING' });
 		try {
-			// const users = await getUsers();
-			const categorys = [
-				{
-					id: 0,
-					name: 'Entradas',
-				},
-				{
-					id: 1,
-					name: 'Carnes',
-				},
-				{
-					id: 2,
-					name: 'Pastas',
-				},
-				{
-					id: 3,
-					name: 'Guarniciones',
-				},
-				{
-					id: 4,
-					name: 'Postres',
-				},
-				{
-					id: 5,
-					name: 'Vinos',
-				},
-				{
-					id: 6,
-					name: 'Cocktails',
-				},
-				{
-					id: 7,
-					name: 'Desayunos',
-				},
-				{
-					id: 8,
-					name: 'Happy Hours',
-				},
-			];
-			dispatch({ type: 'DATA_CATEGORYS', payload: categorys });
+			const token = localStorage.getItem('token');
+			const categorys = await apiURL.get('/api/categorys', {
+				withCredentials: true,
+				headers: { authorization: `Bearer ${token}` },
+			});
+			dispatch({ type: 'DATA_CATEGORYS_SUCCESS', payload: categorys.data });
+			return categorys.data;
 		} catch (error) {
+			dispatch({ type: 'DATA_USERS_ERROR', payload: error.message });
 			console.error('Error al buscar la categoria:', error);
+			showAlert({
+				icon: 'error',
+				title: 'Error al buscar la categoria. Intente nuevamente!',
+			});
 		}
 	};
 
-	const addCategoryAction = async (category) => {
+	const addCategoryAction = async (values) => {
+		dispatch({ type: 'DATA_CATEGORYS_PENDING' });
 		try {
-			// const addUser = await addUser(user);
-			dispatch({ type: 'ADD_CATEGORY', payload: category });
-			Swal.fire({
+			const token = localStorage.getItem('token');
+			const category = await apiURL.post('/api/categorys', values, {
+				withCredentials: true,
+				headers: { authorization: `Bearer ${token}` },
+			});
+			dispatch({ type: 'ADD_CATEGORY_SUCCESS', payload: category.data });
+			showAlert({
 				icon: 'success',
 				title: 'Categoria registrada correctamente',
-				showConfirmButton: false,
-				timer: 2500,
 			});
+			return category.data;
 		} catch (error) {
-			console.error('Error al registra la categoria:', error);
+			dispatch({ type: 'DATA_USERS_ERROR', payload: error.message });
+			console.error('Error al registrar la categoria:', error);
+			showAlert({
+				icon: 'error',
+				title: 'Error al registrar la categoria. Intente nuevamente!',
+			});
 		}
 	};
 
 	const disableCategoryAction = async (id) => {
-		const result = await Swal.fire({
-			title: 'Confirmas la inhabilitacion de la categoria?',
+		const isConfirmed = await confirmAction({
+			title: 'Confirmas la suspension de la categoria?',
 			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#d33',
-			cancelButtonColor: '#8f8e8b',
-			confirmButtonText: 'Sí, confirmar',
-			cancelButtonText: 'Cancelar',
 		});
-		if (result.isConfirmed) {
+		if (isConfirmed) {
+			dispatch({ type: 'DATA_CATEGORYS_PENDING' });
 			try {
-				// const updatedProduct = await disableProduct(id);
-
-				dispatch({ type: 'DISABLE_CATEGORY', payload: id });
-				Swal.fire({
+				const updatedValues = { status: false };
+				const token = localStorage.getItem('token');
+				const updatedCategory = await apiURL.put(
+					`/api/categorys/${id}`,
+					updatedValues,
+					{
+						withCredentials: true,
+						headers: { authorization: `Bearer ${token}` },
+					}
+				);
+				dispatch({ type: 'DISABLE_CATEGORY_SUCCESS', payload: id });
+				showAlert({
 					icon: 'success',
-					title: 'Categoria inhabilitada correctamente',
-					showConfirmButton: false,
-					timer: 2500,
+					title: 'Categoria suspendida correctamente',
 				});
+				return updatedCategory.data;
 			} catch (error) {
+				dispatch({ type: 'DATA_USERS_ERROR', payload: error.message });
 				console.error('Error al suspender la categoria:', error);
+				showAlert({
+					icon: 'error',
+					title: 'Error al suspender la categoria. Intente nuevamente!',
+				});
 			}
 		}
 	};
 
 	const enableCategoryAction = async (id) => {
-		const result = await Swal.fire({
-			title: 'Confirmas la habilitacion de la categoria?',
+		const isConfirmed = await confirmAction({
+			title: 'Confirmas la habilitación de la categoria?',
 			icon: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#085718',
-			cancelButtonColor: '#8f8e8b',
-			confirmButtonText: 'Sí, confirmar',
-			cancelButtonText: 'Cancelar',
 		});
-		if (result.isConfirmed) {
+		if (isConfirmed) {
+			dispatch({ type: 'DATA_CATEGORYS_PENDING' });
 			try {
-				// const updatedUser = await enableUser(id);
-				dispatch({ type: 'ENABLE_CATEGORY', payload: id });
-				Swal.fire({
+				const updatedValues = { status: true };
+				const token = localStorage.getItem('token');
+				const updatedCategory = await apiURL.put(
+					`/api/categorys/${id}`,
+					updatedValues,
+					{
+						withCredentials: true,
+						headers: { authorization: `Bearer ${token}` },
+					}
+				);
+				dispatch({ type: 'ENABLE_CATEGORY_SUCCESS', payload: id });
+				showAlert({
 					icon: 'success',
 					title: 'Categoria habilitada correctamente',
-					showConfirmButton: false,
-					timer: 2500,
 				});
+				return updatedCategory.data;
 			} catch (error) {
+				dispatch({ type: 'DATA_USERS_ERROR', payload: error.message });
 				console.error('Error al habilitar la categoria:', error);
+				showAlert({
+					icon: 'error',
+					title: 'Error al habilitar la categoria. Intente nuevamente!',
+				});
 			}
 		}
 	};
 
-	const editCategoryAction = async (category) => {
+	const editCategoryAction = async (id, values) => {
+		dispatch({ type: 'DATA_CATEGORYS_PENDING' });
 		try {
-			// const updatedUser = await editUser(user);
-			const updatedCategory = { ...category };
-			dispatch({ type: 'EDIT_CATEGORY', payload: updatedCategory });
-			Swal.fire({
+			const token = localStorage.getItem('token');
+			const updatedCategory = await apiURL.put(
+				`/api/categorys/${id}`,
+				values,
+				{
+					withCredentials: true,
+					headers: { authorization: `Bearer ${token}` },
+				}
+			);
+			dispatch({
+				type: 'EDIT_CATEGORY_SUCCESS',
+				payload: updatedCategory.data,
+			});
+			showAlert({
 				icon: 'success',
 				title: 'Categoria editada correctamente',
-				showConfirmButton: false,
-				timer: 1500,
 			});
+			return updatedCategory.data;
 		} catch (error) {
+			dispatch({ type: 'DATA_USERS_ERROR', payload: error.message });
 			console.error('Error al editar la categoria:', error);
-			Swal.fire({
+			showAlert({
 				icon: 'error',
 				title: 'Error al editar la categoria. Intente nuevamente!',
-				showConfirmButton: false,
-				timer: 1500,
 			});
 		}
 	};
 
+	const deleteCategoryAction = async (id) => {
+		const isConfirmed = await confirmAction({
+			title: 'Confirmas la eliminacion definitiva de la categoria?',
+			icon: 'warning',
+		});
+		if (isConfirmed) {
+			dispatch({ type: 'DATA_CATEGORYS_PENDING' });
+			try {
+				const token = localStorage.getItem('token');
+				const deletedCategory = await apiURL.delete(
+					`/api/categorys/${id}`,
+					{
+						withCredentials: true,
+						headers: { authorization: `Bearer ${token}` },
+					}
+				);
+				dispatch({ type: 'DELETE_CATEGORY_SUCCESS', payload: id });
+				showAlert({
+					icon: 'success',
+					title: 'Categoria eliminada correctamente',
+				});
+				return deletedCategory.data;
+			} catch (error) {
+				dispatch({ type: 'DATA_USERS_ERROR', payload: error.message });
+				console.log(error);
+				showAlert({
+					icon: 'error',
+					title: 'Error al eliminar la categoria. Intente nuevamente!',
+				});
+			}
+		}
+	};
+
 	return {
-		state,
 		dataCategorys,
 		addCategoryAction,
 		disableCategoryAction,
 		enableCategoryAction,
 		editCategoryAction,
+		deleteCategoryAction,
 	};
 };

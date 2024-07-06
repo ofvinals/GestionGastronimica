@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
 import Modal from 'react-bootstrap/Modal';
+import '../css/Custom.css';
 
 export const Modals = ({ isOpen, onClose, title, children }) => {
 	return (
-		<Modal show={isOpen} onHide={onClose}>
+		<Modal centered show={isOpen} onHide={onClose}>
 			<Modal.Header closeButton>
 				<Modal.Title className='text-background font-bold'>
 					{title}

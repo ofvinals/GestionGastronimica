@@ -2,14 +2,13 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { Form, Button } from 'react-bootstrap';
-import Loader from '../../Loader.jsx';
 import { UserContext } from '../../../context/UserContext.jsx';
 import { useUserActions } from '../../../hooks/useUserActions.jsx';
+import GenericForm from '../../../helpers/GenericForm';
+import FormField from '../../../helpers/FormField';
 
 const UserForm = ({ rowId, onClose, mode = 'edit' }) => {
-	const [loading, setLoading] = useState(false);
-	const { state } = useContext(UserContext);
+	const { state, loading } = useContext(UserContext);
 	const { editUserAction, addUserAction } = useUserActions();
 	const {
 		register,
@@ -17,21 +16,21 @@ const UserForm = ({ rowId, onClose, mode = 'edit' }) => {
 		setValue,
 		formState: { errors },
 	} = useForm();
+	const [showPassword, setShowPassword] = useState(false);
+	const toggleShowPassword = () => setShowPassword(!showPassword);
 
-	const loadUser = async () => {
-		try {
-			setLoading(true);
-			const user = state.users.find((user) => user.id === rowId);
-			if (user) {
-				setValue('name', user.name);
-				setValue('subname', user.subname);
-				setValue('tel', user.tel);
-				setValue('rol', user.rol);
-				setValue('status', user.status);
-			}
-			setLoading(false);
-		} catch (error) {
-			console.error('Error al cargar los datos del usuario', error);
+	const loadUser = () => {
+		const user = state.users.find((user) => user._id === rowId);
+		if (user) {
+			setValue('name', user.name);
+			setValue('subname', user.subname);
+			setValue('tel', user.tel);
+			setValue('email', user.email);
+			setValue('address', user.address);
+			setValue('dni', user.dni);
+			setValue('rol', user.rol);
+			setValue('status', user.status);
+			setValue('password', user.password);
 		}
 	};
 
@@ -44,137 +43,146 @@ const UserForm = ({ rowId, onClose, mode = 'edit' }) => {
 	const onSubmit = handleSubmit(async (values) => {
 		try {
 			const userData = {
-				id: rowId,
 				name: values.name,
 				subname: values.subname,
+				email: values.email,
 				tel: values.tel,
+				address: values.address,
+				dni: values.dni,
 				rol: values.rol,
 				status: values.status,
-
+				password: values.password,
 			};
-
 			if (mode === 'edit') {
-				setLoading(true);
-				await editUserAction(userData);
-				setLoading(false);
-				onClose();
+				await editUserAction(rowId, userData);
 			} else {
-				setLoading(true);
 				await addUserAction(userData);
-				setLoading(false);
-				onClose();
 			}
+			onClose();
 		} catch (error) {
 			console.error(error);
 		}
 	});
 
 	return (
-		<>
-			{loading ? (
-				<Loader />
-			) : (
-				<Form onSubmit={onSubmit}>
-					<Form.Group controlId='fecha'>
-						<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
-							Nombre
-						</Form.Label>
-						<Form.Control
-							type='text'
-							{...register('name', {
-								required: 'El nombre es requerido',
-							})}
-							readOnly={mode === 'view'}
-						/>
-						{errors.name && (
-							<span className='text-warning fs-6'>
-								{errors.name.message}
-							</span>
-						)}
-					</Form.Group>
-					<Form.Group controlId='concepto'>
-						<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
-							Apellido
-						</Form.Label>
-						<Form.Control
-							type='text'
-							{...register('subname', {
-								required: 'El apellido es requerido',
-							})}
-							readOnly={mode === 'view'}
-						/>
-						{errors.subname && (
-							<span className='text-warning fs-6'>
-								{errors.subname.message}
-							</span>
-						)}
-					</Form.Group>
-					<Form.Group controlId='tipo'>
-						<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
-							Telefono
-						</Form.Label>
-						<Form.Control
-							type='number'
-							{...register('tel', {
-								required: 'El telefono es requerido',
-							})}
-							readOnly={mode === 'view'}></Form.Control>
-						{errors.tel && (
-							<span className='text-warning fs-6'>
-								{errors.tel.message}
-							</span>
-						)}
-					</Form.Group>
-					<Form.Group controlId='monto'>
-						<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
-							Rol
-						</Form.Label>
-						<Form.Control
-							as='select'
-							{...register('rol', {
-								required: 'El rol es requerido',
-							})}
-							readOnly={mode === 'view'}>
-							<option value=''>Selecciona..</option>
-							<option value='admin'>Administrador</option>
-							<option value='server'>Mozo</option>
-							<option value='kitchen'>Cocina</option>
-							<option value='bar'>Bar</option>
-						</Form.Control>
-					</Form.Group>
-
-					<label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
-						Usuario Activo?
-						<input
-							className={`ml-2 mt-2 h-6 w-6 text-red-600 focus:ring-red-500 border-gray-300 rounded ${
-								mode === 'view' ? 'cursor-not-allowed opacity-50' : ''
-							}`}
-							type='checkbox'
-							value='status'
-							{...register('status')}
-							disabled={mode === 'view'}
-						/>
-					</label>
-
-					<Form.Group className='flex flex-wrap items-center w-full justify-around mt-3'>
-						{mode !== 'view' && (
-							<Button
-								type='submit'
-								className='bg-background shadow-3xl btnLogout text-white text-center p-2 border-2 w-[230px] my-3  border-white rounded-xl font-semibold'>
-								{mode === 'create'
-									? 'Registrar Usuario'
-									: 'Guardar Cambios'}
-							</Button>
-						)}
-						<Button
-							className='bg-white shadow-3xl btnAdmin text-primary text-center p-2 border-2 w-[150px] my-3 border-primary rounded-xl font-semibold'
-							onClick={onClose}>
-							{mode === 'view' ? 'Volver' : 'Cancelar'}
-						</Button>
-					</Form.Group>
-				</Form>
-			)}
-		</>
+		<GenericForm
+			loading={loading}
+			onSubmit={onSubmit}
+			onClose={onClose}
+			mode={mode}>
+			<FormField
+				id='name'
+				label='Nombre'
+				register={register('name', { required: 'El nombre es requerido' })}
+				errors={errors.name}
+				readOnly={mode === 'view'}
+			/>
+			<FormField
+				id='subname'
+				label='Apellido'
+				register={register('subname', {
+					required: 'El apellido es requerido',
+				})}
+				errors={errors.subname}
+				readOnly={mode === 'view'}
+			/>
+			<FormField
+				id='dni'
+				label='DNI/CUIL'
+				type='number'
+				register={register('dni', {
+					required: 'El DNI/CUIL es requerido',
+					minLength: {
+						value: 8,
+						message: 'El DNI/CUIL debe contener entre 8 y 10 dígitos.',
+					},
+					maxLength: {
+						value: 11,
+						message: 'El DNI/CUIL debe contener entre 8 y 10 dígitos.',
+					},
+				})}
+				errors={errors.dni}
+				readOnly={mode === 'view'}
+			/>
+			<FormField
+				id='email'
+				label='Email'
+				type='email'
+				register={register('email', {
+					required: 'El Email es requerido',
+				})}
+				errors={errors.email}
+				readOnly={mode === 'view'}
+			/>
+			<FormField
+				id='tel'
+				label='Teléfono'
+				type='number'
+				register={register('tel', {
+					required: 'El teléfono es requerido',
+					minLength: {
+						value: 10,
+						message: 'El celular debe contener 10 dígitos',
+					},
+					maxLength: {
+						value: 10,
+						message: 'El celular debe contener 10 dígitos',
+					},
+				})}
+				errors={errors.tel}
+				readOnly={mode === 'view'}
+			/>
+			<FormField
+				id='address'
+				label='Dirección'
+				register={register('address', {
+					required: 'La dirección es requerida',
+				})}
+				errors={errors.address}
+				readOnly={mode === 'view'}
+			/>
+			<FormField
+				id='rol'
+				label='Rol'
+				as='select'
+				register={register('rol', { required: 'El rol es requerido' })}
+				errors={errors.rol}
+				readOnly={mode === 'view'}>
+				<option value=''>Selecciona el rol o puesto...</option>
+				<option value='admin'>Administrador</option>
+				<option value='server'>Mozo</option>
+				<option value='kitchen'>Cocina</option>
+				<option value='bar'>Bar</option>
+			</FormField>
+			<div className='flex flex-row items-center w-full rounded-md focus:outline-none'>
+				<FormField
+					id='password'
+					label={mode === 'edit' ? '' : 'Contraseña'}
+					type={showPassword ? 'text' : 'password'}
+					register={register('password', {
+						required: 'La contraseña es requerida',
+						minLength: {
+							value: 7,
+							message: 'La contraseña debe contener al menos 7 dígitos',
+						},
+					})}
+					errors={errors.password}
+					readOnly={mode === 'view'}
+					hidden={mode === 'edit'}
+				/>
+				<button
+					type='button'
+					hidden={mode === 'edit'}
+					onClick={toggleShowPassword}
+					id='vercontrasena'
+					className='border-none'>
+					<i
+						className={`text-xl mt-[30px] p-2 ${
+							showPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'
+						}`}></i>
+				</button>{' '}
+			</div>
+		</GenericForm>
 	);
 };
 

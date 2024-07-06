@@ -1,21 +1,27 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 
-import { useEffect, useMemo, useState } from 'react';
-import { FaSlash, FaCheck, FaEdit } from 'react-icons/fa';
+import { useContext, useEffect, useMemo, useState } from 'react';
+import { FaPause, FaPlay, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Table } from '../../Table.jsx';
 import Modals from '../../Modals.jsx';
 import { useCategoryActions } from '../../../hooks/useCategoryActions.jsx';
 import CategoryForm from './CategoryForm.jsx';
+import { MenuContext } from '../../../context/MenuContext.jsx';
 
 export const CategoryProducts = () => {
+	const { state } = useContext(MenuContext);
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const [rowId, setRowId] = useState(null);
 	const [openEditModal, setOpenEditModal] = useState(false);
-	const { state, dataCategorys, disableCategoryAction, enableCategoryAction } =
-		useCategoryActions();
+	const {
+		dataCategorys,
+		deleteCategoryAction,
+		disableCategoryAction,
+		enableCategoryAction,
+	} = useCategoryActions();
 
 	const handleOpenAddModal = (rowId) => {
 		setOpenAddModal(true);
@@ -29,6 +35,7 @@ export const CategoryProducts = () => {
 	const handleCloseModal = () => {
 		setOpenEditModal(false);
 		setOpenAddModal(false);
+		dataCategorys();
 	};
 
 	useEffect(() => {
@@ -49,7 +56,9 @@ export const CategoryProducts = () => {
 				enableColumnOrdering: false,
 				size: 50,
 				Cell: ({ row }) => {
-					return row.original.status ? 'Habilitado' : 'Suspendido';
+					return row.original.status === true
+						? 'Habilitado'
+						: 'Suspendido';
 				},
 			},
 		],
@@ -59,23 +68,30 @@ export const CategoryProducts = () => {
 	const actions = [
 		{
 			text: 'Inhabilitar',
-			icon: <FaSlash />,
+			icon: <FaPause />,
 			onClick: (row) => {
-				disableCategoryAction(row.original.id);
+				disableCategoryAction(row.original._id);
 			},
 		},
 		{
 			text: 'Habilitar',
-			icon: <FaCheck />,
+			icon: <FaPlay />,
 			onClick: (row) => {
-				enableCategoryAction(row.original.id);
+				enableCategoryAction(row.original._id);
 			},
 		},
 		{
 			text: 'Editar',
 			icon: <FaEdit />,
 			onClick: (row) => {
-				handleOpenEditModal(row.original.id);
+				handleOpenEditModal(row.original._id);
+			},
+		},
+		{
+			text: 'Eliminar',
+			icon: <FaTrashAlt />,
+			onClick: (row) => {
+				deleteCategoryAction(row.original._id);
 			},
 		},
 	];
@@ -88,12 +104,12 @@ export const CategoryProducts = () => {
 
 	return (
 		<>
-			<div className='px-5 bg-slate-700 flex flex-wrap flex-row items-center justify-between'>
+			<div className='px-5 shadowIndex rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-between'>
 				<h3 className=' text-white text-xl font-semibold '>Categorias</h3>
 				<button
 					onClick={handleOpenAddModal}
-					className='mx-3 my-3 bg-slate-600 border-1 border-white rounded-md text-white p-2  hover:text-slate-600 hover:bg-white'>
-					<i className='pe-2 fa-solid fa-circle-plus'></i>
+					className='mx-3 my-3 border-1 border-white p-1 bg-slate-600 hover:text-slate-600 text-slate-50 hover:bg-white rounded-md'>
+					<i className='pe-2 fa-solid fa-plus'></i>
 					Agregar Categorias
 				</button>
 			</div>

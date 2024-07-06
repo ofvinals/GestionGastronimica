@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useContext, useState, useMemo } from 'react';
-import { FaUserAltSlash, FaUserCheck, FaUserEdit } from 'react-icons/fa';
+import { FaPause, FaPlay, FaUserEdit, FaTrashAlt } from 'react-icons/fa';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Table } from '../../Table.jsx';
@@ -8,10 +8,12 @@ import Modals from '../../Modals.jsx';
 import UserForm from './UserForm.jsx';
 import { UserContext } from '../../../context/UserContext.jsx';
 import { useUserActions } from '../../../hooks/useUserActions.jsx';
+import '../../../css/Custom.css';
 
 export const UserDashboard = () => {
 	const { state } = useContext(UserContext);
-	const { dataUsers, disableUserAction, enableUserAction } = useUserActions();
+	const { dataUsers, disableUserAction, enableUserAction, deleteUserAction } =
+		useUserActions();
 	const [openEditModal, setOpenEditModal] = useState(false);
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const [rowId, setRowId] = useState(null);
@@ -25,9 +27,11 @@ export const UserDashboard = () => {
 		setOpenEditModal(true);
 		setRowId(rowId);
 	};
+
 	const handleCloseModal = () => {
 		setOpenEditModal(false);
 		setOpenAddModal(false);
+		dataUsers();
 	};
 
 	useEffect(() => {
@@ -66,7 +70,9 @@ export const UserDashboard = () => {
 				enableColumnOrdering: false,
 				size: 50,
 				Cell: ({ row }) => {
-					return row.original.status ? 'Habilitado' : 'Suspendido';
+					return row.original.status === true
+						? 'Habilitado'
+						: 'Suspendido';
 				},
 			},
 		],
@@ -76,23 +82,30 @@ export const UserDashboard = () => {
 	const actions = [
 		{
 			text: 'Inhabilitar',
-			icon: <FaUserAltSlash />,
+			icon: <FaPause />,
 			onClick: (row) => {
-				disableUserAction(row.original.id);
+				disableUserAction(row.original._id);
 			},
 		},
 		{
 			text: 'Habilitar',
-			icon: <FaUserCheck />,
+			icon: <FaPlay />,
 			onClick: (row) => {
-				enableUserAction(row.original.id);
+				enableUserAction(row.original._id);
 			},
 		},
 		{
 			text: 'Editar',
 			icon: <FaUserEdit />,
 			onClick: (row) => {
-				handleOpenEditModal(row.original.id);
+				handleOpenEditModal(row.original._id);
+			},
+		},
+		{
+			text: 'Eliminar',
+			icon: <FaTrashAlt />,
+			onClick: (row) => {
+				deleteUserAction(row.original._id);
 			},
 		},
 	];
@@ -105,12 +118,12 @@ export const UserDashboard = () => {
 
 	return (
 		<>
-			<div className='px-5 bg-slate-600 flex flex-wrap flex-row items-center justify-between'>
+			<div className='px-5 bg-slate-600 shadowIndex flex flex-wrap flex-row items-center justify-between rounded-t-md'>
 				<h3 className=' text-white text-xl font-semibold '>Usuarios</h3>
 				<button
 					onClick={handleOpenAddModal}
-					className='mx-3 my-3 border-1 border-white p-1 text-white hover:bg-white rounded-md hover:text-slate-600 '>
-					<i className='pe-2 fa-solid fa-user-plus'></i>
+					className='mx-3 my-3 border-1 border-white p-1 bg-slate-700 hover:text-slate-700 text-slate-50 hover:bg-white rounded-md'>
+					<i className='pe-2 fa-solid fa-plus'></i>
 					Agregar Usuarios
 				</button>
 			</div>

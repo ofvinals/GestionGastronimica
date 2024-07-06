@@ -1,6 +1,7 @@
 import { MenuDashboard } from './MenuDashboard';
 import { useState } from 'react';
-import { CategoryProducts } from './CategoryProducts';
+import { CategoryProducts } from '../Categorys/CategoryDashboard';
+import '../../../css/Custom.css';
 
 export const Menu = () => {
 	const [activeButton, setActiveButton] = useState('menu');
@@ -20,7 +21,7 @@ export const Menu = () => {
 	return (
 		<>
 			<section>
-				<div className='px-5 pt-2 bg-slate-600 flex flex-wrap flex-row items-end justify-around'>
+				<div className='px-5 pt-3 shadowIndex rounded-t-md bg-slate-600 flex flex-wrap flex-row items-end justify-around'>
 					<button
 						onClick={() => {
 							handleMenu();
@@ -28,8 +29,8 @@ export const Menu = () => {
 						}}
 						className={`mx-3 border-none text-white p-2   ${
 							activeButton === 'menu'
-								? 'bg-slate-700 text-white rounded-t-lg'
-								: 'bg-transparent text-white '
+								? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
+								: 'bg-transparent text-white hover:font-bold'
 						}`}>
 						Carta Menu
 					</button>
@@ -41,8 +42,8 @@ export const Menu = () => {
 						}}
 						className={`mx-3  border-none text-white p-2  ${
 							activeButton === 'categorias'
-								? 'bg-slate-700 text-white rounded-t-lg'
-								: 'bg-transparent text-white '
+								? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
+								: 'bg-transparent text-white hover:font-bold'
 						}`}>
 						Categorias
 					</button>

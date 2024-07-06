@@ -1,0 +1,11 @@
+.shadowIndex{
+   box-shadow: 2px -2px 10px 0px rgba(0,0,0,0.75);
+   -webkit-box-shadow: 2px -2px 10px 0px rgba(0,0,0,0.75);
+   -moz-box-shadow: 2px -2px 10px 0px rgba(0,0,0,0.75);
+}
+#dropdown-basic-button{
+   background-color:transparent!important;
+   border: none;
+}
+.dropdown-menu.show{
+background-color: #475569;}

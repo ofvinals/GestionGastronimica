@@ -1,59 +1,46 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 /* eslint-disable react-refresh/only-export-components */
-import { useContext, useReducer, useState } from 'react';
+import { useEffect, useReducer } from 'react';
 import { AuthReducer } from '../reducer/AuthReducer';
-import { apiURL } from '/api/apiURL.js';
 import { createContext } from 'react';
-
-export const AuthContext = createContext();
-
-export const useAuth = () => useContext(AuthContext);
+import { apiURL } from '/api/apiURL.js';
+import { useNavigate } from 'react-router-dom';
 
 const initialState = {
 	user: null,
+	loading: false,
+	error: null,
 };
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
 	const [state, dispatch] = useReducer(AuthReducer, initialState);
-	const [errors, setErrors] = useState([]);
-	const [isAuthenticated, setIsAuthenticated] = useState(false);
-	const [isLoading, setIsLoading] = useState(true);
+	const navigate = useNavigate();
 
-	const login = async (values) => {
-		try {
-			setIsLoading(true);
-			const user = await apiURL.post('/api/login', values, {
-				credentials: 'include',
-			});
-			localStorage.setItem('token', user.data.accessToken);
-			setIsAuthenticated(true);
-			dispatch({ type: 'LOGIN', payload: user.data });
-			setIsLoading(false);
-			return user.data;
-		} catch (error) {
-			console.error('Login Error:', error);
-			setErrors(error.response.data);
-			setIsLoading(false);
-			throw error;
+	useEffect(() => {
+		const token = localStorage.getItem('token');
+		if (token) {
+			apiURL
+				.get('/api/verify', {
+					withCredentials: true,
+					headers: { Authorization: `Bearer ${token}` },
+				})
+				.then((response) => {
+					dispatch({ type: 'LOGIN', payload: response.data });
+				})
+				.catch((error) => {
+					console.error('Error al validar el token:', error);
+					localStorage.removeItem('token');
+					navigate('/');
+				});
+		} else {
+			navigate('/');
 		}
-	};
-
-	const logout = () => {
-		dispatch({ type: 'LOGOUT' });
-		localStorage.removeItem('token');
-		setIsAuthenticated(false);
-	};
+	}, []);
 
 	return (
-		<AuthContext.Provider
-			value={{
-				state,
-				login,
-				errors,
-				isAuthenticated,
-				isLoading,
-				logout,
-			}}>
+		<AuthContext.Provider value={{ state, dispatch }}>
 			{children}
 		</AuthContext.Provider>
 	);
