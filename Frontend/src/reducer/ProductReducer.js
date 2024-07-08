@@ -3,11 +3,6 @@
 export const ProductReducer = (state, action) => {
 	switch (action.type) {
 		case 'DATA_PRODUCTS_PENDING':
-		case 'ADD_PRODUCT_PENDING':
-		case 'DISABLE_PRODUCT_PENDING':
-		case 'ENABLE_PRODUCT_PENDING':
-		case 'EDIT_PRODUCT_PENDING':
-		case 'DELETE_PRODUCT_PENDING':
 			return { ...state, loading: true, error: null };
 		case 'DATA_PRODUCTS_SUCCESS':
 			return {
@@ -20,6 +15,7 @@ export const ProductReducer = (state, action) => {
 			return {
 				...state,
 				products: [...state.products, action.payload],
+				loading: false,
 				error: null,
 			};
 		case 'DISABLE_PRODUCT_SUCCESS':
@@ -30,6 +26,7 @@ export const ProductReducer = (state, action) => {
 						? { ...product, status: false }
 						: product
 				),
+				loading: false,
 				error: null,
 			};
 		case 'ENABLE_PRODUCT_SUCCESS':
@@ -40,6 +37,7 @@ export const ProductReducer = (state, action) => {
 						? { ...product, status: true }
 						: product
 				),
+				loading: false,
 				error: null,
 			};
 		case 'EDIT_PRODUCT_SUCCESS':
@@ -48,33 +46,24 @@ export const ProductReducer = (state, action) => {
 				products: state.products.map((product) =>
 					product._id === action.payload._id ? action.payload : product
 				),
+				loading: false,
 				error: null,
 			};
 		case 'DELETE_PRODUCT_SUCCESS':
-			console.log(action.payload);
 			return {
 				...state,
 				products: state.products.filter(
 					(product) => product._id !== action.payload
 				),
+				loading: false,
 				error: null,
 			};
 		case 'DATA_PRODUCTS_ERROR':
-		case 'ADD_PRODUCT_ERROR':
-		case 'DISABLE_PRODUCT_ERROR':
-		case 'ENABLE_PRODUCT_ERROR':
-		case 'EDIT_PRODUCT_ERROR':
-		case 'DELETE_PRODUCT_ERROR':
 			return { ...state, loading: false, error: action.payload };
 
 		case 'DATA_SUPPLIERS_PENDING':
-		case 'ADD_SUPPLIER_PENDING':
-		case 'DISABLE_SUPPLIER_PENDING':
-		case 'ENABLE_SUPPLIER_PENDING':
-		case 'EDIT_SUPPLIER_PENDING':
-		case 'DELETE_SUPPLIER_PENDING':
 			return { ...state, loading: true, error: null };
-		case 'DATA_SUPPLIERS':
+		case 'DATA_SUPPLIERS_SUCCESS':
 			return {
 				...state,
 				loading: false,
@@ -86,6 +75,7 @@ export const ProductReducer = (state, action) => {
 				...state,
 				suppliers: [...state.suppliers, action.payload],
 				error: null,
+				loading: false,
 			};
 		case 'DISABLE_SUPPLIER_SUCCESS':
 			return {
@@ -95,6 +85,7 @@ export const ProductReducer = (state, action) => {
 						? { ...supplier, status: false }
 						: supplier
 				),
+				loading: false,
 				error: null,
 			};
 		case 'ENABLE_SUPPLIER_SUCCESS':
@@ -105,6 +96,7 @@ export const ProductReducer = (state, action) => {
 						? { ...supplier, status: true }
 						: supplier
 				),
+				loading: false,
 				error: null,
 			};
 		case 'EDIT_SUPPLIER_SUCCESS':
@@ -113,6 +105,7 @@ export const ProductReducer = (state, action) => {
 				suppliers: state.suppliers.map((supplier) =>
 					supplier._id === action.payload._id ? action.payload : supplier
 				),
+				loading: false,
 				error: null,
 			};
 		case 'DELETE_SUPPLIER_SUCCESS':
@@ -121,14 +114,10 @@ export const ProductReducer = (state, action) => {
 				suppliers: state.suppliers.filter(
 					(supplier) => supplier._id !== action.payload
 				),
+				loading: false,
 				error: null,
 			};
 		case 'DATA_SUPPLIERS_ERROR':
-		case 'ADD_SUPPLIER_ERROR':
-		case 'DISABLE_SUPPLIER_ERROR':
-		case 'ENABLE_SUPPLIER_ERROR':
-		case 'EDIT_SUPPLIER_ERROR':
-		case 'DELETE_SUPPLIER_ERROR':
 			return { ...state, loading: false, error: action.payload };
 		default:
 			return state;

@@ -52,22 +52,16 @@ const updateLayout = async (req, res) => {
 
 const updateTable = async (req, res) => {
 	try {
-		const { id, index } = req.params;
-		const { isOpen, layoutId, closeTime, OpenAt } = req.body;
-		// Verificar el documento antes de la actualización
+		const { id } = req.params;
+		const { isOpen, layoutId, closeTime, openAt } = req.body;
 		const lounge = await Lounge.findById(id);
-		if (!lounge) {
-			return res.status(404).send('Documento no encontrado');
-		}
-		// Verificar si el layoutId existe en los layouts
 		const layout = lounge.layouts.id(layoutId);
 		if (!layout) {
 			return res.status(404).send('Layout no encontrado');
 		}
-
 		// Realizar la actualización
 		layout.isOpen = isOpen;
-		layout.OpenAt = OpenAt;
+		layout.openAt = openAt;
 		layout.closeTime = closeTime;
 		await lounge.save();
 		res.status(200).send('Propiedad isOpen actualizada correctamente');

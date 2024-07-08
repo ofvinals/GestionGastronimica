@@ -18,7 +18,7 @@ const CategoryForm = ({ rowId, onClose, mode = 'edit' }) => {
 	} = useForm();
 
 	const loadCategory = () => {
-		const category = state.categories.find(
+		const category = state.categorys.find(
 			(category) => category._id === rowId
 		);
 		if (category) {
@@ -63,7 +63,6 @@ const CategoryForm = ({ rowId, onClose, mode = 'edit' }) => {
 					required: 'El nombre es obligatorio',
 				})}
 				errors={errors.name}
-				placeholder='Ingresa el nombre de la categoría'
 			/>
 			<FormField
 				id='status'
@@ -71,9 +70,8 @@ const CategoryForm = ({ rowId, onClose, mode = 'edit' }) => {
 				type='checkbox'
 				register={register('status')}
 				errors={errors.status}
-				className={`ml-2 mt-2 h-9 w-9 text-red-600 focus:ring-red-500 border-gray-300 rounded ${
-					mode === 'view' ? 'cursor-not-allowed opacity-50' : ''
-				}`}
+
+				renderAs="toggle"
 			/>
 		</GenericForm>
 	);

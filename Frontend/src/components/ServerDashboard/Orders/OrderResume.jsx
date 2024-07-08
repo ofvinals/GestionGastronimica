@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { OrderContext } from '../../../context/OrderContext';
 import { useOrderActions } from '../../../hooks/useOrderActions';
 import { MenuServer } from '../MenuServer';
@@ -7,26 +7,13 @@ import { useLayoutActions } from '../../../hooks/useLayoutActions';
 
 // RECIBE PROPS DE ORDERFORM
 export const OrderResume = ({ onClose, setOpenLayout, setOrderForm }) => {
-	const { state: prevOrder } = useContext(OrderContext);
+	const { state: Order } = useContext(OrderContext);
 	const { addOrderAction, deleteOrderPrevAction } = useOrderActions();
 	const { loadAllLayoutAction } = useLayoutActions();
-	const [orders, setOrders] = useState([]);
+	
+	const [orders, setOrders] = useState(Order.prevOrder);
 	const [confirmOrder, setConfirmOrder] = useState(false);
-
-	// VERIFICA SI LOS ITEMS TIENE PENDING. SI FALSE... COLOCA FALSE EN PENDING
-	useEffect(() => {
-		if (prevOrder.prevOrder) {
-			setOrders(
-				prevOrder.prevOrder.map((order) => ({
-					...order,
-					items: order.items.map((item) => ({
-						...item,
-						pending: item.pending ?? false,
-					})),
-				}))
-			);
-		}
-	}, [prevOrder.prevOrder]);
+console.log(orders)
 
 	// MODIFICA EL ESTADO DE PENDING EN CADA ITEM
 	const handleCheckboxChange = (orderIndex, itemIndex) => {
@@ -41,7 +28,7 @@ export const OrderResume = ({ onClose, setOpenLayout, setOrderForm }) => {
 		try {
 			await addOrderAction(orders);
 			setConfirmOrder(true);
-			await deleteOrderPrevAction(prevOrder.prevOrder[0].tableId);
+			await deleteOrderPrevAction(Order.prevOrder[0].tableId);
 			setOrderForm(false);
 			loadAllLayoutAction();
 			setOpenLayout(true);

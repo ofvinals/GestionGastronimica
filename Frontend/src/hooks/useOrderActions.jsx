@@ -6,30 +6,23 @@ import { showAlert, confirmAction } from '../helpers/showAlert';
 export const useOrderActions = () => {
 	const { dispatch } = useContext(OrderContext);
 
+	// AGREGA SOLO A REDUCER LA PREVORDER 
 	const addOrderPrevAction = async (values) => {
-		console.log(values);
 		dispatch({
 			type: 'ADD_ORDERS_PREV_SUCCESS',
 			payload: values,
 		});
 	};
 
+	// BORRA LA PREVORDER DE REDUCER 
 	const deleteOrderPrevAction = (id) => {
-		console.log(id);
-		try {
-			dispatch({
-				type: 'DELETE_PREV_ORDERS_SUCCESS',
-				payload: id,
-			});
-		} catch (error) {
-			console.error('Error al eliminar la pre comanda:', error);
-			dispatch({
-				type: 'DATA_ORDERS_ERROR',
-				payload: error.message,
-			});
-		}
+		dispatch({
+			type: 'DELETE_PREV_ORDERS_SUCCESS',
+			payload: id,
+		});
 	};
 
+// DEVUELVE TODAS LAS ORDENES GUARDADAS
 	const dataOrders = async () => {
 		dispatch({
 			type: 'DATA_ORDERS_PENDING',
@@ -51,16 +44,16 @@ export const useOrderActions = () => {
 				type: 'DATA_ORDERS_ERROR',
 				payload: error.message,
 			});
-			console.error('Error al buscar la comanda:', error);
+			console.error('Error al buscar comandas:', error);
 			showAlert({
 				icon: 'error',
-				title: 'Error al buscar la comanda. Intente nuevamente!',
+				title: 'Error al buscar comandas. Intente nuevamente!',
 			});
 		}
 	};
 
+// GUARDA LA ORDEN
 	const addOrderAction = async (values) => {
-		console.log(values);
 		dispatch({
 			type: 'DATA_ORDERS_PENDING',
 		});
@@ -70,7 +63,6 @@ export const useOrderActions = () => {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
-			console.log(order.data);
 			dispatch({
 				type: 'ADD_ORDERS_SUCCESS',
 				payload: order.data,
@@ -93,8 +85,8 @@ export const useOrderActions = () => {
 		}
 	};
 
+// ACTUALIZA EL ESTADO PENDIENTE A FALSE DEL ITEM SELECCIONADO.
 	const updateOrderPending = async (itemIds) => {
-		console.log(itemIds);
 		dispatch({
 			type: 'DATA_ORDERS_PENDING',
 		});
@@ -108,7 +100,6 @@ export const useOrderActions = () => {
 					headers: { authorization: `Bearer ${token}` },
 				}
 			);
-			console.log(updatedOrder);
 			dispatch({
 				type: 'UPDATE_ORDER_PENDING_SUCCESS',
 				payload: updatedOrder.data,
@@ -191,6 +182,7 @@ export const useOrderActions = () => {
 					title: 'Item pendiente eliminado correctamente',
 				});
 				return response.data;
+				
 			} catch (error) {
 				dispatch({
 					type: 'DATA_ORDERS_ERROR',
@@ -205,7 +197,7 @@ export const useOrderActions = () => {
 		}
 	};
 
-	const orderCashAction = async ( closeTime, orderOpen, filteredOrder) => {
+	const orderCashAction = async (closeTime, orderOpen, filteredOrder) => {
 		console.log(closeTime, orderOpen, filteredOrder);
 		dispatch({
 			type: 'DATA_ORDERS_PENDING',
@@ -214,7 +206,7 @@ export const useOrderActions = () => {
 			const token = localStorage.getItem('token');
 			const closedOrders = await apiURL.put(
 				`/api/orders/update`,
-				{ closeTime, orderOpen, filteredOrder }, 
+				{ closeTime, orderOpen, filteredOrder },
 				{
 					withCredentials: true,
 					headers: { authorization: `Bearer ${token}` },
@@ -222,7 +214,7 @@ export const useOrderActions = () => {
 			);
 			dispatch({
 				type: 'CASH_ORDER_SUCCESS',
-				payload: closedOrders.data, 
+				payload: closedOrders.data,
 			});
 			showAlert({
 				icon: 'success',

@@ -10,6 +10,7 @@ import { OrderResume } from './OrderResume';
 import { useOrderActions } from '../../../hooks/useOrderActions';
 import { useLayoutActions } from '../../../hooks/useLayoutActions';
 import { OrderContext } from '../../../context/OrderContext';
+import { AuthContext } from '../../../context/AuthContext';
 
 // RECIBE DATOS DE RESTAURANTLAYOUT
 export const OrderForm = ({
@@ -26,9 +27,11 @@ export const OrderForm = ({
 	const { deleteOrderPrevAction } = useOrderActions();
 	const { updateTableIsOpenAction } = useLayoutActions();
 	const { state: prevOrder } = useContext(OrderContext);
+	const { state: serverState } = useContext(AuthContext);
 	const [selectedCategory, setSelectedCategory] = useState(null);
 	const [confirmComanda, setConfirmComanda] = useState(null);
-	
+
+	const server = serverState.user.displayName;
 	// RECIBE LA CATEGORIA SELECCIONADA EN CATEGORYSELECTION
 	const handleCategorySelect = (category) => {
 		setSelectedCategory(category);
@@ -38,7 +41,7 @@ export const OrderForm = ({
 	const handleComanda = () => {
 		setConfirmComanda(true);
 	};
-	
+
 	// CIERRA RESUMEN DE COMANDA
 	const handleCloseModal = () => {
 		setConfirmComanda(null);
@@ -118,6 +121,7 @@ export const OrderForm = ({
 						tableId={tableId}
 						salonName={salonName}
 						diners={count}
+						server={server}
 					/>
 				</div>
 			</div>

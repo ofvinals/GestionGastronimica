@@ -9,7 +9,7 @@ import { useMenuActions } from '../../../hooks/useMenuActions.jsx';
 
 const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
 	const { state, loading } = useContext(MenuContext);
-	const categories = state.categories;
+	const categorys = state.categorys;
 	const { dataMenus, editMenuAction, addMenuAction } = useMenuActions();
 	const {
 		register,
@@ -77,7 +77,7 @@ const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
 				})}
 				errors={errors.category}>
 				<option>Selecciona la categoría</option>
-				{categories.map((category, id) => (
+				{categorys.map((category, id) => (
 					<option key={id} value={category.name}>
 						{category.name}
 					</option>
@@ -105,9 +105,7 @@ const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
 				type='checkbox'
 				register={register('status')}
 				errors={errors.status}
-				className={`ml-2 mt-2 h-6 w-6 text-red-600 focus:ring-red-500 border-gray-300 rounded ${
-					mode === 'view' ? 'cursor-not-allowed opacity-50' : ''
-				}`}
+				renderAs={'toggle'}
 			/>
 		</GenericForm>
 	);

@@ -12,7 +12,7 @@ const getUsers = async (req, res) => {
 
 const createUser = async (req, res) => {
 	console.log(req.body)
-	const { name, subname, email, dni, tel, rol, status, password } = req.body;
+	const { name, subname, email, dni, tel, address, rol, status, password } = req.body;
 
 	try {
 		const passwordHash = await bcrypt.hash(password, 10);
@@ -22,6 +22,7 @@ const createUser = async (req, res) => {
 			email, 
 			dni,
 			tel,
+			address,
 			rol,
 			status,
 			password: passwordHash,

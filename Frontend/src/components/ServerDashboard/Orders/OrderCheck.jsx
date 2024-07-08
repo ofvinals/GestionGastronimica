@@ -96,14 +96,15 @@ export const OrderCheck = ({
 	};
 
 	// FUNCION PARA ELIMINAR ITEMS PENDIENTES
-	const handleDeleteItem = (orderId, itemId) => {
-		deleteItemOrder(orderId, itemId);
+	const handleDeleteItem = async (orderId, itemId) => {
+		await deleteItemOrder(orderId, itemId);
 		dataOrders();
 	};
 
 	// FILTRA ITEMS CON PENDING TRUE Y ENVIA NUEVA PREVORDER
 	const handlePending = async () => {
 		const itemIds = modifiedItems.map((item) => item._id);
+		console.log(itemIds)
 		try {
 			// ACTUALIZA PENDING DE LOS ITEMS MODIFICADOS EN REDUCER Y BACKEND
 			await updateOrderPending(itemIds);
@@ -256,13 +257,14 @@ export const OrderCheck = ({
 				<Modals
 					isOpen={true}
 					onClose={onClose}
-					title='Cobrar orden de mesa'>
+					title='Cobrar Mesa'>
 					<CashOrder
 						order={filteredOrder}
 						salonName={salonName}
 						diners={diners}
 						server={server}
 						tableNum={tableNum}
+						onClose={onClose}
 					/>
 				</Modals>
 			)}

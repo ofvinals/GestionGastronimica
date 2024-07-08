@@ -4,7 +4,15 @@ const loungeSchema = new mongoose.Schema(
 	{
 		name: { type: String, require: true },
 		layouts: [
-			{ x: Number, y: Number, id: Number, waiter: String, isOpen: Boolean, closeTime: String, OpenAt:String },
+			{
+				x: Number,
+				y: Number,
+				id: Number,
+				waiter: String,
+				isOpen: Boolean,
+				closeTime: Date,
+				openAt: Date,
+			},
 		],
 	},
 

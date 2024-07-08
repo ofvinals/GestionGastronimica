@@ -36,7 +36,7 @@ export const useUserActions = () => {
 
 	const addUserAction = async (user) => {
 		dispatch({
-			type: 'ADD_USER_PENDING',
+			type: 'DATA_USERS_PENDING',
 		});
 		try {
 			const token = localStorage.getItem('token');
@@ -72,7 +72,7 @@ export const useUserActions = () => {
 			icon: 'warning',
 		});
 		if (isConfirmed) {
-			dispatch({ type: 'DISABLE_USER_PENDING' });
+			dispatch({ type: 'DATA_USERS_PENDING' });
 			try {
 				const updatedValues = { status: false };
 				const token = localStorage.getItem('token');
@@ -115,7 +115,7 @@ export const useUserActions = () => {
 		});
 		if (isConfirmed) {
 			dispatch({
-				type: 'ENABLE_USER_PENDING',
+				type: 'DATA_USERS_PENDING',
 			});
 			try {
 				const updatedValues = { status: true };
@@ -153,7 +153,7 @@ export const useUserActions = () => {
 
 	const editUserAction = async (id, values) => {
 		dispatch({
-			type: 'EDIT_USER_PENDING',
+			type: 'DATA_USERS_PENDING',
 		});
 		try {
 			const token = localStorage.getItem('token');
@@ -191,7 +191,7 @@ export const useUserActions = () => {
 		});
 		if (isConfirmed) {
 			dispatch({
-				type: 'DELETE_USER_PENDING',
+				type: 'DATA_USERS_PENDING',
 			});
 			try {
 				const token = localStorage.getItem('token');

@@ -116,11 +116,9 @@ const SupplierForm = ({ rowId, onClose, mode = 'edit' }) => {
 				id='status'
 				label='Proveedor Activo?'
 				type='checkbox'
+				renderAs="toggle"
 				register={register('status')}
 				errors={errors.status}
-				className={`ml-2 mt-2 h-6 w-6 text-red-600 focus:ring-red-500 border-gray-300 rounded ${
-					mode === 'view' ? 'cursor-not-allowed opacity-50' : ''
-				}`}
 				readOnly={mode === 'view'}
 			/>
 		</GenericForm>

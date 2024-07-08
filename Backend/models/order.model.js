@@ -18,7 +18,8 @@ const orderSchema = new Schema(
 		diners: { type: Number },
 		server: { type: String },
 		orderOpen: { type: Boolean },
-		closeTime:{type:String},
+		openAt: { type: Date },
+		closeTime: { type: Date },
 		items: [itemSchema],
 	},
 	{ timestamps: true }

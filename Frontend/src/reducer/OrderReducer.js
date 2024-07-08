@@ -41,6 +41,7 @@ export const OrderReducer = (state, action) => {
 								tableId: action.payload.tableId,
 								orderOpen: action.payload.orderOpen,
 								items: updatedItems,
+								server:action.payload.server
 							};
 						} else {
 							return {
@@ -48,6 +49,7 @@ export const OrderReducer = (state, action) => {
 								diners: action.payload.diners,
 								tableId: action.payload.tableId,
 								orderOpen: action.payload.orderOpen,
+								server:action.payload.server,
 								items: [...order.items, action.payload.item],
 							};
 						}
@@ -63,6 +65,7 @@ export const OrderReducer = (state, action) => {
 						tableId: action.payload.tableId,
 						diners: action.payload.diners,
 						orderOpen: action.payload.orderOpen,
+						server:action.payload.server,
 						items: [action.payload.item],
 					},
 				];

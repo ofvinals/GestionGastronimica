@@ -5,19 +5,18 @@ import { useMenuActions } from '../../../hooks/useMenuActions.jsx';
 import { MenuContext } from '../../../context/MenuContext.jsx';
 import { OrderCard } from './OrderCard.jsx';
 import { useOrderActions } from '../../../hooks/useOrderActions.jsx';
-import { AuthContext } from '../../../context/AuthContext';
+import moment from 'moment-timezone';
 
 // RECIBE PROPS DE ORDERFORM
 export const OrderMenu = ({
 	selectedCategory,
 	tableNum,
 	tableId,
+	server,
 	salonName,
 	diners,
 }) => {
 	const { state: menuState } = useContext(MenuContext);
-	const { state: serverState } = useContext(AuthContext);
-
 	const { dataMenus } = useMenuActions();
 	const { addOrderPrevAction } = useOrderActions();
 	const [currentDiners, setCurrentDiners] = useState(diners);
@@ -34,12 +33,14 @@ export const OrderMenu = ({
 
 	// FUNCION PARA GUARDAR ORDEN EN REDUCER Y BACKEND CON TODOS LOS DATOS DE LA ORDEN
 	const updateOrder = (menu, quantity, text) => {
+		const openAt = moment().tz('America/Argentina/Buenos_Aires').toDate();
 		const values = {
 			salonName: salonName,
 			tableNum: tableNum,
 			tableId: tableId,
 			orderOpen: true,
-			server: serverState.user && serverState.user.displayName,
+			openAt: openAt,
+			server: server,
 			diners: currentDiners,
 			item: {
 				category: menu.category,
@@ -49,6 +50,7 @@ export const OrderMenu = ({
 				text: text,
 			},
 		};
+		console.log(values);
 		addOrderPrevAction(values);
 	};
 

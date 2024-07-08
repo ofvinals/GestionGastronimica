@@ -114,9 +114,7 @@ const ProductForm = ({ rowId, onClose, mode = 'edit' }) => {
 				type='checkbox'
 				register={register('status')}
 				errors={errors.status}
-				className={`ml-2 mt-2 h-6 w-6 text-red-600 focus:ring-red-500 border-gray-300 rounded ${
-					mode === 'view' ? 'cursor-not-allowed opacity-50' : ''
-				}`}
+				renderAs="toggle"
 				readOnly={mode === 'view'}
 			/>
 		</GenericForm>

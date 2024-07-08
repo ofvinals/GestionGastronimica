@@ -6,6 +6,7 @@ export const AuthReducer = (state, action) => {
 			return {
 				...state,
 				user: action.payload,
+				loading: false,
 			};
 		case 'LOGIN_ERROR':
 			return { ...state, loading: false, error: action.payload };
@@ -14,6 +15,7 @@ export const AuthReducer = (state, action) => {
 			return {
 				...state,
 				user: null,
+				loading: false,
 			};
 		default:
 			return state;

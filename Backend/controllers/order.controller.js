@@ -1,5 +1,4 @@
 const Order = require('../models/order.model.js');
-const moment = require('moment-timezone');
 
 const getOrders = async (req, res) => {
 	try {
@@ -11,35 +10,40 @@ const getOrders = async (req, res) => {
 };
 
 const createOrder = async (req, res) => {
-	console.log(req.body);
+	console.log(req.body)
 	try {
-		const { salonName, tableNum, tableId, diners, items, orderOpen } =
-			req.body[0];
-			const createdAt = moment().tz('America/Argentina/Buenos_Aires').toDate();
-
+		const {
+			salonName,
+			tableNum,
+			tableId,
+			openAt,
+			diners,
+			server,
+			items,
+			orderOpen,
+		} = req.body[0];
 		const newOrder = new Order({
 			salonName,
 			tableNum,
-			diners,
 			tableId,
+			openAt,
+			diners,
+			server,
 			items,
 			orderOpen,
-			createdAt,
 		});
 
 		await newOrder.save();
 
 		res.json(newOrder);
 	} catch (error) {
-		console.error('Error al guardar la order:', error);
+		console.error('Error al guardar la orden:', error);
 	}
 };
 
 const getOrder = async (req, res) => {
 	try {
 		const order = await Order.findById(req.params.id);
-		if (!order)
-			return res.status(404).json({ message: 'Order no encontrada' });
 		res.json(order);
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
@@ -74,10 +78,10 @@ const updateOrderPending = async (req, res) => {
 };
 
 const updateOrderOpen = async (req, res) => {
-	console.log(req.body)
+	console.log(req.body);
 	try {
 		const { closeTime, orderOpen, filteredOrder } = req.body;
-		console.log(closeTime)
+		console.log(closeTime);
 		// Iterar sobre cada orden en filteredOrder
 		for (const orderId of filteredOrder) {
 			const order = await Order.findById(orderId);
@@ -97,8 +101,6 @@ const updateOrderOpen = async (req, res) => {
 const deleteOrder = async (req, res) => {
 	try {
 		const deletedOrder = await Order.findByIdAndDelete(req.params.id);
-		if (!deletedOrder)
-			return res.status(404).json({ message: 'Order no encontrada' });
 		res.json(deletedOrder);
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
@@ -109,23 +111,13 @@ const deleteItem = async (req, res) => {
 	const { orderId, itemId } = req.params;
 	try {
 		const order = await Order.findById(orderId);
-		if (!order) {
-			return res.status(404).json({ message: 'Order not found' });
-		}
-
 		const initialLength = order.items.length;
 		order.items = order.items.filter(
 			(item) => item._id.toString() !== itemId
 		);
-
-		if (initialLength === order.items.length) {
-			return res.status(404).json({ message: 'Item not found in order' });
-		}
-
 		await order.save();
-		res.status(200).json({ message: 'Item deleted successfully' });
+		res.json(initialLength);
 	} catch (error) {
-		console.error('Error deleting item from order:', error);
 		res.status(500).json({ message: 'Error deleting item from order' });
 	}
 };

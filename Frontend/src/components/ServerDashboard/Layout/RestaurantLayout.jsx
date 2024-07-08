@@ -69,13 +69,19 @@ export const RestaurantLayout = ({ salonId, onReload }) => {
 		setOpenLayout(false);
 		const tableId = confirmTable._id;
 		const isOpen = true;
-		const closeTime = null
+		const closeTime = '';
 		const openAt = moment().tz('America/Argentina/Buenos_Aires').toDate();
-		console.log(openAt)
 		const salon_Id = salonId;
 		const index = currentLayout.findIndex((table) => table._id === tableId);
 		setOpenOrder(true);
-		updateTableIsOpenAction(closeTime, salon_Id, tableId, isOpen, index, openAt);
+		updateTableIsOpenAction(
+			closeTime,
+			salon_Id,
+			tableId,
+			isOpen,
+			index,
+			openAt
+		);
 	};
 
 	const handleCloseModal = () => {
@@ -99,7 +105,7 @@ export const RestaurantLayout = ({ salonId, onReload }) => {
 	if (loading) {
 		return <Loader />;
 	}
-	
+
 	return (
 		<>
 			{openLayout ? (

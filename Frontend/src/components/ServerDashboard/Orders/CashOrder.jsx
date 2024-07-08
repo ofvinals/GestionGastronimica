@@ -1,13 +1,16 @@
 /* eslint-disable react/prop-types */
+import { useLayoutActions } from '../../../hooks/useLayoutActions';
 
-export const CashOrder = ({ order }) => {
+export const CashOrder = ({ order, onClose }) => {
+	const { loadAllLayoutAction } = useLayoutActions();
 	const salonName = order[0]?.salonName;
 	const tableNum = order[0]?.tableNum;
 	const diners = order[0]?.diners;
 	const server = order[0]?.server;
 
 	const handleCash = () => {
-	
+		onClose();
+		loadAllLayoutAction();
 	};
 	const handleCreditCard = () => {};
 
