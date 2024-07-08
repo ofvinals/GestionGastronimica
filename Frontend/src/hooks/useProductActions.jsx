@@ -7,17 +7,25 @@ export const useProductActions = () => {
 	const { dispatch } = useContext(ProductContext);
 
 	const dataProducts = async () => {
-		dispatch({ type: 'DATA_PRODUCTS_PENDING' });
+		dispatch({
+			type: 'DATA_PRODUCTS_PENDING',
+		});
 		try {
 			const token = localStorage.getItem('token');
 			const products = await apiURL.get('/api/products', {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
-			dispatch({ type: 'DATA_PRODUCTS_SUCCESS', payload: products.data });
+			dispatch({
+				type: 'DATA_PRODUCTS_SUCCESS',
+				payload: products.data,
+			});
 			return products.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_PRODUCTS_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_PRODUCTS_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al buscar el producto:', error);
 			showAlert({
 				icon: 'error',
@@ -27,21 +35,29 @@ export const useProductActions = () => {
 	};
 
 	const addProductAction = async (values) => {
-		dispatch({ type: 'DATA_PRODUCTS_PENDING' });
+		dispatch({
+			type: 'DATA_PRODUCTS_PENDING',
+		});
 		try {
 			const token = localStorage.getItem('token');
 			const product = await apiURL.post('/api/products', values, {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
-			dispatch({ type: 'ADD_PRODUCT_SUCCESS', payload: product.data });
+			dispatch({
+				type: 'ADD_PRODUCT_SUCCESS',
+				payload: product.data,
+			});
 			showAlert({
 				icon: 'success',
 				title: 'Producto registrado correctamente',
 			});
 			return product.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_PRODUCTS_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_PRODUCTS_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al registra el producto:', error);
 			showAlert({
 				icon: 'error',
@@ -56,7 +72,9 @@ export const useProductActions = () => {
 			icon: 'warning',
 		});
 		if (isConfirmed) {
-			dispatch({ type: 'DATA_PRODUCTS_PENDING' });
+			dispatch({
+				type: 'DATA_PRODUCTS_PENDING',
+			});
 			try {
 				const updatedValues = { status: false };
 				const token = localStorage.getItem('token');
@@ -68,14 +86,20 @@ export const useProductActions = () => {
 						headers: { authorization: `Bearer ${token}` },
 					}
 				);
-				dispatch({ type: 'DISABLE_PRODUCT_SUCCESS', payload: id });
+				dispatch({
+					type: 'DISABLE_PRODUCT_SUCCESS',
+					payload: id,
+				});
 				showAlert({
 					icon: 'success',
 					title: 'Producto suspendido correctamente',
 				});
 				return updatedProduct.data;
 			} catch (error) {
-				dispatch({ type: 'DATA_PRODUCTS_ERROR', payload: error.message });
+				dispatch({
+					type: 'DATA_PRODUCTS_ERROR',
+					payload: error.message,
+				});
 				console.error('Error al suspender el producto:', error);
 				showAlert({
 					icon: 'error',
@@ -91,7 +115,9 @@ export const useProductActions = () => {
 			icon: 'warning',
 		});
 		if (isConfirmed) {
-			dispatch({ type: 'DATA_PRODUCTS_PENDING' });
+			dispatch({
+				type: 'DATA_PRODUCTS_PENDING',
+			});
 			try {
 				const updatedValues = { status: true };
 				const token = localStorage.getItem('token');
@@ -103,14 +129,20 @@ export const useProductActions = () => {
 						headers: { authorization: `Bearer ${token}` },
 					}
 				);
-				dispatch({ type: 'ENABLE_PRODUCT_SUCCESS', payload: id });
+				dispatch({
+					type: 'ENABLE_PRODUCT_SUCCESS',
+					payload: id,
+				});
 				showAlert({
 					icon: 'success',
 					title: 'Producto habilitado correctamente',
 				});
 				return updatedProduct.data;
 			} catch (error) {
-				dispatch({ type: 'DATA_PRODUCTS_ERROR', payload: error.message });
+				dispatch({
+					type: 'DATA_PRODUCTS_ERROR',
+					payload: error.message,
+				});
 				console.error('Error al habilitar el producto:', error);
 				showAlert({
 					icon: 'error',
@@ -121,7 +153,9 @@ export const useProductActions = () => {
 	};
 
 	const editProductAction = async (id, values) => {
-		dispatch({ type: 'DATA_PRODUCTS_PENDING' });
+		dispatch({
+			type: 'DATA_PRODUCTS_PENDING',
+		});
 		try {
 			const token = localStorage.getItem('token');
 			const updatedProduct = await apiURL.put(
@@ -142,7 +176,10 @@ export const useProductActions = () => {
 			});
 			return updatedProduct.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_PRODUCTS_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_PRODUCTS_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al editar el producto:', error);
 			showAlert({
 				icon: 'error',
@@ -157,22 +194,29 @@ export const useProductActions = () => {
 			icon: 'warning',
 		});
 		if (isConfirmed) {
-			dispatch({ type: 'DATA_PRODUCTS_PENDING' });
+			dispatch({
+				type: 'DATA_PRODUCTS_PENDING',
+			});
 			try {
 				const token = localStorage.getItem('token');
 				const deletedProduct = await apiURL.delete(`/api/products/${id}`, {
 					withCredentials: true,
 					headers: { authorization: `Bearer ${token}` },
 				});
-				console.log(deletedProduct);
-				dispatch({ type: 'DELETE_PRODUCT_SUCCESS', payload: id });
+				dispatch({
+					type: 'DELETE_PRODUCT_SUCCESS',
+					payload: id,
+				});
 				showAlert({
 					icon: 'success',
 					title: 'Producto eliminado correctamente',
 				});
 				return deletedProduct.data;
 			} catch (error) {
-				dispatch({ type: 'DATA_PRODUCTS_ERROR', payload: error.message });
+				dispatch({
+					type: 'DATA_PRODUCTS_ERROR',
+					payload: error.message,
+				});
 				console.log(error);
 				showAlert({
 					icon: 'error',

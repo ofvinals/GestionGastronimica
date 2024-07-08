@@ -6,27 +6,6 @@ import { showAlert, confirmAction } from '../helpers/showAlert';
 export const useOrderActions = () => {
 	const { dispatch } = useContext(OrderContext);
 
-	const dataOrders = async () => {
-		dispatch({ type: 'DATA_ORDERS_PENDING' });
-		try {
-			const token = localStorage.getItem('token');
-			const orders = await apiURL.get('/api/orders', {
-				withCredentials: true,
-				headers: { authorization: `Bearer ${token}` },
-			});
-			console.log(orders);
-			dispatch({ type: 'DATA_ORDERS_SUCCESS', payload: orders.data });
-			return orders.data;
-		} catch (error) {
-			dispatch({ type: 'DATA_ORDERS_ERROR', payload: error.message });
-			console.error('Error al buscar la comanda:', error);
-			showAlert({
-				icon: 'error',
-				title: 'Error al buscar la comanda. Intente nuevamente!',
-			});
-		}
-	};
-
 	const addOrderPrevAction = async (values) => {
 		console.log(values);
 		dispatch({
@@ -35,55 +14,109 @@ export const useOrderActions = () => {
 		});
 	};
 
-	const addOrderAction = async (values) => {
-		dispatch({ type: 'DATA_ORDERS_PENDING' });
+	const deleteOrderPrevAction = (id) => {
+		console.log(id);
 		try {
-			console.log(values);
+			dispatch({
+				type: 'DELETE_PREV_ORDERS_SUCCESS',
+				payload: id,
+			});
+		} catch (error) {
+			console.error('Error al eliminar la pre comanda:', error);
+			dispatch({
+				type: 'DATA_ORDERS_ERROR',
+				payload: error.message,
+			});
+		}
+	};
+
+	const dataOrders = async () => {
+		dispatch({
+			type: 'DATA_ORDERS_PENDING',
+		});
+		try {
+			const token = localStorage.getItem('token');
+			const orders = await apiURL.get('/api/orders', {
+				withCredentials: true,
+				headers: { authorization: `Bearer ${token}` },
+			});
+			console.log(orders);
+			dispatch({
+				type: 'DATA_ORDERS_SUCCESS',
+				payload: orders.data,
+			});
+			return orders.data;
+		} catch (error) {
+			dispatch({
+				type: 'DATA_ORDERS_ERROR',
+				payload: error.message,
+			});
+			console.error('Error al buscar la comanda:', error);
+			showAlert({
+				icon: 'error',
+				title: 'Error al buscar la comanda. Intente nuevamente!',
+			});
+		}
+	};
+
+	const addOrderAction = async (values) => {
+		console.log(values);
+		dispatch({
+			type: 'DATA_ORDERS_PENDING',
+		});
+		try {
 			const token = localStorage.getItem('token');
 			const order = await apiURL.post('/api/orders', values, {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
 			console.log(order.data);
-			dispatch({ type: 'ADD_ORDERS_SUCCESS', payload: order.data });
+			dispatch({
+				type: 'ADD_ORDERS_SUCCESS',
+				payload: order.data,
+			});
 			showAlert({
 				icon: 'success',
 				title: 'Comanda enviada correctamente',
 			});
 			return order.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_ORDERS_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_ORDERS_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al registrar la comanda:', error);
 			showAlert({
 				icon: 'error',
-				title: 'Error al enviar la comanda. Intente nuevamente!',
+				title: 'Error al registrar la comanda. Intente nuevamente!',
 			});
 		}
 	};
 
 	const updateOrderPending = async (itemIds) => {
-		dispatch({ type: 'DATA_ORDERS_PENDING' });
-
+		console.log(itemIds);
+		dispatch({
+			type: 'DATA_ORDERS_PENDING',
+		});
 		try {
 			const token = localStorage.getItem('token');
 			const updatedOrder = await apiURL.put(
-				`/api/orders/`, 
+				`/api/orders/`,
 				{ itemIds },
 				{
 					withCredentials: true,
 					headers: { authorization: `Bearer ${token}` },
 				}
 			);
+			console.log(updatedOrder);
 			dispatch({
 				type: 'UPDATE_ORDER_PENDING_SUCCESS',
-				payload: updatedOrder.data, 
+				payload: updatedOrder.data,
 			});
-
 			showAlert({
 				icon: 'success',
 				title: 'Items pendientes enviados correctamente',
 			});
-
 			return updatedOrder.data;
 		} catch (error) {
 			dispatch({
@@ -99,20 +132,24 @@ export const useOrderActions = () => {
 	};
 
 	const editOrderAction = async (id, values) => {
-		dispatch({ type: 'DATA_ORDERS_PENDING' });
+		console.log(id, values);
+		dispatch({
+			type: 'DATA_ORDERS_PENDING',
+		});
 		try {
 			const token = localStorage.getItem('token');
 			const updatedOrder = await apiURL.put(`/api/orders/${id}`, values, {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
+			console.log(updatedOrder);
 			dispatch({
 				type: 'EDIT_ORDERS_SUCCESS',
 				payload: updatedOrder.data,
 			});
 			showAlert({
 				icon: 'success',
-				title: 'Comanda editado correctamente',
+				title: 'Comanda editada correctamente',
 			});
 			return updatedOrder.data;
 		} catch (error) {
@@ -125,49 +162,83 @@ export const useOrderActions = () => {
 		}
 	};
 
-	const orderCashAction = async (id) => {
-		// const isConfirmed = await confirmAction({
-		// 	title: 'Confirmas el cierre de la mesa?',
-		// 	icon: 'warning',
-		// });
-		// if (isConfirmed) {
-			dispatch({ type: 'DATA_ORDERS_PENDING' });
+	const deleteItemOrder = async (orderId, itemId) => {
+		const isConfirmed = await confirmAction({
+			title: 'Confirmas la eliminación del item pendiente?',
+			icon: 'warning',
+		});
+		if (isConfirmed) {
+			dispatch({
+				type: 'DATA_ORDERS_PENDING',
+			});
 			try {
-				const updatedValues = { status: false };
+				console.log(orderId, itemId);
 				const token = localStorage.getItem('token');
-				const orderCash = await apiURL.put(
-					`/api/orders/${id}`,
-					updatedValues,
+				const response = await apiURL.delete(
+					`/api/orders/${orderId}/items/${itemId}`,
 					{
 						withCredentials: true,
 						headers: { authorization: `Bearer ${token}` },
 					}
 				);
-				dispatch({ type: 'CASH_ORDER_SUCCESS', payload: id });
+				console.log(response.data);
+				dispatch({
+					type: 'DELETE_ITEM_SUCCESS',
+					payload: response.data,
+				});
 				showAlert({
 					icon: 'success',
-					title: 'Mesa cerrada correctamente. A continuacion ingrese el metodo de pago',
+					title: 'Item pendiente eliminado correctamente',
 				});
-				return orderCash.data;
+				return response.data;
 			} catch (error) {
-				dispatch({ type: 'DATA_ORDERS_ERROR', payload: error.message });
-				console.error('Error al cerrar la mesa:', error);
+				dispatch({
+					type: 'DATA_ORDERS_ERROR',
+					payload: error.message,
+				});
+				console.error('Error al eliminar el item pendiente:', error);
 				showAlert({
 					icon: 'error',
-					title: 'Error al cerrar la mesa. Intente nuevamente!',
+					title: 'Error al eliminar el item pendiente. Intente nuevamente!',
 				});
 			}
-		
-		return;
+		}
 	};
 
-	const deleteOrderPrevAction = async (id) => {
-		console.log(id);
+	const orderCashAction = async ( closeTime, orderOpen, filteredOrder) => {
+		console.log(closeTime, orderOpen, filteredOrder);
+		dispatch({
+			type: 'DATA_ORDERS_PENDING',
+		});
 		try {
-			dispatch({ type: 'DELETE_PREV_ORDERS_SUCCESS', payload: id });
+			const token = localStorage.getItem('token');
+			const closedOrders = await apiURL.put(
+				`/api/orders/update`,
+				{ closeTime, orderOpen, filteredOrder }, 
+				{
+					withCredentials: true,
+					headers: { authorization: `Bearer ${token}` },
+				}
+			);
+			dispatch({
+				type: 'CASH_ORDER_SUCCESS',
+				payload: closedOrders.data, 
+			});
+			showAlert({
+				icon: 'success',
+				title: 'Mesa cerrada correctamente. A continuación ingrese el método de pago',
+			});
+			return closedOrders.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_ORDERS_ERROR', payload: error.message });
-			console.log(error);
+			dispatch({
+				type: 'DATA_ORDERS_ERROR',
+				payload: error.message,
+			});
+			console.error('Error al cerrar la mesa:', error);
+			showAlert({
+				icon: 'error',
+				title: 'Error al cerrar la mesa. Intente nuevamente!',
+			});
 		}
 	};
 
@@ -177,6 +248,7 @@ export const useOrderActions = () => {
 		addOrderAction,
 		updateOrderPending,
 		editOrderAction,
+		deleteItemOrder,
 		orderCashAction,
 		deleteOrderPrevAction,
 	};

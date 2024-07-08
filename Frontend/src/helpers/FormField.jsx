@@ -12,7 +12,7 @@ const FormField = ({
 	extraProps,
 	...rest
 }) => {
-	const { togglePasswordVisibility, showPassword } = extraProps || {}; // Extrae togglePasswordVisibility y showPassword de extraProps si están definidos
+	const { togglePasswordVisibility, showPassword } = extraProps || {}; 
 
 	return (
 		<Form.Group controlId={id}>
@@ -32,8 +32,9 @@ const FormField = ({
 						{errors.message}
 					</Form.Text>
 				)}
+				{/* Renderiza el botón de mostrar/ocultar contraseña si el tipo es 'password'  */}
 				{type === 'password' &&
-					togglePasswordVisibility && ( // Renderiza el botón de mostrar/ocultar contraseña si el tipo es 'password' y togglePasswordVisibility está definido
+					togglePasswordVisibility && ( 
 						<button
 							type='button'
 							onClick={togglePasswordVisibility}

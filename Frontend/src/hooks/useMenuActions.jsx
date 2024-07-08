@@ -7,17 +7,25 @@ export const useMenuActions = () => {
 	const { dispatch } = useContext(MenuContext);
 
 	const dataMenus = async () => {
-		dispatch({ type: 'DATA_MENUS_PENDING' });
+		dispatch({
+			type: 'DATA_MENUS_PENDING',
+		});
 		try {
 			const token = localStorage.getItem('token');
 			const menus = await apiURL.get('/api/menus', {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
-			dispatch({ type: 'DATA_MENUS_SUCCESS', payload: menus.data });
+			dispatch({
+				type: 'DATA_MENUS_SUCCESS',
+				payload: menus.data,
+			});
 			return menus.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_MENUS_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_MENUS_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al buscar el menu:', error);
 			showAlert({
 				icon: 'error',
@@ -27,21 +35,29 @@ export const useMenuActions = () => {
 	};
 
 	const addMenuAction = async (values) => {
-		dispatch({ type: 'DATA_MENUS_PENDING' });
+		dispatch({
+			type: 'DATA_MENUS_PENDING',
+		});
 		try {
 			const token = localStorage.getItem('token');
 			const menu = await apiURL.post('/api/menus', values, {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
-			dispatch({ type: 'ADD_MENU_SUCCESS', payload: menu.data });
+			dispatch({
+				type: 'ADD_MENU_SUCCESS',
+				payload: menu.data,
+			});
 			showAlert({
 				icon: 'success',
 				title: 'Menu registrado correctamente',
 			});
 			return menu.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_MENUS_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_MENUS_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al registra el menu:', error);
 			showAlert({
 				icon: 'error',
@@ -56,7 +72,9 @@ export const useMenuActions = () => {
 			icon: 'warning',
 		});
 		if (isConfirmed) {
-			dispatch({ type: 'DATA_MENUS_PENDING' });
+			dispatch({
+				type: 'DATA_MENUS_PENDING',
+			});
 			try {
 				const updatedValues = { status: false };
 				const token = localStorage.getItem('token');
@@ -68,14 +86,20 @@ export const useMenuActions = () => {
 						headers: { authorization: `Bearer ${token}` },
 					}
 				);
-				dispatch({ type: 'DISABLE_MENU_SUCCESS', payload: id });
+				dispatch({
+					type: 'DISABLE_MENU_SUCCESS',
+					payload: id,
+				});
 				showAlert({
 					icon: 'success',
 					title: 'Menu suspendido correctamente',
 				});
 				return updatedMenu.data;
 			} catch (error) {
-				dispatch({ type: 'DATA_MENUS_ERROR', payload: error.message });
+				dispatch({
+					type: 'DATA_MENUS_ERROR',
+					payload: error.message,
+				});
 				console.error('Error al suspender el menu:', error);
 				showAlert({
 					icon: 'error',
@@ -91,7 +115,9 @@ export const useMenuActions = () => {
 			icon: 'warning',
 		});
 		if (isConfirmed) {
-			dispatch({ type: 'DATA_MENUS_PENDING' });
+			dispatch({
+				type: 'DATA_MENUS_PENDING',
+			});
 			try {
 				const updatedValues = { status: true };
 				const token = localStorage.getItem('token');
@@ -103,14 +129,20 @@ export const useMenuActions = () => {
 						headers: { authorization: `Bearer ${token}` },
 					}
 				);
-				dispatch({ type: 'ENABLE_MENU_SUCCESS', payload: id });
+				dispatch({
+					type: 'ENABLE_MENU_SUCCESS',
+					payload: id,
+				});
 				showAlert({
 					icon: 'success',
 					title: 'Menu habilitado correctamente',
 				});
 				return updatedMenu.data;
 			} catch (error) {
-				dispatch({ type: 'DATA_MENUS_ERROR', payload: error.message });
+				dispatch({
+					type: 'DATA_MENUS_ERROR',
+					payload: error.message,
+				});
 				console.error('Error al habilitar el menu:', error);
 				showAlert({
 					icon: 'error',
@@ -121,21 +153,29 @@ export const useMenuActions = () => {
 	};
 
 	const editMenuAction = async (id, values) => {
-		dispatch({ type: 'DATA_MENUS_PENDING' });
+		dispatch({
+			type: 'DATA_MENUS_PENDING',
+		});
 		try {
 			const token = localStorage.getItem('token');
 			const updatedMenu = await apiURL.put(`/api/menus/${id}`, values, {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
-			dispatch({ type: 'EDIT_MENU_SUCCESS', payload: updatedMenu.data });
+			dispatch({
+				type: 'EDIT_MENU_SUCCESS',
+				payload: updatedMenu.data,
+			});
 			showAlert({
 				icon: 'success',
 				title: 'Menu editado correctamente',
 			});
 			return updatedMenu.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_MENUS_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_MENUS_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al editar el menu:', error);
 			showAlert({
 				icon: 'error',
@@ -143,20 +183,26 @@ export const useMenuActions = () => {
 			});
 		}
 	};
+	
 	const deleteMenuAction = async (id) => {
 		const isConfirmed = await confirmAction({
 			title: 'Confirmas la eliminacion definitiva del menu?',
 			icon: 'warning',
 		});
 		if (isConfirmed) {
-			dispatch({ type: 'DATA_MENUS_PENDING' });
+			dispatch({
+				type: 'DATA_MENUS_PENDING',
+			});
 			try {
 				const token = localStorage.getItem('token');
 				const deletedMenu = await apiURL.delete(`/api/menus/${id}`, {
 					withCredentials: true,
 					headers: { authorization: `Bearer ${token}` },
 				});
-				dispatch({ type: 'DELETE_MENU_SUCCESS', payload: id });
+				dispatch({
+					type: 'DELETE_MENU_SUCCESS',
+					payload: id,
+				});
 				showAlert({
 					icon: 'success',
 					title: 'Menu eliminado correctamente',

@@ -1,4 +1,3 @@
-// src/components/Alert.js
 import Swal from 'sweetalert2';
 
 export const showAlert = (options) => {

@@ -9,13 +9,18 @@ export const useAuthActions = () => {
 	const navigate = useNavigate();
 
 	const login = async (values) => {
-		dispatch({ type: 'LOGIN_PENDING' });
+		dispatch({
+			type: 'LOGIN_PENDING',
+		});
 		try {
 			const user = await apiURL.post('/api/login', values, {
 				credentials: 'include',
 			});
 			localStorage.setItem('token', user.data.accessToken);
-			dispatch({ type: 'LOGIN_SUCCESS', payload: user.data });
+			dispatch({
+				type: 'LOGIN_SUCCESS',
+				payload: user.data,
+			});
 			showAlert({
 				icon: 'success',
 				title: 'Inicio de sesión exitoso!',
@@ -23,7 +28,10 @@ export const useAuthActions = () => {
 			return user.data;
 		} catch (error) {
 			console.error('Error al iniciar sesion:', error);
-			dispatch({ type: 'LOGIN_ERROR', payload: error.message });
+			dispatch({
+				type: 'LOGIN_ERROR',
+				payload: error.message,
+			});
 			showAlert({
 				icon: 'error',
 				title: 'El usuario y/o contraseña no son correctos. Intente nuevamente!',
@@ -32,7 +40,9 @@ export const useAuthActions = () => {
 	};
 
 	const logout = () => {
-		dispatch({ type: 'LOGOUT' });
+		dispatch({
+			type: 'LOGOUT',
+		});
 		localStorage.removeItem('token');
 		navigate('/home');
 		showAlert({

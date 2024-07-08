@@ -7,17 +7,25 @@ export const useCategoryActions = () => {
 	const { dispatch } = useContext(MenuContext);
 
 	const dataCategorys = async () => {
-		dispatch({ type: 'DATA_CATEGORYS_PENDING' });
+		dispatch({
+			type: 'DATA_CATEGORYS_PENDING',
+		});
 		try {
 			const token = localStorage.getItem('token');
 			const categorys = await apiURL.get('/api/categorys', {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
-			dispatch({ type: 'DATA_CATEGORYS_SUCCESS', payload: categorys.data });
+			dispatch({
+				type: 'DATA_CATEGORYS_SUCCESS',
+				payload: categorys.data,
+			});
 			return categorys.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_USERS_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_USERS_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al buscar la categoria:', error);
 			showAlert({
 				icon: 'error',
@@ -27,21 +35,29 @@ export const useCategoryActions = () => {
 	};
 
 	const addCategoryAction = async (values) => {
-		dispatch({ type: 'DATA_CATEGORYS_PENDING' });
+		dispatch({
+			type: 'DATA_CATEGORYS_PENDING',
+		});
 		try {
 			const token = localStorage.getItem('token');
 			const category = await apiURL.post('/api/categorys', values, {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
-			dispatch({ type: 'ADD_CATEGORY_SUCCESS', payload: category.data });
+			dispatch({
+				type: 'ADD_CATEGORY_SUCCESS',
+				payload: category.data,
+			});
 			showAlert({
 				icon: 'success',
 				title: 'Categoria registrada correctamente',
 			});
 			return category.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_USERS_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_USERS_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al registrar la categoria:', error);
 			showAlert({
 				icon: 'error',
@@ -56,7 +72,9 @@ export const useCategoryActions = () => {
 			icon: 'warning',
 		});
 		if (isConfirmed) {
-			dispatch({ type: 'DATA_CATEGORYS_PENDING' });
+			dispatch({
+				type: 'DATA_CATEGORYS_PENDING',
+			});
 			try {
 				const updatedValues = { status: false };
 				const token = localStorage.getItem('token');
@@ -68,14 +86,20 @@ export const useCategoryActions = () => {
 						headers: { authorization: `Bearer ${token}` },
 					}
 				);
-				dispatch({ type: 'DISABLE_CATEGORY_SUCCESS', payload: id });
+				dispatch({
+					type: 'DISABLE_CATEGORY_SUCCESS',
+					payload: id,
+				});
 				showAlert({
 					icon: 'success',
 					title: 'Categoria suspendida correctamente',
 				});
 				return updatedCategory.data;
 			} catch (error) {
-				dispatch({ type: 'DATA_USERS_ERROR', payload: error.message });
+				dispatch({
+					type: 'DATA_USERS_ERROR',
+					payload: error.message,
+				});
 				console.error('Error al suspender la categoria:', error);
 				showAlert({
 					icon: 'error',
@@ -91,7 +115,9 @@ export const useCategoryActions = () => {
 			icon: 'warning',
 		});
 		if (isConfirmed) {
-			dispatch({ type: 'DATA_CATEGORYS_PENDING' });
+			dispatch({
+				type: 'DATA_CATEGORYS_PENDING',
+			});
 			try {
 				const updatedValues = { status: true };
 				const token = localStorage.getItem('token');
@@ -103,14 +129,20 @@ export const useCategoryActions = () => {
 						headers: { authorization: `Bearer ${token}` },
 					}
 				);
-				dispatch({ type: 'ENABLE_CATEGORY_SUCCESS', payload: id });
+				dispatch({
+					type: 'ENABLE_CATEGORY_SUCCESS',
+					payload: id,
+				});
 				showAlert({
 					icon: 'success',
 					title: 'Categoria habilitada correctamente',
 				});
 				return updatedCategory.data;
 			} catch (error) {
-				dispatch({ type: 'DATA_USERS_ERROR', payload: error.message });
+				dispatch({
+					type: 'DATA_USERS_ERROR',
+					payload: error.message,
+				});
 				console.error('Error al habilitar la categoria:', error);
 				showAlert({
 					icon: 'error',
@@ -121,7 +153,9 @@ export const useCategoryActions = () => {
 	};
 
 	const editCategoryAction = async (id, values) => {
-		dispatch({ type: 'DATA_CATEGORYS_PENDING' });
+		dispatch({
+			type: 'DATA_CATEGORYS_PENDING',
+		});
 		try {
 			const token = localStorage.getItem('token');
 			const updatedCategory = await apiURL.put(
@@ -142,7 +176,10 @@ export const useCategoryActions = () => {
 			});
 			return updatedCategory.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_USERS_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_USERS_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al editar la categoria:', error);
 			showAlert({
 				icon: 'error',
@@ -157,7 +194,9 @@ export const useCategoryActions = () => {
 			icon: 'warning',
 		});
 		if (isConfirmed) {
-			dispatch({ type: 'DATA_CATEGORYS_PENDING' });
+			dispatch({
+				type: 'DATA_CATEGORYS_PENDING',
+			});
 			try {
 				const token = localStorage.getItem('token');
 				const deletedCategory = await apiURL.delete(
@@ -167,14 +206,20 @@ export const useCategoryActions = () => {
 						headers: { authorization: `Bearer ${token}` },
 					}
 				);
-				dispatch({ type: 'DELETE_CATEGORY_SUCCESS', payload: id });
+				dispatch({
+					type: 'DELETE_CATEGORY_SUCCESS',
+					payload: id,
+				});
 				showAlert({
 					icon: 'success',
 					title: 'Categoria eliminada correctamente',
 				});
 				return deletedCategory.data;
 			} catch (error) {
-				dispatch({ type: 'DATA_USERS_ERROR', payload: error.message });
+				dispatch({
+					type: 'DATA_USERS_ERROR',
+					payload: error.message,
+				});
 				console.log(error);
 				showAlert({
 					icon: 'error',

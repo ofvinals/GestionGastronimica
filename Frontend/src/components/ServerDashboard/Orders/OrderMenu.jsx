@@ -5,8 +5,9 @@ import { useMenuActions } from '../../../hooks/useMenuActions.jsx';
 import { MenuContext } from '../../../context/MenuContext.jsx';
 import { OrderCard } from './OrderCard.jsx';
 import { useOrderActions } from '../../../hooks/useOrderActions.jsx';
+import { AuthContext } from '../../../context/AuthContext';
 
-// RECIBE DATOS DE ORDERFORM
+// RECIBE PROPS DE ORDERFORM
 export const OrderMenu = ({
 	selectedCategory,
 	tableNum,
@@ -15,15 +16,18 @@ export const OrderMenu = ({
 	diners,
 }) => {
 	const { state: menuState } = useContext(MenuContext);
+	const { state: serverState } = useContext(AuthContext);
+
 	const { dataMenus } = useMenuActions();
 	const { addOrderPrevAction } = useOrderActions();
-
 	const [currentDiners, setCurrentDiners] = useState(diners);
 
+	// DEVUELVE TODOS LOS MENUS DE LA CARTA
 	useEffect(() => {
 		dataMenus();
 	}, []);
 
+	// ACTUALIZA DINERS SI SE MODIFICA
 	useEffect(() => {
 		setCurrentDiners(diners);
 	}, [diners]);
@@ -35,6 +39,7 @@ export const OrderMenu = ({
 			tableNum: tableNum,
 			tableId: tableId,
 			orderOpen: true,
+			server: serverState.user && serverState.user.displayName,
 			diners: currentDiners,
 			item: {
 				category: menu.category,

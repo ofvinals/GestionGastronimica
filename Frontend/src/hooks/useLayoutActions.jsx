@@ -6,22 +6,31 @@ export const useLayoutActions = () => {
 	const { dispatch } = useContext(LoungeContext);
 
 	const loadAllLayoutAction = async () => {
-		dispatch({ type: 'DATA_TABLE_PENDING' });
+		dispatch({
+			type: 'DATA_TABLE_PENDING',
+		});
 		try {
 			const token = localStorage.getItem('token');
 			const response = await apiURL.get('/api/lounges/', {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
-			dispatch({ type: 'DATA_SALONS_SUCCESS', payload: response.data });
+			dispatch({
+				type: 'DATA_SALONS_SUCCESS',
+				payload: response.data,
+			});
 			return response.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_TABLE_ERROR', payload: error.message });
 			console.error('Error al cargar el layout:', error);
+			dispatch({
+				type: 'DATA_TABLE_ERROR',
+				payload: error.message,
+			});
 		}
 	};
 
 	const loadLayoutAction = async (salonId) => {
+		console.log(salonId);
 		dispatch({ type: 'DATA_TABLE_PENDING' });
 		try {
 			const token = localStorage.getItem('token');
@@ -29,15 +38,23 @@ export const useLayoutActions = () => {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
-			dispatch({ type: 'DATA_SALONID_SUCCESS', payload: response.data });
+			console.log(response.data);
+			dispatch({
+				type: 'DATA_SALONID_SUCCESS',
+				payload: response.data,
+			});
 			return response.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_TABLE_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_TABLE_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al cargar el layout:', error);
 		}
 	};
 
 	const editLayoutAction = async (salonId, layouts) => {
+		console.log(salonId, layouts);
 		dispatch({ type: 'DATA_TABLE_PENDING' });
 		try {
 			const token = localStorage.getItem('token');
@@ -55,7 +72,10 @@ export const useLayoutActions = () => {
 			});
 			return updatedLayout.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_TABLE_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_TABLE_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al editar el layout:', error);
 		}
 	};
@@ -68,16 +88,25 @@ export const useLayoutActions = () => {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
-			dispatch({ type: 'ADD_TABLE_SUCCESS', payload: table.data, id });
+			dispatch({
+				type: 'ADD_TABLE_SUCCESS',
+				payload: table.data,
+				id,
+			});
 			return table.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_TABLE_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_TABLE_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al agregar la mesa:', error);
 		}
 	};
 
 	const editTablePositionAction = async (id, values) => {
-		dispatch({ type: 'DATA_TABLE_PENDING' });
+		dispatch({
+			type: 'DATA_TABLE_PENDING',
+		});
 		try {
 			const token = localStorage.getItem('token');
 			const updatedLayout = await apiURL.put(`/api/lounges/${id}`, values, {
@@ -90,13 +119,18 @@ export const useLayoutActions = () => {
 			});
 			return updatedLayout.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_TABLE_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_TABLE_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al editar la mesa:', error);
 		}
 	};
 
 	const editTableDetailsAction = async (id, values) => {
-		dispatch({ type: 'DATA_TABLE_PENDING' });
+		dispatch({
+			type: 'DATA_TABLE_PENDING',
+		});
 		try {
 			const token = localStorage.getItem('token');
 			const updatedLayout = await apiURL.put(`/api/lounges/${id}`, values, {
@@ -109,32 +143,47 @@ export const useLayoutActions = () => {
 			});
 			return updatedLayout.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_TABLE_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_TABLE_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al editar la mesa:', error);
 		}
 	};
 
-	const updateTableIsOpenAction = async (salon_Id, tableId, isOpen, index) => {
-		console.log(salon_Id, tableId, isOpen, index);
-		dispatch({ type: 'DATA_TABLE_PENDING' });
+	const updateTableIsOpenAction = async (
+		closeTime,
+		salon_Id,
+		tableId,
+		isOpen,
+		index,
+		openAt
+	) => {
+		console.log(closeTime, salon_Id, tableId, isOpen, index, openAt);
+		dispatch({
+			type: 'DATA_TABLE_PENDING',
+		});
 		try {
 			const token = localStorage.getItem('token');
 			const updatedTable = await apiURL.put(
 				`/api/lounges/${salon_Id}/${index}`,
-				{ isOpen, layoutId: tableId },
+				{ closeTime, salon_Id, layoutId: tableId, isOpen, openAt },
 				{
 					withCredentials: true,
 					headers: { authorization: `Bearer ${token}` },
 				}
 			);
-			console.log(updatedTable.data)
+			console.log(updatedTable.data);
 			dispatch({
 				type: 'OPEN_TABLE_SUCCESS',
-				payload: { salon_Id, tableId, isOpen, index },
+				payload: { closeTime, salon_Id, tableId, isOpen, index, openAt },
 			});
 			return updatedTable.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_TABLE_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_TABLE_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al abrir la mesa:', error);
 		}
 	};
@@ -147,13 +196,17 @@ export const useLayoutActions = () => {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
-			console.log(response);
-			dispatch({ type: 'DATA_TABLE_SUCCESS', payload: response.data });
+			dispatch({
+				type: 'DATA_TABLE_SUCCESS',
+				payload: response.data,
+			});
 			return response.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_TABLE_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_TABLE_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al cargar el layout:', error);
-			throw error;
 		}
 	};
 	return {

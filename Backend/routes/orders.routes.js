@@ -5,18 +5,21 @@ const {
 	getOrder,
 	createOrder,
 	deleteOrder,
-	updateOrderPending 
+	updateOrderPending,
+	deleteItem,
+	updateOrderOpen,
 } = require('../controllers/order.controller.js');
 
 const router = express.Router();
 
-router.get('/orders',  getOrders);
-router.post('/orders',  createOrder)
-router.get('/orders/:id',  getOrder);
-router.delete('/orders/:id',  deleteOrder);
+router.get('/orders', getOrders);
+router.post('/orders', createOrder);
+router.get('/orders/:id', getOrder);
+router.delete('/orders/:id', deleteOrder);
 router.put('/orders', updateOrderPending);
+router.delete('/orders/:orderId/items/:itemId', deleteItem);
 
-// RUTA PARA ACTUALIZAR EL ESTADO PENDIENTE DE ITEMS DE LA ORDEN
-// router.put('/orders/:tableId/updatePending', updateOrderPending);
+// Ruta específica para actualizar el estado de la orden
+router.put('/orders/update', updateOrderOpen); 
 
 module.exports = router;

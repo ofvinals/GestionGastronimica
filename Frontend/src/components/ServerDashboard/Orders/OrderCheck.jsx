@@ -6,11 +6,15 @@ import { useOrderActions } from '../../../hooks/useOrderActions';
 import { CashOrder } from './CashOrder';
 import { useLayoutActions } from '../../../hooks/useLayoutActions';
 import { showAlert, confirmAction } from '../../../helpers/showAlert';
+import moment from 'moment-timezone';
+import Modals from '../../Modals';
+
 const originalState = {
 	1: { pending: false },
 	2: { pending: true },
 };
-// RECIBE DATOS DE RESTAURANTLAYOUT SI TABLE IS OPEN
+
+// RECIBE PROPS DE RESTAURANTLAYOUT SI TABLE IS OPEN
 export const OrderCheck = ({
 	onClose,
 	tableId,
@@ -19,7 +23,7 @@ export const OrderCheck = ({
 	salonId,
 }) => {
 	const { state: stateOrders } = useContext(OrderContext);
-	const { dataOrders, updateOrderPending, orderCashAction } =
+	const { dataOrders, updateOrderPending, deleteItemOrder, orderCashAction } =
 		useOrderActions();
 	const { updateTableIsOpenAction } = useLayoutActions();
 	const [orders, setOrders] = useState([]);
@@ -54,10 +58,13 @@ export const OrderCheck = ({
 			setHasModifiedItems(false);
 		}
 	}, [modifiedItems]);
+
 	// FILTRA LAS ORDENES PENDIENTES DE LA MESA SELECCIONADA
 	const filteredOrder = useMemo(() => {
 		if (stateOrders) {
-			return stateOrders.orders.filter((order) => order.tableId === tableId);
+			return stateOrders.orders.filter(
+				(order) => order.tableId === tableId && order.orderOpen === true
+			);
 		}
 		return [];
 	}, [stateOrders, tableId]);
@@ -68,28 +75,41 @@ export const OrderCheck = ({
 	const server = filteredOrder[0]?.server;
 
 	// MANEJA EL ESTADO DE PENDING DE CADA ITEM
-	const handleCheckboxChange = (orderIndex, itemIndex) => {
-		const updatedOrders = [...orders];
-		const item = updatedOrders[orderIndex]?.items[itemIndex];
-		if (item) {
-			item.pending = !item.pending;
-			const modifiedItem = item;
-			setOrders(updatedOrders);
-			// AGREGA ITEM MODIFICADO A MODIFIEDITEMS
-			if (!modifiedItems.includes(modifiedItem)) {
-				setModifiedItems([...modifiedItems, modifiedItem]);
+	const handleCheckboxChange = (orderId, itemId) => {
+		const updatedOrders = orders.map((order) => {
+			if (order._id === orderId) {
+				const updatedItems = order.items.map((item) => {
+					if (item._id === itemId) {
+						item.pending = !item.pending;
+						const modifiedItem = item;
+						if (!modifiedItems.includes(modifiedItem)) {
+							setModifiedItems([...modifiedItems, modifiedItem]);
+						}
+					}
+					return item;
+				});
+				return { ...order, items: updatedItems };
 			}
-		}
+			return order;
+		});
+		setOrders(updatedOrders);
+	};
+
+	// FUNCION PARA ELIMINAR ITEMS PENDIENTES
+	const handleDeleteItem = (orderId, itemId) => {
+		deleteItemOrder(orderId, itemId);
+		dataOrders();
 	};
 
 	// FILTRA ITEMS CON PENDING TRUE Y ENVIA NUEVA PREVORDER
 	const handlePending = async () => {
 		const itemIds = modifiedItems.map((item) => item._id);
 		try {
+			// ACTUALIZA PENDING DE LOS ITEMS MODIFICADOS EN REDUCER Y BACKEND
 			await updateOrderPending(itemIds);
 			onClose();
 		} catch (error) {
-			console.error('Error updating pending items:', error);
+			console.error('Error al actualizar el item:', error);
 		}
 	};
 
@@ -100,7 +120,7 @@ export const OrderCheck = ({
 		);
 	};
 
-	// FUNCIÓN PARA MANEJAR EL COBRO DE LA ORDEN
+	// FUNCIÓN PARA MANEJAR EL CIERRE DE LA MESA Y COBRO DE LA ORDEN
 	const handleCash = async () => {
 		if (allItemsConfirmed()) {
 			const isConfirmed = await confirmAction({
@@ -108,19 +128,21 @@ export const OrderCheck = ({
 				icon: 'warning',
 			});
 			if (isConfirmed) {
-				orderCashAction();
+				const closeTime = moment().tz('America/Argentina/Buenos_Aires').toDate();
 				const isOpen = false;
+				const orderOpen = false;
 				const index = currentLayout.findIndex(
 					(table) => table._id === tableId
 				);
-				updateTableIsOpenAction(salonId, tableId, isOpen, index);
+				updateTableIsOpenAction(closeTime, salonId, tableId, isOpen, index);
+				orderCashAction(closeTime, orderOpen, filteredOrder);
 				setCashOrder(true);
-				onClose();
 			}
 		} else {
+			// SI HAY ITEMS PENDIENTES
 			showAlert({
 				icon: 'error',
-				title: 'Algunos ítems aún están pendientes. No puedes cerrar la mesa',
+				title: 'Tienes items aún están pendientes en la comanda. No puedes cerrar la mesa',
 			});
 		}
 	};
@@ -141,11 +163,11 @@ export const OrderCheck = ({
 								<span className='font-semibold'>Comensales:</span>{' '}
 								{diners}
 							</p>
-							{filteredOrder.map((order, orderIndex) => (
+							{filteredOrder.map((order) => (
 								<div key={order._id}>
-									{order.items.map((item, itemIndex) => (
+									{order.items.map((item) => (
 										<div
-											key={itemIndex}
+											key={item._id}
 											className={
 												item.pending
 													? ' mx-2 border-t-2 border-slate-400'
@@ -161,23 +183,34 @@ export const OrderCheck = ({
 												Observaciones: {item.text}
 											</p>
 											{item.pending ? (
-												<div className='ml-4 mt-2'>
-													<label className='inline-flex items-center'>
-														<input
-															type='checkbox'
-															checked={item.pending}
-															onChange={() =>
-																handleCheckboxChange(
-																	orderIndex,
-																	itemIndex
-																)
-															}
-															className='form-checkbox h-5 w-5 text-green-600'
-														/>
-														<span className='ml-2 text-gray-700'>
-															Pendiente
-														</span>
-													</label>
+												<div className='flex flex-row flex-wrap items-center justify-around'>
+													<div className='ml-4 mt-2'>
+														<label className='inline-flex items-center'>
+															<input
+																type='checkbox'
+																className=' h-5 w-5 text-green-600 bg-green-500'
+																checked={item.pending}
+																onChange={() =>
+																	handleCheckboxChange(
+																		order._id,
+																		item._id
+																	)
+																}
+															/>
+															<span className='ml-2 text-gray-700 font-semibold'>
+																Pendiente
+															</span>
+														</label>
+													</div>
+													<button
+														onClick={() =>
+															handleDeleteItem(
+																order._id,
+																item._id
+															)
+														}>
+														<i className='fa-solid fa-trash-can rounded-full p-2 border-2 mb-1 border-red-700 text-red-700 hover:bg-red-700 hover:text-red-100'></i>
+													</button>
 												</div>
 											) : (
 												<span className='ml-2 text-gray-900 font-bold'>
@@ -219,7 +252,20 @@ export const OrderCheck = ({
 					</button>
 				</div>
 			</>
-			{cashOrder && <CashOrder />}
+			{cashOrder && (
+				<Modals
+					isOpen={true}
+					onClose={onClose}
+					title='Cobrar orden de mesa'>
+					<CashOrder
+						order={filteredOrder}
+						salonName={salonName}
+						diners={diners}
+						server={server}
+						tableNum={tableNum}
+					/>
+				</Modals>
+			)}
 		</div>
 	);
 };

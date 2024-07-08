@@ -15,9 +15,10 @@ const UserMenu = ({ displayName }) => {
 		setShow(nextShow);
 	};
 
-	const handleLogOut = async () => {
-		await logout();
+	const handleLogOut = () => {
+		logout();
 	};
+	
 	const handleProfileModal = () => {
 		setOpenProfileModal(true);
 	};
@@ -40,7 +41,9 @@ const UserMenu = ({ displayName }) => {
 						show={show}
 						onToggle={handleToggle}
 						id='dropdown-basic-button'>
-						<Dropdown.Item href='#/edit-profile' onClick={handleProfileModal}>
+						<Dropdown.Item
+							href='#/edit-profile'
+							onClick={handleProfileModal}>
 							<i className='fa-solid fa-user-pen pr-2'></i>
 							Editar Perfil
 						</Dropdown.Item>

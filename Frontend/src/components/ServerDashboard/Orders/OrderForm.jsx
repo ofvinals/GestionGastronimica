@@ -23,12 +23,12 @@ export const OrderForm = ({
 	setOrderForm,
 }) => {
 	const { count, increment, decrement } = useCounter(0);
-	const [selectedCategory, setSelectedCategory] = useState(null);
-	const [confirmComanda, setConfirmComanda] = useState(null);
 	const { deleteOrderPrevAction } = useOrderActions();
 	const { updateTableIsOpenAction } = useLayoutActions();
 	const { state: prevOrder } = useContext(OrderContext);
-
+	const [selectedCategory, setSelectedCategory] = useState(null);
+	const [confirmComanda, setConfirmComanda] = useState(null);
+	
 	// RECIBE LA CATEGORIA SELECCIONADA EN CATEGORYSELECTION
 	const handleCategorySelect = (category) => {
 		setSelectedCategory(category);
@@ -100,12 +100,12 @@ export const OrderForm = ({
 							<button
 								onClick={handleComanda}
 								className='mx-1 my-3 w-[50%] text-xl border-2 font-semibold border-green-100 p-2 bg-green-700 hover:text-green-700 hover:border-green-700 text-slate-50 hover:bg-white rounded-md'>
-								CONFIRMAR COMANDA
+								VERIFICAR Y CONFIRMAR COMANDA
 							</button>
 							<button
 								onClick={handleDelete}
 								className='mx-1 my-3 w-1/3 text-xl border-2 font-semibold border-green-100 p-2 bg-red-700 hover:text-red-700 hover:border-red-700 text-slate-50 hover:bg-white rounded-md'>
-								ELIMINAR COMANDA
+								CANCELAR COMANDA
 							</button>
 						</div>
 					</div>

@@ -7,17 +7,25 @@ export const useSupplierActions = () => {
 	const { dispatch } = useContext(ProductContext);
 
 	const dataSuppliers = async () => {
-		dispatch({ type: 'DATA_SUPPLIERS_PENDING' });
+		dispatch({
+			type: 'DATA_SUPPLIERS_PENDING',
+		});
 		try {
 			const token = localStorage.getItem('token');
 			const suppliers = await apiURL.get('/api/suppliers', {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
-			dispatch({ type: 'DATA_SUPPLIERS_SUCCESS', payload: suppliers.data });
+			dispatch({
+				type: 'DATA_SUPPLIERS_SUCCESS',
+				payload: suppliers.data,
+			});
 			return suppliers.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_SUPPLIERS_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_SUPPLIERS_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al buscar el proveedor:', error);
 			showAlert({
 				icon: 'error',
@@ -27,21 +35,29 @@ export const useSupplierActions = () => {
 	};
 
 	const addSupplierAction = async (values) => {
-		dispatch({ type: 'DATA_SUPPLIERS_PENDING' });
+		dispatch({
+			type: 'DATA_SUPPLIERS_PENDING',
+		});
 		try {
 			const token = localStorage.getItem('token');
 			const supplier = await apiURL.post('/api/suppliers', values, {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
-			dispatch({ type: 'ADD_SUPPLIER_SUCCESS', payload: supplier.data });
+			dispatch({
+				type: 'ADD_SUPPLIER_SUCCESS',
+				payload: supplier.data,
+			});
 			showAlert({
 				icon: 'success',
 				title: 'Proveedor registrado correctamente',
 			});
 			return supplier.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_SUPPLIERS_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_SUPPLIERS_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al registra el proveedor:', error);
 			showAlert({
 				icon: 'error',
@@ -56,7 +72,9 @@ export const useSupplierActions = () => {
 			icon: 'warning',
 		});
 		if (isConfirmed) {
-			dispatch({ type: 'DATA_SUPPLIERS_PENDING' });
+			dispatch({
+				type: 'DATA_SUPPLIERS_PENDING',
+			});
 			try {
 				const updatedValues = { status: false };
 				const token = localStorage.getItem('token');
@@ -68,14 +86,20 @@ export const useSupplierActions = () => {
 						headers: { authorization: `Bearer ${token}` },
 					}
 				);
-				dispatch({ type: 'DISABLE_SUPPLIER_SUCCESS', payload: id });
+				dispatch({
+					type: 'DISABLE_SUPPLIER_SUCCESS',
+					payload: id,
+				});
 				showAlert({
 					icon: 'success',
 					title: 'Proveedor inhabilitado correctamente',
 				});
 				return updatedSupplier.data;
 			} catch (error) {
-				dispatch({ type: 'DATA_SUPPLIERS_ERROR', payload: error.message });
+				dispatch({
+					type: 'DATA_SUPPLIERS_ERROR',
+					payload: error.message,
+				});
 				console.error('Error al suspender el proveedor:', error);
 				showAlert({
 					icon: 'error',
@@ -91,7 +115,9 @@ export const useSupplierActions = () => {
 			icon: 'warning',
 		});
 		if (isConfirmed) {
-			dispatch({ type: 'DATA_SUPPLIERS_PENDING' });
+			dispatch({
+				type: 'DATA_SUPPLIERS_PENDING',
+			});
 			try {
 				const updatedValues = { status: true };
 				const token = localStorage.getItem('token');
@@ -103,14 +129,20 @@ export const useSupplierActions = () => {
 						headers: { authorization: `Bearer ${token}` },
 					}
 				);
-				dispatch({ type: 'ENABLE_SUPPLIER_SUCCESS', payload: id });
+				dispatch({
+					type: 'ENABLE_SUPPLIER_SUCCESS',
+					payload: id,
+				});
 				showAlert({
 					icon: 'success',
 					title: 'Proveedor habilitado correctamente',
 				});
 				return updatedSupplier.data;
 			} catch (error) {
-				dispatch({ type: 'DATA_SUPPLIERS_ERROR', payload: error.message });
+				dispatch({
+					type: 'DATA_SUPPLIERS_ERROR',
+					payload: error.message,
+				});
 				console.error('Error al habilitar el proveedor:', error);
 				showAlert({
 					icon: 'error',
@@ -121,7 +153,9 @@ export const useSupplierActions = () => {
 	};
 
 	const editSupplierAction = async (id, values) => {
-		dispatch({ type: 'DATA_SUPPLIERS_PENDING' });
+		dispatch({
+			type: 'DATA_SUPPLIERS_PENDING',
+		});
 		try {
 			const token = localStorage.getItem('token');
 			const updatedSupplier = await apiURL.put(
@@ -142,7 +176,10 @@ export const useSupplierActions = () => {
 			});
 			return updatedSupplier.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_SUPPLIERS_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_SUPPLIERS_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al editar el proveedor:', error);
 			showAlert({
 				icon: 'error',
@@ -157,7 +194,9 @@ export const useSupplierActions = () => {
 			icon: 'warning',
 		});
 		if (isConfirmed) {
-			dispatch({ type: 'DATA_SUPPLIERS_PENDING' });
+			dispatch({
+				type: 'DATA_SUPPLIERS_PENDING',
+			});
 			try {
 				const token = localStorage.getItem('token');
 				const deletedSupplier = await apiURL.delete(
@@ -167,14 +206,20 @@ export const useSupplierActions = () => {
 						headers: { authorization: `Bearer ${token}` },
 					}
 				);
-				dispatch({ type: 'DELETE_SUPPLIER_SUCCESS', payload: id });
+				dispatch({
+					type: 'DELETE_SUPPLIER_SUCCESS',
+					payload: id,
+				});
 				showAlert({
 					icon: 'success',
 					title: 'Proveedor eliminado correctamente',
 				});
 				return deletedSupplier.data;
 			} catch (error) {
-				dispatch({ type: 'DATA_SUPPLIERS_ERROR', payload: error.message });
+				dispatch({
+					type: 'DATA_SUPPLIERS_ERROR',
+					payload: error.message,
+				});
 				console.log(error);
 				showAlert({
 					icon: 'error',

@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
-// FORMULARIO DEL MODAL. RECIBE DATOS DE RESTAURANTLAYOUT
+
+// FORMULARIO DEL MODAL. RECIBE PROPS DE RESTAURANTLAYOUT. DEVUELVE ONCONFIRM
 export const TableOpenForm = ({ table, onConfirm, onClose }) => {
 	// comprobar que la mesa este habilitada para el server usuario o para todos
 	return (

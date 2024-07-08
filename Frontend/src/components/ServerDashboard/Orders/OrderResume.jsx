@@ -2,13 +2,14 @@
 import { useContext, useEffect, useState } from 'react';
 import { OrderContext } from '../../../context/OrderContext';
 import { useOrderActions } from '../../../hooks/useOrderActions';
-import { AuthContext } from '../../../context/AuthContext';
 import { MenuServer } from '../MenuServer';
+import { useLayoutActions } from '../../../hooks/useLayoutActions';
 
+// RECIBE PROPS DE ORDERFORM
 export const OrderResume = ({ onClose, setOpenLayout, setOrderForm }) => {
 	const { state: prevOrder } = useContext(OrderContext);
-	const { state: serverState } = useContext(AuthContext);
 	const { addOrderAction, deleteOrderPrevAction } = useOrderActions();
+	const { loadAllLayoutAction } = useLayoutActions();
 	const [orders, setOrders] = useState([]);
 	const [confirmOrder, setConfirmOrder] = useState(false);
 
@@ -42,6 +43,7 @@ export const OrderResume = ({ onClose, setOpenLayout, setOrderForm }) => {
 			setConfirmOrder(true);
 			await deleteOrderPrevAction(prevOrder.prevOrder[0].tableId);
 			setOrderForm(false);
+			loadAllLayoutAction();
 			setOpenLayout(true);
 		} catch (error) {
 			console.error('Error al confirmar la orden:', error);
@@ -65,7 +67,7 @@ export const OrderResume = ({ onClose, setOpenLayout, setOrderForm }) => {
 									</p>
 									<p className='mt-3'>
 										<span className='font-semibold'>Server:</span>{' '}
-										{serverState.user && serverState.user.displayName}
+										{order.server}
 									</p>
 									<p className='mb-3'>
 										<span className='font-semibold'>Comensales:</span>{' '}

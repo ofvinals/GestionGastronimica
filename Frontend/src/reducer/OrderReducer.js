@@ -108,9 +108,35 @@ export const OrderReducer = (state, action) => {
 			return {
 				...state,
 				loading: false,
-				orders: state.orders.map((order) =>
-					order._id === action.payload._id ? action.payload : order
-				),
+				orders: state.orders.map((order) => {
+					if (order._id === action.payload.orderId) {
+						return {
+							...order,
+							items: order.items.map((item) =>
+								action.payload.itemIds.includes(item._id)
+									? { ...item, pending: !item.pending }
+									: item
+							),
+						};
+					}
+					return order;
+				}),
+			};
+		case 'DELETE_ITEM_SUCCESS':
+			return {
+				...state,
+				loading: false,
+				orders: state.orders.map((order) => {
+					if (order._id === action.payload.orderId) {
+						return {
+							...order,
+							items: order.items.filter(
+								(item) => item._id !== action.payload.itemId
+							),
+						};
+					}
+					return order;
+				}),
 			};
 		case 'CASH_ORDER_SUCCESS':
 			return {
@@ -123,7 +149,6 @@ export const OrderReducer = (state, action) => {
 				loading: false,
 				error: null,
 			};
-
 		case 'DATA_ORDERS_ERROR':
 			return { ...state, loading: false, error: action.payload };
 

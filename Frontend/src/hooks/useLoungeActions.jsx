@@ -18,10 +18,16 @@ export const useLoungeActions = () => {
 				addSalonAction(name);
 				return;
 			}
-			dispatch({ type: 'DATA_SALONS_SUCCESS', payload: lounges.data });
+			dispatch({
+				type: 'DATA_SALONS_SUCCESS',
+				payload: lounges.data,
+			});
 			return lounges.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_SALON_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_SALON_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al buscar el salon:', error);
 		}
 	};
@@ -41,8 +47,11 @@ export const useLoungeActions = () => {
 			});
 			return lounge.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_SALON_ERROR', payload: error.message });
-			console.error('Error al registra el producto:', error);
+			dispatch({
+				type: 'DATA_SALON_ERROR',
+				payload: error.message,
+			});
+			console.error('Error al registra el salon:', error);
 		}
 	};
 

@@ -93,7 +93,7 @@ export const LoungeReducer = (state, action) => {
 		}
 		case 'OPEN_TABLE_SUCCESS':
 			console.log(action)
-		const { salon_Id, tableId, isOpen } = action.payload;
+		const { salon_Id, tableId, isOpen, closeTime } = action.payload;
 			return {
 				...state,
 				lounges: state.lounges.map((salon) =>
@@ -101,7 +101,7 @@ export const LoungeReducer = (state, action) => {
 						? {
 								...salon,
 								layouts: salon.layouts.map((table) =>
-									table.id === tableId ? { ...table, isOpen } : table
+									table.id === tableId ? { ...table, isOpen, closeTime } : table
 								),
 						  }
 						: salon

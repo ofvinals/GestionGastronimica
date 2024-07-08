@@ -5,24 +5,26 @@ import { LoungeContext } from '../../../../context/LoungeContext.jsx';
 import { useLoungeActions } from '../../../../hooks/useLoungeActions.jsx';
 
 const MenuLayout = () => {
+	const { state: loungeState } = useContext(LoungeContext);
+	const { dataSalons } = useLoungeActions();
 	const [activeSalonId, setActiveSalonId] = useState(null);
 	const [showLoungeForm, setShowLoungeForm] = useState(false);
-	const { state } = useContext(LoungeContext);
-	const { dataSalons } = useLoungeActions();
+	const [salonActive, setSalonActive] = useState([]);
 
 	useEffect(() => {
 		dataSalons();
 	}, []);
 
 	useEffect(() => {
-		if (state.lounges.length > 0) {
-			setActiveSalonId(state.lounges[0]._id);
+		if (loungeState.lounges.length > 0) {
+			setActiveSalonId(loungeState.lounges[0]._id);
+			setSalonActive(loungeState.lounges[0]);
 		}
 	}, []);
 
 	const handleSalonClick = (salonId) => {
 		setActiveSalonId(salonId);
-		setShowLoungeForm(false); 
+		setShowLoungeForm(false);
 	};
 
 	const handleOpenForm = () => {
@@ -37,18 +39,16 @@ const MenuLayout = () => {
 		<>
 			<section>
 				<div className='pt-3 shadowIndex rounded-t-md bg-slate-600 flex flex-wrap flex-row items-center justify-around'>
-					{state.lounges.map((salon) => (
-						<button
-							key={salon._id}
-							onClick={() => handleSalonClick(salon._id)}
-							className={`border-none text-white p-2 ${
-								activeSalonId === salon._id
-									? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
-									: 'bg-transparent text-white hover:font-bold'
-							}`}>
-							{salon.name}
-						</button>
-					))}
+					<button
+						onClick={() => handleSalonClick(salonActive._id)}
+						className={`border-none text-white p-2 ${
+							activeSalonId === salonActive._id
+								? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
+								: 'bg-transparent text-white hover:font-bold'
+						}`}>
+						{salonActive.name}
+					</button>
+
 					<div className='flex items-end justify-end'>
 						<button
 							onClick={(e) =>
@@ -67,10 +67,7 @@ const MenuLayout = () => {
 					{activeSalonId !== null && (
 						<RestaurantLayout
 							salonId={activeSalonId}
-							salonName={
-								state.lounges.find(salon => salon._id === activeSalonId)?.name || 'Nombre no encontrado'
-
-							}
+							salonName={salonActive.name}
 							showLoungeForm={showLoungeForm}
 							onCloseForm={handleCloseForm}
 						/>

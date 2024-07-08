@@ -12,6 +12,7 @@ const initialState = {
 	loading: false,
 	error: null,
 };
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -27,17 +28,21 @@ export const AuthProvider = ({ children }) => {
 					headers: { Authorization: `Bearer ${token}` },
 				})
 				.then((response) => {
-					dispatch({ type: 'LOGIN', payload: response.data });
+					console.log(response.data);
+					dispatch({
+						type: 'LOGIN_SUCCESS',
+						payload: response.data,
+					});
 				})
 				.catch((error) => {
 					console.error('Error al validar el token:', error);
 					localStorage.removeItem('token');
-					navigate('/');
+					navigate('/home');
 				});
 		} else {
-			navigate('/');
+			navigate('/home');
 		}
-	}, []);
+	}, [navigate]);
 
 	return (
 		<AuthContext.Provider value={{ state, dispatch }}>

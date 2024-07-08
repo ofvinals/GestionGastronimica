@@ -7,17 +7,25 @@ export const useUserActions = () => {
 	const { dispatch } = useContext(UserContext);
 
 	const dataUsers = async () => {
-		dispatch({ type: 'DATA_USERS_PENDING' });
+		dispatch({
+			type: 'DATA_USERS_PENDING',
+		});
 		try {
 			const token = localStorage.getItem('token');
 			const users = await apiURL.get('/api/users', {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
-			dispatch({ type: 'DATA_USERS_SUCCESS', payload: users.data });
+			dispatch({
+				type: 'DATA_USERS_SUCCESS',
+				payload: users.data,
+			});
 			return users.data;
 		} catch (error) {
-			dispatch({ type: 'DATA_USERS_ERROR', payload: error.message });
+			dispatch({
+				type: 'DATA_USERS_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al buscar el usuario:', error);
 			showAlert({
 				icon: 'error',
@@ -27,21 +35,29 @@ export const useUserActions = () => {
 	};
 
 	const addUserAction = async (user) => {
-		dispatch({ type: 'ADD_USER_PENDING' });
+		dispatch({
+			type: 'ADD_USER_PENDING',
+		});
 		try {
 			const token = localStorage.getItem('token');
 			const res = await apiURL.post('/api/users', user, {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
-			dispatch({ type: 'ADD_USER_SUCCESS', payload: res.data });
+			dispatch({
+				type: 'ADD_USER_SUCCESS',
+				payload: res.data,
+			});
 			showAlert({
 				icon: 'success',
 				title: 'Usuario registrado correctamente',
 			});
 			return res.data;
 		} catch (error) {
-			dispatch({ type: 'ADD_USER_ERROR', payload: error.message });
+			dispatch({
+				type: 'ADD_USER_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al registrar el usuario:', error);
 			showAlert({
 				icon: 'error',
@@ -68,14 +84,20 @@ export const useUserActions = () => {
 						headers: { authorization: `Bearer ${token}` },
 					}
 				);
-				dispatch({ type: 'DISABLE_USER_SUCCESS', payload: id });
+				dispatch({
+					type: 'DISABLE_USER_SUCCESS',
+					payload: id,
+				});
 				showAlert({
 					icon: 'success',
 					title: 'Usuario suspendido correctamente',
 				});
 				return updatedUser.data;
 			} catch (error) {
-				dispatch({ type: 'DISABLE_USER_ERROR', payload: error.message });
+				dispatch({
+					type: 'DISABLE_USER_ERROR',
+					payload: error.message,
+				});
 				console.error('Error al suspender al usuario:', error);
 				showAlert({
 					icon: 'error',
@@ -92,7 +114,9 @@ export const useUserActions = () => {
 			confirmButtonColor: '#085718',
 		});
 		if (isConfirmed) {
-			dispatch({ type: 'ENABLE_USER_PENDING' });
+			dispatch({
+				type: 'ENABLE_USER_PENDING',
+			});
 			try {
 				const updatedValues = { status: true };
 				const token = localStorage.getItem('token');
@@ -104,14 +128,20 @@ export const useUserActions = () => {
 						headers: { authorization: `Bearer ${token}` },
 					}
 				);
-				dispatch({ type: 'ENABLE_USER_SUCCESS', payload: id });
+				dispatch({
+					type: 'ENABLE_USER_SUCCESS',
+					payload: id,
+				});
 				showAlert({
 					icon: 'success',
 					title: 'Usuario habilitado correctamente',
 				});
 				return updatedUser.data;
 			} catch (error) {
-				dispatch({ type: 'ENABLE_USER_ERROR', payload: error.message });
+				dispatch({
+					ype: 'ENABLE_USER_ERROR',
+					payload: error.message,
+				});
 				console.error('Error al habilitar el usuario:', error);
 				showAlert({
 					icon: 'error',
@@ -122,21 +152,29 @@ export const useUserActions = () => {
 	};
 
 	const editUserAction = async (id, values) => {
-		dispatch({ type: 'EDIT_USER_PENDING' });
+		dispatch({
+			type: 'EDIT_USER_PENDING',
+		});
 		try {
 			const token = localStorage.getItem('token');
 			const updatedUser = await apiURL.put(`/api/users/${id}`, values, {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
-			dispatch({ type: 'EDIT_USER_SUCCESS', payload: updatedUser.data });
+			dispatch({
+				type: 'EDIT_USER_SUCCESS',
+				payload: updatedUser.data,
+			});
 			showAlert({
 				icon: 'success',
 				title: 'Usuario editado correctamente',
 			});
 			return updatedUser.data;
 		} catch (error) {
-			dispatch({ type: 'EDIT_USER_ERROR', payload: error.message });
+			dispatch({
+				type: 'EDIT_USER_ERROR',
+				payload: error.message,
+			});
 			console.error('Error al editar el usuario:', error);
 			showAlert({
 				icon: 'error',
@@ -152,21 +190,29 @@ export const useUserActions = () => {
 			confirmButtonColor: '#085718',
 		});
 		if (isConfirmed) {
-			dispatch({ type: 'DELETE_USER_PENDING' });
+			dispatch({
+				type: 'DELETE_USER_PENDING',
+			});
 			try {
 				const token = localStorage.getItem('token');
 				const deletedUser = await apiURL.delete(`/api/users/${id}`, {
 					withCredentials: true,
 					headers: { authorization: `Bearer ${token}` },
 				});
-				dispatch({ type: 'DELETE_USER_SUCCESS', payload: id });
+				dispatch({
+					type: 'DELETE_USER_SUCCESS',
+					payload: id,
+				});
 				showAlert({
 					icon: 'success',
 					title: 'Usuario eliminado correctamente',
 				});
 				return deletedUser.data;
 			} catch (error) {
-				dispatch({ type: 'DELETE_USER_ERROR', payload: error.message });
+				dispatch({
+					type: 'DELETE_USER_ERROR',
+					payload: error.message,
+				});
 				console.log(error);
 				showAlert({
 					icon: 'error',

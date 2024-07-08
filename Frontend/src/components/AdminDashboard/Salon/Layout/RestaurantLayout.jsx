@@ -20,24 +20,33 @@ const RestaurantLayout = ({
 	const [selectedTable, setSelectedTable] = useState(null);
 	const [currentLayout, setCurrentLayout] = useState([]);
 	const [showEditTableDetails, setShowEditTableDetails] = useState(false);
-	const firstLoad = useRef(true); 
+	const firstLoad = useRef(true);
 
 	const { editLayoutAction, loadLayoutAction, addSalonAction } =
 		useLayoutActions();
 
-	useEffect(() => {
-		const fetchLayout = async () => {
+	const fetchLayout = async () => {
+		try {
+			console.log(salonId);
 			const layout = await loadLayoutAction(salonId);
-			setCurrentLayout(layout);
-		};
+			console.log(layout);
+			setCurrentLayout(layout || []); // Asegura que si layout es null o undefined, se usa un array vacío
+		} catch (error) {
+			console.error('Error fetching layout:', error);
+			// Puedes manejar el error aquí, como mostrar un mensaje al usuario o intentar recuperar de alguna manera
+		}
+	};
+
+	useEffect(() => {
 		fetchLayout();
 	}, [salonId]);
+	console.log(currentLayout);
 
 	useEffect(() => {
 		if (firstLoad.current) {
-			firstLoad.current = false; 
+			firstLoad.current = false;
 		} else {
-			editLayoutAction(salonId, currentLayout);
+			// editLayoutAction(salonId, currentLayout);
 		}
 	}, [currentLayout]);
 
@@ -67,6 +76,7 @@ const RestaurantLayout = ({
 			}
 		}
 	};
+	console.log(currentLayout);
 
 	const handleDragEnd = (e, id) => {
 		const gridX = Math.floor(e.target.x() / CELL_SIZE) * CELL_SIZE;
@@ -95,8 +105,8 @@ const RestaurantLayout = ({
 
 	const handleTableClick = (table) => {
 		setSelectedTable(table);
-		setShowEditTableDetails(true); 
-		onCloseForm(); 
+		setShowEditTableDetails(true);
+		onCloseForm();
 	};
 
 	const handleTableNumberChange = (e) => {
@@ -135,7 +145,7 @@ const RestaurantLayout = ({
 	const handleCloseForm = () => {
 		setShowEditTableDetails(false);
 	};
-
+	console.log(currentLayout);
 	return (
 		<div className='flex flex-row w-full'>
 			<div className='w-4/6 m-2 border-2 border-black'>
@@ -149,18 +159,19 @@ const RestaurantLayout = ({
 					onContextMenu={(e) => e.evt.preventDefault()}>
 					<Layer>
 						<GridLines />
-						{currentLayout.map((table) => (
-							<TableRect
-								key={table.id}
-								table={table}
-								isSelected={
-									selectedTable && selectedTable.id === table.id
-								}
-								onDragEnd={(e) => handleDragEnd(e, table.id)}
-								onClick={() => handleTableClick(table)}
-								onContextMenu={(e) => handleRightClick(e, table.id)}
-							/>
-						))}
+						{currentLayout.layouts &&
+							currentLayout.layouts.map((table) => (
+								<TableRect
+									key={table.id}
+									table={table}
+									isSelected={
+										selectedTable && selectedTable.id === table.id
+									}
+									onDragEnd={(e) => handleDragEnd(e, table.id)}
+									onClick={() => handleTableClick(table)}
+									onContextMenu={(e) => handleRightClick(e, table.id)}
+								/>
+							))}
 					</Layer>
 				</Stage>
 			</div>
