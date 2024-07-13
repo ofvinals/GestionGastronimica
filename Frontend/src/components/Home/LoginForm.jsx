@@ -10,8 +10,8 @@ import { useAuthActions } from '../../hooks/useAuthActions';
 
 export const LoginForm = () => {
 	const navigate = useNavigate();
-	const { login, loading } = useAuthActions();
-	const { state: userState } = useContext(UserContext);
+	const { login } = useAuthActions();
+	const { state: userState, loading } = useContext(UserContext);
 	const { dataUsers } = useUserActions();
 
 	const users = userState.users;
@@ -50,7 +50,7 @@ export const LoginForm = () => {
 	};
 
 	return (
-		<section className='py-5 flex flex-wrap items-center justify-center flex-col pb-10'>
+		<section className='flex flex-wrap items-center justify-center flex-col pb-10'>
 			<Form
 				id='loginForm'
 				className='mt-5 flex flex-col justify-center items-center w-[300px] border-2 border-white bg-slate-700 pb-6 rounded-xl'

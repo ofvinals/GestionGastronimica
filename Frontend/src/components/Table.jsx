@@ -8,6 +8,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 
+// RECIBE COLUMNS, DATA Y ACTIONS DE CADA COMPONENTE
 export const Table = ({ columns, data, actions }) => {
 	const table = useMaterialReactTable({
 		columns,
@@ -31,6 +32,7 @@ export const Table = ({ columns, data, actions }) => {
 			shape: 'rounded',
 			variant: 'outlined',
 		},
+		// RENDERIZA LOS BOTONES DE ACCIONES
 		renderRowActions: ({ row }) => (
 			<Box sx={{ display: 'flex', gap: '5px' }}>
 				{actions.map((action, index) => {
@@ -44,7 +46,7 @@ export const Table = ({ columns, data, actions }) => {
 									key={index}
 									className='flex  items-center justify-center'
 									onClick={() => action.onClick(row)}
-									data-tip="Inhabilitar">
+									data-tip='Inhabilitar'>
 									<span className='bg-yellow-600 text-center text-white rounded-xl border-2 p-2 hover:opacity-50'>
 										{action.icon}
 									</span>
@@ -89,12 +91,25 @@ export const Table = ({ columns, data, actions }) => {
 							</button>
 						);
 					}
+					if (action.text === 'Ver') {
+						return (
+							<button
+								key={index}
+								className='flex items-center justify-center'
+								onClick={() => action.onClick(row)}>
+								<span className='bg-yellow-700  text-center text-white rounded-xl border-2 p-2 hover:opacity-50'>
+									{action.icon}
+								</span>
+							</button>
+						);
+					}
 					return null;
 				})}
 			</Box>
 		),
 	});
 
+	// RENDERIZA EL TEMA DE LA TABLE
 	const darkTheme = createTheme({
 		palette: {
 			mode: 'light',

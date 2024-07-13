@@ -32,13 +32,9 @@ export const RestaurantLayout = ({ salonId, onReload }) => {
 	const [openLayout, setOpenLayout] = useState(true);
 	const [openOrderCheck, setOpenOrderCheck] = useState(false);
 
-	// DEVUELVE TODAS LAS MESAS DEL SALON
+	// CARGA TODAS LAS MESAS DEL SALON
 	useEffect(() => {
 		loadAllLayoutAction(salonId);
-	}, [salonId]);
-
-	// CARGA EN CURRENTLAYOUT LAS MESAS DEL SALON SELECCIONADO
-	useEffect(() => {
 		if (state.lounges) {
 			const layout = state.lounges.find((layout) => layout._id === salonId);
 			if (layout && layout.layouts) {
@@ -49,12 +45,12 @@ export const RestaurantLayout = ({ salonId, onReload }) => {
 			}
 		}
 	}, [state.lounges, salonId]);
-
+	
 	// ACCION AL HACER CLICK EN UNA MESA
 	const handleTableClick = (table) => {
 		setConfirmTable(table);
 		if (table.isOpen) {
-			// SI ESTA ABIERTA ABIERTA ABRE LA ORDEN (ORDERCHECK)
+			// SI ESTA ABIERTA ABRE LA ORDEN (ORDERCHECK)
 			setOpenOrderCheck(true);
 		} else {
 			// SINO ABRE MODAL P CONFIRMAR
@@ -64,16 +60,19 @@ export const RestaurantLayout = ({ salonId, onReload }) => {
 
 	// AL CONFIRMAR ACTUALIZA LOS DATOS DE LA MESA Y ABRE LA ORDEN (ORDERFORM)
 	const handleConfirm = () => {
+		// CIERRA MODALES. Y PREPARA DATOS P ENVIAR A REDUCER Y BACKEND 
 		setOpenConfirm(false);
 		setOpenOrderCheck(false);
 		setOpenLayout(false);
 		const tableId = confirmTable._id;
 		const isOpen = true;
 		const closeTime = '';
-		const openAt = moment().tz('America/Argentina/Buenos_Aires').toDate();
+		const openAt = moment().tz('America/Argentina/Buenos_Aires');
 		const salon_Id = salonId;
 		const index = currentLayout.findIndex((table) => table._id === tableId);
+		// ABRE EL MODAL DE LA ORDER P HACER EL PEDIDO
 		setOpenOrder(true);
+		// ACTUALIZA EL ESTADO DE LA MESA
 		updateTableIsOpenAction(
 			closeTime,
 			salon_Id,
@@ -84,6 +83,7 @@ export const RestaurantLayout = ({ salonId, onReload }) => {
 		);
 	};
 
+	// CIERRA TODOS LOS MODALES
 	const handleCloseModal = () => {
 		setConfirmTable(false);
 		setOpenOrderCheck(false);
@@ -154,7 +154,6 @@ export const RestaurantLayout = ({ salonId, onReload }) => {
 					setOrderForm={setOpenOrder}
 				/>
 			)}
-
 			{openOrderCheck && (
 				<Modals
 					isOpen={true}

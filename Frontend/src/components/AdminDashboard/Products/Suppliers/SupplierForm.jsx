@@ -68,59 +68,75 @@ const SupplierForm = ({ rowId, onClose, mode = 'edit' }) => {
 			mode={mode}>
 			<FormField
 				id='name'
-				label='Nombre / Razon Social'
+				label='Nombre / Razon Social*'
 				register={register('name', { required: 'El nombre es requerido' })}
 				errors={errors.name}
 				readOnly={mode === 'view'}
-			/>
+			/>{' '}
+			{errors.name && (
+				<span className='text-red-700 fs-6'>{errors.name.message}</span>
+			)}
 			<FormField
 				id='email'
-				label='Email'
+				label='Email*'
 				type='email'
 				register={register('email', { required: 'El email es requerido' })}
 				errors={errors.email}
 				readOnly={mode === 'view'}
-			/>
+			/>{' '}
+			{errors.email && (
+				<span className='text-red-700 fs-6'>{errors.email.message}</span>
+			)}
 			<FormField
 				id='tel'
-				label='Teléfono'
+				label='Teléfono*'
 				type='number'
 				register={register('tel', { required: 'El teléfono es requerido' })}
 				errors={errors.tel}
 				readOnly={mode === 'view'}
-			/>
+			/>{' '}
+			{errors.tel && (
+				<span className='text-red-700 fs-6'>{errors.tel.message}</span>
+			)}
 			<FormField
 				id='address'
-				label='Domicilio'
+				label='Domicilio*'
 				register={register('address', {
 					required: 'El domicilio es requerido',
 				})}
 				errors={errors.address}
 				readOnly={mode === 'view'}
-			/>
+			/>{' '}
+			{errors.address && (
+				<span className='text-red-700 fs-6'>{errors.address.message}</span>
+			)}
 			<FormField
 				id='cuit'
-				label='CUIT'
+				label='CUIT*'
 				register={register('cuit', { required: 'El CUIT es requerido' })}
 				errors={errors.cuit}
 				readOnly={mode === 'view'}
-			/>
+			/>{' '}
+			{errors.cuit && (
+				<span className='text-red-700 fs-6'>{errors.cuit.message}</span>
+			)}
 			<FormField
 				id='comment'
 				label='Comentarios'
 				as='textarea'
 				register={register('comment')}
 				readOnly={mode === 'view'}
-			/>
+			/>{' '}
 			<FormField
 				id='status'
 				label='Proveedor Activo?'
 				type='checkbox'
-				renderAs="toggle"
+				renderAs='toggle'
 				register={register('status')}
-				errors={errors.status}
 				readOnly={mode === 'view'}
-			/>
+			/>{' '}
+						<p className='text-sm'>(*) Campos obligatorios</p>
+
 		</GenericForm>
 	);
 };

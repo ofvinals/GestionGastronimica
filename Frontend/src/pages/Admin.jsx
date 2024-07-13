@@ -5,6 +5,7 @@ import { SalonMenu } from '../components/AdminDashboard/Salon/SalonMenu';
 import { UserDashboard } from '../components/AdminDashboard/Users/UserDashboard';
 import { ProductsMenu } from '../components/AdminDashboard/Products/ProductsMenu';
 import { UnderConstruction } from '../components/AdminDashboard/UnderConstruction';
+import { OrdersMenu } from '../components/AdminDashboard/Kitchen/OrdersMenu';
 
 export const Admin = () => {
 	const [showDataUsers, setShowDataUsers] = useState(false);
@@ -23,6 +24,7 @@ export const Admin = () => {
 		setShowDataReports(false);
 		setShowKitchen(false);
 	};
+
 	const handleProduct = () => {
 		setShowDataUsers(false);
 		setShowDataProducts(true);
@@ -32,6 +34,7 @@ export const Admin = () => {
 		setShowDataCash(false);
 		setShowKitchen(false);
 	};
+
 	const handleSalon = () => {
 		setShowDataUsers(false);
 		setShowDataProducts(false);
@@ -41,6 +44,7 @@ export const Admin = () => {
 		setShowDataCash(false);
 		setShowKitchen(false);
 	};
+
 	const handleMenu = () => {
 		setShowDataUsers(false);
 		setShowDataProducts(false);
@@ -50,6 +54,7 @@ export const Admin = () => {
 		setShowDataCash(false);
 		setShowKitchen(false);
 	};
+
 	const handleReports = () => {
 		setShowDataUsers(false);
 		setShowDataProducts(false);
@@ -59,6 +64,7 @@ export const Admin = () => {
 		setShowDataCash(false);
 		setShowKitchen(false);
 	};
+
 	const handleCash = () => {
 		setShowDataUsers(false);
 		setShowDataProducts(false);
@@ -68,6 +74,7 @@ export const Admin = () => {
 		setShowDataCash(true);
 		setShowKitchen(false);
 	};
+
 	const handleKitchen = () => {
 		setShowDataUsers(false);
 		setShowDataProducts(false);
@@ -79,8 +86,8 @@ export const Admin = () => {
 	};
 
 	return (
-		<div>
-			<h1 className='text-center text-4xl font-bold my-10 text-slate-700'>
+		<div className='min-h-[60vh] md:min-h-[77vh] bg-[#DBD7CF]'>
+			<h1 className='text-center text-4xl font-bold py-10 text-slate-700'>
 				Administración
 			</h1>
 			<div className='flex w-full h-full flex-col flex-wrap'>
@@ -97,12 +104,12 @@ export const Admin = () => {
 				</div>
 				<div className='w-full'>
 					{showDataMenu && <Menu />}
+					{showDataUsers && <UserDashboard />}
 					{showDataProducts && <ProductsMenu />}
 					{showDataTable && <SalonMenu />}
-					{showDataUsers && <UserDashboard />}
+					{showDataKitchen && <OrdersMenu />}
 					{showDataReports && <UnderConstruction />}
 					{showDataCash && <UnderConstruction />}
-					{showDataKitchen && <UnderConstruction />}
 				</div>
 			</div>
 		</div>

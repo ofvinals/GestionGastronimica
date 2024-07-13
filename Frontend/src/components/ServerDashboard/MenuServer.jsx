@@ -5,15 +5,17 @@ import RestaurantLayout from './Layout/RestaurantLayout';
 import { LoungeContext } from '../../context/LoungeContext.jsx';
 import { useLoungeActions } from '../../hooks/useLoungeActions.jsx';
 
-export const MenuServer = ({ reload, onReload }) => {
+export const MenuServer = ({ reload }) => {
 	const { state: loungeState } = useContext(LoungeContext);
 	const { dataSalons } = useLoungeActions();
 	const [activeSalonId, setActiveSalonId] = useState(null);
 
+	// CARGA TODOS LOS SALONES GUARDADOS
 	useEffect(() => {
 		dataSalons();
 	}, [reload]);
 
+	// SI NO HAY SALON ACTIVO. CARGA EL PRIMER SALON DEL ARRAY LOUNGES
 	useEffect(() => {
 		if (
 			!activeSalonId &&
@@ -24,10 +26,12 @@ export const MenuServer = ({ reload, onReload }) => {
 		}
 	}, [loungeState.lounges]);
 
+	// MANEJA LA SELECCION DEL SALON
 	const handleSalonClick = (salonId) => {
 		setActiveSalonId(salonId);
 	};
-
+	
+	// RECARGA LA PAGINA
 	const handleReload = () => {
 		window.location.reload();
 	};
@@ -35,6 +39,7 @@ export const MenuServer = ({ reload, onReload }) => {
 	return (
 		<section>
 			<div className='pt-3 shadowIndex rounded-t-md bg-slate-600 flex flex-wrap flex-row justify-around'>
+				{/* RENDERIZA LOS SALONES POR BOTON */}
 				{loungeState.lounges && loungeState.lounges.length > 0 && (
 					<div className='w-full flex flex-row flex-wrap items-center justify-around'>
 						{loungeState.lounges.map((salon) => (
@@ -52,20 +57,19 @@ export const MenuServer = ({ reload, onReload }) => {
 					</div>
 				)}
 			</div>
-				<div className='flex w-full'>
-					{activeSalonId !== null && (
-						<RestaurantLayout
-							onReload={handleReload}
-							salonId={activeSalonId}
-							salonName={
-								loungeState.lounges.find(
-									(salon) => salon._id === activeSalonId
-								)?.name || 'Nombre no encontrado'
-							}
-						/>
-					)}
-				</div>
-
+			<div className='flex w-full'>
+				{activeSalonId !== null && (
+					<RestaurantLayout
+						onReload={handleReload}
+						salonId={activeSalonId}
+						salonName={
+							loungeState.lounges.find(
+								(salon) => salon._id === activeSalonId
+							)?.name || 'Nombre de salon no encontrado'
+						}
+					/>
+				)}
+			</div>
 		</section>
 	);
 };

@@ -1,4 +1,5 @@
 const Order = require('../models/order.model.js');
+const { DateTime } = require('luxon'); // Importa DateTime desde Luxon
 
 const getOrders = async (req, res) => {
 	try {
@@ -10,34 +11,43 @@ const getOrders = async (req, res) => {
 };
 
 const createOrder = async (req, res) => {
-	console.log(req.body)
+	console.log(req.body);
 	try {
+		const ahora = DateTime.now().setZone('America/Argentina/Buenos_Aires');
+
 		const {
 			salonName,
 			tableNum,
 			tableId,
-			openAt,
 			diners,
 			server,
+			cookedAt,
 			items,
 			orderOpen,
+			elapsedDuration,
 		} = req.body[0];
+		const openAt = ahora.toISO();
+		// Crea una nueva instancia de Order utilizando los datos obtenidos
 		const newOrder = new Order({
 			salonName,
 			tableNum,
 			tableId,
 			openAt,
+			cookedAt,
 			diners,
 			server,
 			items,
 			orderOpen,
+			elapsedDuration,
 		});
 
+		// Guarda la nueva orden en la base de datos
 		await newOrder.save();
 
-		res.json(newOrder);
+		res.json(newOrder); // Devuelve la orden creada como respuesta
 	} catch (error) {
 		console.error('Error al guardar la orden:', error);
+		res.status(500).json({ error: 'Error al guardar la orden' });
 	}
 };
 
@@ -77,17 +87,38 @@ const updateOrderPending = async (req, res) => {
 	}
 };
 
+const updateItemCooked = async (req, res) => {
+	const { orderId, itemId } = req.params;
+	const { cookedAt } = req.body;
+	try {
+		const order = await Order.findById(orderId);
+		if (!order) {
+			return res.status(404).send('Order not found');
+		}
+		const item = order.items.id(itemId);
+		if (!item) {
+			return res.status(404).send('Item not found');
+		}
+		item.cookedAt = cookedAt;
+		await order.save();
+		res.send(order);
+	} catch (error) {
+		res.status(500).send('Server error');
+	}
+};
+
 const updateOrderOpen = async (req, res) => {
 	console.log(req.body);
 	try {
-		const { closeTime, orderOpen, filteredOrder } = req.body;
-		console.log(closeTime);
+		const { closeTime, orderOpen, filteredOrder, elapsedDuration } = req.body;
+		console.log(closeTime, elapsedDuration);
 		// Iterar sobre cada orden en filteredOrder
 		for (const orderId of filteredOrder) {
 			const order = await Order.findById(orderId);
 			if (order) {
 				order.orderOpen = orderOpen;
 				order.closeTime = closeTime;
+				order.elapsedDuration = elapsedDuration;
 				await order.save();
 			}
 		}
@@ -127,6 +158,7 @@ module.exports = {
 	getOrders,
 	createOrder,
 	updateOrderPending,
+	updateItemCooked,
 	updateOrderOpen,
 	deleteOrder,
 	deleteItem,

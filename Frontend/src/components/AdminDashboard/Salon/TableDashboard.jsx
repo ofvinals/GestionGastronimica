@@ -5,13 +5,14 @@ import { useContext, useEffect, useState } from 'react';
 import RestaurantLayout from '../../ServerDashboard/Layout/RestaurantLayout';
 import { LoungeContext } from '../../../context/LoungeContext.jsx';
 import { useLoungeActions } from '../../../hooks/useLoungeActions.jsx';
+import Loader from '../../../helpers/Loader.jsx';
 
 export const TableDashboard = ({ reload, onReload }) => {
-  const { dataSalons } = useLoungeActions();
-  const { state: loungeState } = useContext(LoungeContext);
+	const { dataSalons } = useLoungeActions();
+	const { state: loungeState, loading } = useContext(LoungeContext);
 	const [activeSalonId, setActiveSalonId] = useState(null);
 
-  useEffect(() => {
+	useEffect(() => {
 		dataSalons();
 	}, [reload]);
 
@@ -31,14 +32,19 @@ export const TableDashboard = ({ reload, onReload }) => {
 
 	return (
 		<div>
-			<RestaurantLayout
-				onReload={handleReload}
-				salonId={activeSalonId}
-				salonName={
-					loungeState.lounges.find((salon) => salon._id === activeSalonId)
-						?.name || 'Nombre no encontrado'
-				}
-			/>
+			{loading ? (
+				<Loader />
+			) : (
+				<RestaurantLayout
+					onReload={handleReload}
+					salonId={activeSalonId}
+					salonName={
+						loungeState.lounges.find(
+							(salon) => salon._id === activeSalonId
+						)?.name || 'Nombre no encontrado'
+					}
+				/>
+			)}
 		</div>
 	);
 };

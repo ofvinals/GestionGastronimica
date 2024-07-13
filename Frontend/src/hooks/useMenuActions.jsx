@@ -35,6 +35,7 @@ export const useMenuActions = () => {
 	};
 
 	const addMenuAction = async (values) => {
+		console.log(values);
 		dispatch({
 			type: 'DATA_MENUS_PENDING',
 		});
@@ -183,7 +184,7 @@ export const useMenuActions = () => {
 			});
 		}
 	};
-	
+
 	const deleteMenuAction = async (id) => {
 		const isConfirmed = await confirmAction({
 			title: 'Confirmas la eliminacion definitiva del menu?',

@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import MenuLayout from '../Salon/Layout/MenuLayout';
 import { TableDashboard } from './TableDashboard';
+import { UnderConstruction } from '../UnderConstruction';
 
 export const SalonMenu = () => {
 	const [activeButton, setActiveButton] = useState('tables');
 	const [showDataTable, setShowDataTable] = useState(true);
 	const [showDataLayout, setShowDataLayout] = useState(false);
+	const [showDataSales, setShowDataSales] = useState(false);
 
 	const handleTable = () => {
 		setShowDataTable(true);
@@ -19,7 +21,8 @@ export const SalonMenu = () => {
 
 	const handleSales = () => {
 		setShowDataTable(false);
-		setShowDataLayout(true);
+		setShowDataLayout(false);
+		setShowDataSales(true)
 	};
 
 	return (
@@ -66,6 +69,7 @@ export const SalonMenu = () => {
 				<div className='w-full'>
 					{showDataTable && <TableDashboard />}
 					{showDataLayout && <MenuLayout />}
+					{showDataSales && <UnderConstruction />}
 				</div>
 			</section>
 		</>

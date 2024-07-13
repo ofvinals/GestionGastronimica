@@ -10,26 +10,32 @@ export const OrderResume = ({ onClose, setOpenLayout, setOrderForm }) => {
 	const { state: Order } = useContext(OrderContext);
 	const { addOrderAction, deleteOrderPrevAction } = useOrderActions();
 	const { loadAllLayoutAction } = useLayoutActions();
-	
 	const [orders, setOrders] = useState(Order.prevOrder);
 	const [confirmOrder, setConfirmOrder] = useState(false);
-console.log(orders)
 
-	// MODIFICA EL ESTADO DE PENDING EN CADA ITEM
+	// MODIFICA EL ESTADO DE PENDING EN CADA ITEM SEGUN EL BOTON
 	const handleCheckboxChange = (orderIndex, itemIndex) => {
 		const updatedOrders = [...orders];
 		updatedOrders[orderIndex].items[itemIndex].pending =
 			!updatedOrders[orderIndex].items[itemIndex].pending;
 		setOrders(updatedOrders);
 	};
-
+	
 	// FUNCION PARA COMFIRMAR LA ORDEN Y ENVIAR A COCINA. BORRA LA PREVORDER DEL REDUCER Y VUELVE AL LAYOUT
 	const handleConfirm = async () => {
 		try {
+
+			// AGREGA NUEVA ORDEN
 			await addOrderAction(orders);
+
+			// ABRE MODAL DE CONFIRMACION
 			setConfirmOrder(true);
+
+			// BORRA PREVORDER DEL REDUCER
 			await deleteOrderPrevAction(Order.prevOrder[0].tableId);
 			setOrderForm(false);
+
+			// RECARGA LAYOUT P ACTUALIZAR ESTADO DE LAS MESAS
 			loadAllLayoutAction();
 			setOpenLayout(true);
 		} catch (error) {
@@ -38,7 +44,7 @@ console.log(orders)
 	};
 
 	return (
-		<div className=''>
+		<div>
 			{confirmOrder ? (
 				<MenuServer />
 			) : (

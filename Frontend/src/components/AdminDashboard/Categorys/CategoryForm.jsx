@@ -17,6 +17,7 @@ const CategoryForm = ({ rowId, onClose, mode = 'edit' }) => {
 		formState: { errors },
 	} = useForm();
 
+	// CARGA DATOS DE LA CATEGORIA
 	const loadCategory = () => {
 		const category = state.categorys.find(
 			(category) => category._id === rowId
@@ -33,6 +34,7 @@ const CategoryForm = ({ rowId, onClose, mode = 'edit' }) => {
 		}
 	}, [rowId, mode]);
 
+	// PREPARA LOS VALUES
 	const onSubmit = handleSubmit(async (values) => {
 		try {
 			const categoryData = {
@@ -40,8 +42,10 @@ const CategoryForm = ({ rowId, onClose, mode = 'edit' }) => {
 				status: values.status,
 			};
 			if (mode === 'edit') {
+				// SI MODE ES EDIT EJECUTA LA FUNCION P EDITAR CATEGORIA
 				await editCategoryAction(rowId, categoryData);
 			} else {
+				// SINO AGREGA LA CATEGORIA INGRESADA
 				await addCategoryAction(categoryData);
 			}
 			onClose();
@@ -58,21 +62,23 @@ const CategoryForm = ({ rowId, onClose, mode = 'edit' }) => {
 			mode={mode}>
 			<FormField
 				id='name'
-				label='Nombre'
+				label='Nombre*'
 				register={register('name', {
 					required: 'El nombre es obligatorio',
 				})}
 				errors={errors.name}
-			/>
+			/>{' '}
+			{errors.name && (
+				<span className='text-red-700 fs-6'>{errors.name.message}</span>
+			)}
 			<FormField
 				id='status'
 				label='Categoría Activa?'
 				type='checkbox'
 				register={register('status')}
-				errors={errors.status}
-
-				renderAs="toggle"
+				renderAs='toggle'
 			/>
+			<p className='text-sm'>(*) Campos obligatorios</p>
 		</GenericForm>
 	);
 };

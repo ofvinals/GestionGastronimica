@@ -6,8 +6,9 @@ import { useOrderActions } from '../../../hooks/useOrderActions';
 import { CashOrder } from './CashOrder';
 import { useLayoutActions } from '../../../hooks/useLayoutActions';
 import { showAlert, confirmAction } from '../../../helpers/showAlert';
-import moment from 'moment-timezone';
 import Modals from '../../Modals';
+import moment from 'moment';
+import { DateTime } from 'luxon';
 
 const originalState = {
 	1: { pending: false },
@@ -30,6 +31,10 @@ export const OrderCheck = ({
 	const [cashOrder, setCashOrder] = useState(false);
 	const [modifiedItems, setModifiedItems] = useState([]);
 	const [hasModifiedItems, setHasModifiedItems] = useState(false);
+	const [elapsedDuration, setElapsedDuration] = useState({
+		hours: 0,
+		minutes: 0,
+	});
 
 	// DEVUELVE TODAS LAS ORDENES GUARDADAS
 	useEffect(() => {
@@ -69,10 +74,15 @@ export const OrderCheck = ({
 		return [];
 	}, [stateOrders, tableId]);
 
+	// EXTRAE Y GUARDA EN VARIABLES DATOS NECESARIOS PARA MOSTRAR
 	const salonName = filteredOrder[0]?.salonName;
 	const tableNum = filteredOrder[0]?.tableNum;
 	const diners = filteredOrder[0]?.diners;
 	const server = filteredOrder[0]?.server;
+	const openAt = filteredOrder[0]?.openAt;
+	const fechaUTC = DateTime.fromISO(openAt, { zone: 'utc' });
+	const fechaBuenosAires = fechaUTC.setZone('America/Argentina/Buenos_Aires');
+	const fechaFormateada = fechaBuenosAires.toFormat('dd/MM/yyyy - HH:mm:ss');
 
 	// MANEJA EL ESTADO DE PENDING DE CADA ITEM
 	const handleCheckboxChange = (orderId, itemId) => {
@@ -94,17 +104,15 @@ export const OrderCheck = ({
 		});
 		setOrders(updatedOrders);
 	};
-
 	// FUNCION PARA ELIMINAR ITEMS PENDIENTES
 	const handleDeleteItem = async (orderId, itemId) => {
 		await deleteItemOrder(orderId, itemId);
 		dataOrders();
 	};
-
 	// FILTRA ITEMS CON PENDING TRUE Y ENVIA NUEVA PREVORDER
 	const handlePending = async () => {
 		const itemIds = modifiedItems.map((item) => item._id);
-		console.log(itemIds)
+		console.log(itemIds);
 		try {
 			// ACTUALIZA PENDING DE LOS ITEMS MODIFICADOS EN REDUCER Y BACKEND
 			await updateOrderPending(itemIds);
@@ -113,37 +121,50 @@ export const OrderCheck = ({
 			console.error('Error al actualizar el item:', error);
 		}
 	};
-
 	// FUNCIÓN PARA VERIFICAR SI TODOS LOS ÍTEMS ESTÁN PENDING FALSE
 	const allItemsConfirmed = () => {
 		return orders.every((order) =>
 			order.items.every((item) => !item.pending)
 		);
 	};
-
 	// FUNCIÓN PARA MANEJAR EL CIERRE DE LA MESA Y COBRO DE LA ORDEN
 	const handleCash = async () => {
 		if (allItemsConfirmed()) {
 			const isConfirmed = await confirmAction({
-				title: 'Confirmas el cierre de la mesa?',
+				title: '¿Confirmas el cierre de la mesa?',
 				icon: 'warning',
 			});
 			if (isConfirmed) {
-				const closeTime = moment().tz('America/Argentina/Buenos_Aires').toDate();
+				const closeTime = new Date().toString();
 				const isOpen = false;
 				const orderOpen = false;
 				const index = currentLayout.findIndex(
 					(table) => table._id === tableId
 				);
+				// ACTUALIZA EL ESTADO DE LA MESA
 				updateTableIsOpenAction(closeTime, salonId, tableId, isOpen, index);
-				orderCashAction(closeTime, orderOpen, filteredOrder);
+				// CALCULA EL TIEMPO DE USO ENTRE CLOSE Y OPEN
+				const duration = moment.duration(
+					moment(closeTime).diff(moment(openAt))
+				);
+				// EXTRAE HORA Y MINUTO DE LA DURACION
+				const elapsedHours = Math.floor(duration.asHours());
+				const elapsedMinutes = duration.minutes();
+				const elapsedDurationString = `${elapsedHours}H${elapsedMinutes}M`;
+				setElapsedDuration(elapsedDurationString);
+				// EJECUTA ACCION P COBRAR. ENVIA DATOS A REDUCER Y BACKEND
+				orderCashAction(
+					closeTime,
+					orderOpen,
+					filteredOrder,
+					elapsedDuration
+				);
 				setCashOrder(true);
 			}
 		} else {
-			// SI HAY ITEMS PENDIENTES
 			showAlert({
 				icon: 'error',
-				title: 'Tienes items aún están pendientes en la comanda. No puedes cerrar la mesa',
+				title: 'Tienes ítems pendientes en la comanda. No puedes cerrar la mesa.',
 			});
 		}
 	};
@@ -163,6 +184,10 @@ export const OrderCheck = ({
 							<p className='mb-3'>
 								<span className='font-semibold'>Comensales:</span>{' '}
 								{diners}
+							</p>
+							<p className='mb-3'>
+								<span className='font-semibold'>Hora Apertura:</span>{' '}
+								{fechaFormateada}
 							</p>
 							{filteredOrder.map((order) => (
 								<div key={order._id}>
@@ -254,10 +279,7 @@ export const OrderCheck = ({
 				</div>
 			</>
 			{cashOrder && (
-				<Modals
-					isOpen={true}
-					onClose={onClose}
-					title='Cobrar Mesa'>
+				<Modals isOpen={true} onClose={onClose} title='Cobrar Mesa'>
 					<CashOrder
 						order={filteredOrder}
 						salonName={salonName}
@@ -265,6 +287,7 @@ export const OrderCheck = ({
 						server={server}
 						tableNum={tableNum}
 						onClose={onClose}
+						elapsedTime={elapsedDuration}
 					/>
 				</Modals>
 			)}

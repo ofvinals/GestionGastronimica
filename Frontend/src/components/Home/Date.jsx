@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-// Componente que se encarga de mostrar la fecha y hora en el header
+// COMPONENTE P MOSTRAR FECHA Y HORA EN EL HEADER
 export const DateTime = () => {
 	const [dateTime, setDateTime] = useState(new Date());
 

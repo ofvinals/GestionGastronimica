@@ -41,7 +41,8 @@ export const OrderReducer = (state, action) => {
 								tableId: action.payload.tableId,
 								orderOpen: action.payload.orderOpen,
 								items: updatedItems,
-								server:action.payload.server
+								server: action.payload.server,
+								openAt: action.payload.openAt,
 							};
 						} else {
 							return {
@@ -49,7 +50,8 @@ export const OrderReducer = (state, action) => {
 								diners: action.payload.diners,
 								tableId: action.payload.tableId,
 								orderOpen: action.payload.orderOpen,
-								server:action.payload.server,
+								server: action.payload.server,
+								openAt: action.payload.openAt,
 								items: [...order.items, action.payload.item],
 							};
 						}
@@ -65,7 +67,8 @@ export const OrderReducer = (state, action) => {
 						tableId: action.payload.tableId,
 						diners: action.payload.diners,
 						orderOpen: action.payload.orderOpen,
-						server:action.payload.server,
+						server: action.payload.server,
+						openAt: action.payload.openAt,
 						items: [action.payload.item],
 					},
 				];
@@ -124,6 +127,23 @@ export const OrderReducer = (state, action) => {
 					}
 					return order;
 				}),
+			};
+		case 'UPDATE_ITEM_COOKED':
+			console.log(action);
+			return {
+				...state,
+				orders: state.orders.map((order) =>
+					order._id === action.payload.orderId
+						? {
+								...order,
+								items: order.items.map((item) =>
+									item._id === action.payload.itemId
+										? { ...item, cookedAt: action.payload.cookedAt }
+										: item
+								),
+						  }
+						: order
+				),
 			};
 		case 'DELETE_ITEM_SUCCESS':
 			return {

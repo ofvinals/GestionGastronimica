@@ -9,9 +9,10 @@ import ProductForm from './SupplierForm.jsx';
 import { ProductContext } from '../../../../context/ProductContext.jsx';
 import { Button } from 'react-bootstrap';
 import { useSupplierActions } from '../../../../hooks/useSupplierActions.jsx';
+import Loader from '../../../../helpers/Loader.jsx';
 
 export const SupplierDashboard = () => {
-	const { state } = useContext(ProductContext);
+	const { state, loading } = useContext(ProductContext);
 	const {
 		dataSuppliers,
 		disableSupplierAction,
@@ -21,25 +22,32 @@ export const SupplierDashboard = () => {
 	const [openEditModal, setOpenEditModal] = useState(false);
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const [rowId, setRowId] = useState(null);
+
+	// ABRE MODAL P AGREGAR
 	const handleOpenAddModal = (rowId) => {
 		setOpenAddModal(true);
 		setRowId(rowId);
 	};
 
+	// ABRE MODAL P EDITAR
 	const handleOpenEditModal = (rowId) => {
 		setOpenEditModal(true);
 		setRowId(rowId);
 	};
+
+	// CIERRA MODALES
 	const handleCloseModal = () => {
 		setOpenEditModal(false);
 		setOpenAddModal(false);
 		dataSuppliers();
 	};
 
+	// CARGA LOS DATOS DE PROVEEDORES
 	useEffect(() => {
 		dataSuppliers();
 	}, []);
 
+	// CONFIGURA COLUMNS PARA LA TABLE
 	const columns = useMemo(
 		() => [
 			{
@@ -93,6 +101,7 @@ export const SupplierDashboard = () => {
 		[]
 	);
 
+	// CONFIGURA ACTIONS PARA LA TABLE
 	const actions = [
 		{
 			text: 'Inhabilitar',
@@ -132,37 +141,49 @@ export const SupplierDashboard = () => {
 
 	return (
 		<>
-			<div className='px-5 shadowIndex rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-between'>
-				<h3 className=' text-white text-xl font-semibold'>Proveedores</h3>{' '}
-				<Button
-					onClick={handleOpenAddModal}
-					className='mx-3 my-3 border-1 border-white p-1 bg-slate-600 hover:text-slate-600 text-slate-50 hover:bg-white rounded-md'>
-					<i className='pe-2 fa-solid fa-plus hover:text-slate-600'></i>
-					Agregar Proveedor
-				</Button>
-			</div>
-			<div className='table-responsive'>
-				<ThemeProvider theme={darkTheme}>
-					<CssBaseline />
-					<Table
-						columns={columns}
-						data={state.suppliers}
-						actions={actions}
-					/>
-				</ThemeProvider>
-			</div>
-			<Modals
-				isOpen={openEditModal}
-				onClose={handleCloseModal}
-				title='Editar Proveedor'>
-				<ProductForm rowId={rowId} onClose={handleCloseModal} mode='edit' />
-			</Modals>
-			<Modals
-				isOpen={openAddModal}
-				onClose={handleCloseModal}
-				title='Agregar Nuevo Proveedor'>
-				<ProductForm onClose={handleCloseModal} mode='create' />
-			</Modals>
+			{loading ? (
+				<Loader />
+			) : (
+				<>
+					<div className='px-5 shadowIndex rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-around sm:justify-between'>
+						<h3 className=' text-white text-xl font-semibold'>
+							Proveedores
+						</h3>{' '}
+						<Button
+							onClick={handleOpenAddModal}
+							className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
+							<i className='pe-2 fa-solid fa-plus hover:text-slate-600'></i>
+							Agregar Proveedor
+						</Button>
+					</div>
+					<div className='table-responsive'>
+						<ThemeProvider theme={darkTheme}>
+							<CssBaseline />
+							<Table
+								columns={columns}
+								data={state.suppliers}
+								actions={actions}
+							/>
+						</ThemeProvider>
+					</div>
+					<Modals
+						isOpen={openEditModal}
+						onClose={handleCloseModal}
+						title='Editar Proveedor'>
+						<ProductForm
+							rowId={rowId}
+							onClose={handleCloseModal}
+							mode='edit'
+						/>
+					</Modals>
+					<Modals
+						isOpen={openAddModal}
+						onClose={handleCloseModal}
+						title='Agregar Nuevo Proveedor'>
+						<ProductForm onClose={handleCloseModal} mode='create' />
+					</Modals>
+				</>
+			)}
 		</>
 	);
 };

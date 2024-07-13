@@ -30,8 +30,8 @@ export const OrderForm = ({
 	const { state: serverState } = useContext(AuthContext);
 	const [selectedCategory, setSelectedCategory] = useState(null);
 	const [confirmComanda, setConfirmComanda] = useState(null);
-
 	const server = serverState.user.displayName;
+	
 	// RECIBE LA CATEGORIA SELECCIONADA EN CATEGORYSELECTION
 	const handleCategorySelect = (category) => {
 		setSelectedCategory(category);
@@ -54,12 +54,15 @@ export const OrderForm = ({
 			const index = currentLayout.findIndex(
 				(table) => table._id === tableId
 			);
+			// ACTUALIZA ESTADO DE LA MESA
 			updateTableIsOpenAction(salonId, tableId, isOpen, index);
 			if (prevOrder.prevOrder && prevOrder.prevOrder.length > 0) {
+				// BORRAR PREVORDER DE REDUCER
 				await deleteOrderPrevAction(prevOrder.prevOrder[0].tableId);
 			} else {
 				console.error('No hay ordenes previas para eliminar');
 			}
+			// CIERRA EL FORM Y ABRE LAYOUT
 			setOrderForm(false);
 			setOpenLayout(true);
 		} catch (error) {
@@ -91,7 +94,7 @@ export const OrderForm = ({
 						</div>
 					</div>
 					<div className='w-full flex flex-row flex-wrap items-center justify-center'>
-						<div className='flex flex-col flex-wrap items-center border-1 mx-4 rounded-xl border-slate-800 w-full'>
+						<div className='flex flex-col flex-wrap items-center border-1 mx-4 px-2 rounded-xl bg-white border-slate-800 w-full'>
 							<h2 className='text-xl font-semibold mt-2'>
 								Categorias del Menu
 							</h2>

@@ -6,6 +6,7 @@ const {
 	createMenu,
 	deleteMenu,
 	updateMenu,
+	updateIngredients,
 
 	getCategorys,
 	getCategory,
@@ -16,15 +17,16 @@ const {
 
 const router = express.Router();
 
-router.get('/menus',  getMenus);
-router.get('/menus/:id',  getMenu);
-router.post ('/menus',  createMenu);
-router.delete('/menus/:id',  deleteMenu);
-router.put('/menus/:id',  updateMenu);
+router.get('/menus', getMenus);
+router.get('/menus/:id', getMenu);
+router.post('/menus', createMenu);
+router.delete('/menus/:id', deleteMenu);
+router.put('/menus/:id', updateMenu);
+router.put('/menus/:id', updateIngredients);
 
-router.get('/categorys',  getCategorys);
-router.get('/categorys/:id',  getCategory);
-router.post ('/categorys',  createCategory);
-router.delete('/categorys/:id',  deleteCategory);
-router.put('/categorys/:id',  updateCategory);
+router.get('/categorys', getCategorys);
+router.get('/categorys/:id', getCategory);
+router.post('/categorys', createCategory);
+router.delete('/categorys/:id', deleteCategory);
+router.put('/categorys/:id', updateCategory);
 module.exports = router;

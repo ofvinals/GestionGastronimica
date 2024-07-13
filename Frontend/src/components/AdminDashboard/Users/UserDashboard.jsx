@@ -9,35 +9,41 @@ import UserForm from './UserForm.jsx';
 import { UserContext } from '../../../context/UserContext.jsx';
 import { useUserActions } from '../../../hooks/useUserActions.jsx';
 import '../../../css/Custom.css';
+import Loader from '../../../helpers/Loader.jsx';
 
 export const UserDashboard = () => {
-	const { state } = useContext(UserContext);
+	const { state, loading } = useContext(UserContext);
 	const { dataUsers, disableUserAction, enableUserAction, deleteUserAction } =
 		useUserActions();
 	const [openEditModal, setOpenEditModal] = useState(false);
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const [rowId, setRowId] = useState(null);
 
+	// ABRE MODAL P AGERGAR Y ENVIA PROP ROWID
 	const handleOpenAddModal = (rowId) => {
 		setOpenAddModal(true);
 		setRowId(rowId);
 	};
 
+	// ABRE MODAL P EDITAR Y ENVIA PROP ROWID
 	const handleOpenEditModal = (rowId) => {
 		setOpenEditModal(true);
 		setRowId(rowId);
 	};
 
+	// CIERRA TODOS LOS MODALES
 	const handleCloseModal = () => {
 		setOpenEditModal(false);
 		setOpenAddModal(false);
 		dataUsers();
 	};
 
+	// CARGA DATOS DE USUARIOS
 	useEffect(() => {
 		dataUsers();
 	}, []);
 
+	// CONFIGURA COLUMNS PARA LA TABLE
 	const columns = useMemo(
 		() => [
 			{
@@ -79,6 +85,7 @@ export const UserDashboard = () => {
 		[]
 	);
 
+	// CONFIGURA ACTIONS PARA LA TABLE
 	const actions = [
 		{
 			text: 'Inhabilitar',
@@ -118,33 +125,49 @@ export const UserDashboard = () => {
 
 	return (
 		<>
-			<div className='px-5 bg-slate-600 shadowIndex flex flex-wrap flex-row items-center justify-between rounded-t-md'>
-				<h3 className=' text-white text-xl font-semibold '>Usuarios</h3>
-				<button
-					onClick={handleOpenAddModal}
-					className='mx-3 my-3 border-1 border-white p-1 bg-slate-700 hover:text-slate-700 text-slate-50 hover:bg-white rounded-md'>
-					<i className='pe-2 fa-solid fa-plus'></i>
-					Agregar Usuarios
-				</button>
-			</div>
-			<div className='table-responsive'>
-				<ThemeProvider theme={darkTheme}>
-					<CssBaseline />
-					<Table columns={columns} data={state.users} actions={actions} />
-				</ThemeProvider>
-			</div>
-			<Modals
-				isOpen={openEditModal}
-				onClose={handleCloseModal}
-				title='Editar Usuario'>
-				<UserForm rowId={rowId} onClose={handleCloseModal} mode='edit' />
-			</Modals>
-			<Modals
-				isOpen={openAddModal}
-				onClose={handleCloseModal}
-				title='Agregar Nuevo Usuario'>
-				<UserForm onClose={handleCloseModal} mode='create' />
-			</Modals>
+			{loading ? (
+				<Loader />
+			) : (
+				<>
+					<div className='px-5 bg-slate-600 shadowIndex flex flex-wrap flex-row items-center justify-around sm:justify-between rounded-t-md'>
+						<h3 className=' text-white text-xl font-semibold '>
+							Usuarios
+						</h3>
+						<button
+							onClick={handleOpenAddModal}
+							className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
+							<i className='pe-2 fa-solid fa-plus'></i>
+							Agregar Usuarios
+						</button>
+					</div>
+					<div className='table-responsive'>
+						<ThemeProvider theme={darkTheme}>
+							<CssBaseline />
+							<Table
+								columns={columns}
+								data={state.users}
+								actions={actions}
+							/>
+						</ThemeProvider>
+					</div>
+					<Modals
+						isOpen={openEditModal}
+						onClose={handleCloseModal}
+						title='Editar Usuario'>
+						<UserForm
+							rowId={rowId}
+							onClose={handleCloseModal}
+							mode='edit'
+						/>
+					</Modals>
+					<Modals
+						isOpen={openAddModal}
+						onClose={handleCloseModal}
+						title='Agregar Nuevo Usuario'>
+						<UserForm onClose={handleCloseModal} mode='create' />
+					</Modals>
+				</>
+			)}
 		</>
 	);
 };

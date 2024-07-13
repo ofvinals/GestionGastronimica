@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
 	const [state, dispatch] = useReducer(AuthReducer, initialState);
 	const navigate = useNavigate();
 
+	// CON CADA REFRESCO DE PAGINA CARGA TOKEN DESDE LOCALSTORAGE Y VERIFICA AUTENTICIDAD Y VIGENCIA
 	useEffect(() => {
 		const token = localStorage.getItem('token');
 		if (token) {
@@ -28,7 +29,6 @@ export const AuthProvider = ({ children }) => {
 					headers: { Authorization: `Bearer ${token}` },
 				})
 				.then((response) => {
-					console.log(response.data);
 					dispatch({
 						type: 'LOGIN_SUCCESS',
 						payload: response.data,

@@ -11,7 +11,8 @@ const getMenus = async (req, res) => {
 };
 
 const createMenu = async (req, res) => {
-	const { name, category, description, price, status } = req.body;
+	const { name, category, description, price, status, ingredients, recipe } =
+		req.body;
 	try {
 		const newMenu = new Menu({
 			name,
@@ -19,6 +20,8 @@ const createMenu = async (req, res) => {
 			description,
 			price,
 			status,
+			ingredients,
+			recipe,
 		});
 		const savedMenu = await newMenu.save();
 		res.json(savedMenu);
@@ -41,13 +44,33 @@ const getMenu = async (req, res) => {
 
 const updateMenu = async (req, res) => {
 	try {
-		const { name, category, description, price, status } = req.body;
+		const {
+			name,
+			category,
+			description,
+			price,
+			status,
+			ingredients,
+			recipe,
+		} = req.body;
 		const updateMenu = await Menu.findByIdAndUpdate(req.params.id, req.body, {
 			new: true,
 		});
 		res.json(updateMenu);
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
+	}
+};
+
+const updateIngredients = async (req, res) => {
+	try {
+		const menu = await Menu.findByIdAndUpdate(req.params.id, req.body, {
+			new: true,
+			runValidators: true,
+		});
+		res.send(menu);
+	} catch (error) {
+		res.status(400).send(error);
 	}
 };
 
@@ -135,4 +158,5 @@ module.exports = {
 	createCategory,
 	updateCategory,
 	deleteCategory,
+	updateIngredients,
 };

@@ -8,16 +8,18 @@ export const Menu = () => {
 	const [showDataCategpry, setShowDataCategpry] = useState(false);
 	const [showDataMenu, setShowDataMenu] = useState(true);
 
+	// ABRE SUBMENU CATEGORIAS Y CIERRA MENU
 	const handleCategory = () => {
 		setShowDataCategpry(true);
 		setShowDataMenu(false);
-		// setShowDataTable(false);
 	};
+
+	// ABRE SUBMENU MENU Y CIERRA CATEGORUAS
 	const handleMenu = () => {
 		setShowDataCategpry(false);
 		setShowDataMenu(true);
-		// setShowDataTable(false);
 	};
+
 	return (
 		<>
 			<section>
@@ -34,7 +36,6 @@ export const Menu = () => {
 						}`}>
 						Carta Menu
 					</button>
-
 					<button
 						onClick={() => {
 							handleCategory();
@@ -51,8 +52,6 @@ export const Menu = () => {
 				<div className='w-full'>
 					{showDataMenu && <MenuDashboard />}
 					{showDataCategpry && <CategoryProducts />}
-					{/* {showDataTable && <TableDashboard />}
-				{showDataUsers && <UserDashboard />} */}
 				</div>
 			</section>
 		</>

@@ -1,6 +1,6 @@
-import { ProductDashboard } from './ProductDashboard';
+import { ProductDashboard } from '../Products/ProductDashboard';
 import { useState } from 'react';
-import { SupplierDashboard } from './Suppliers/SupplierDashboard';
+import { SupplierDashboard } from '../Products/Suppliers/SupplierDashboard';
 import '../../../css/Custom.css';
 import { UnderConstruction } from '../UnderConstruction';
 
@@ -10,17 +10,21 @@ export const ProductsMenu = () => {
 	const [showDataSuppliers, setShowDataSuppliers] = useState(false);
 	const [showDataStocks, setShowDataStocks] = useState(false);
 
+	// ABRE SECCION PRODUCTOS Y CIERRA OTROS MODALES
 	const handleProduct = () => {
 		setShowDataProducts(true);
 		setShowDataSuppliers(false);
 		setShowDataStocks(false);
 	};
 
+	// ABRE SECCION PROVEEDORES Y CIERRA OTROS MODALES
 	const handleSupplier = () => {
 		setShowDataProducts(false);
 		setShowDataSuppliers(true);
 		setShowDataStocks(false);
 	};
+
+	// ABRE SECCION STOCK Y CIERRA OTROS MODALES
 	const handleStock = () => {
 		setShowDataProducts(false);
 		setShowDataSuppliers(false);

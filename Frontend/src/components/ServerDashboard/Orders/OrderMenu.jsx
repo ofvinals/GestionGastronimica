@@ -5,7 +5,6 @@ import { useMenuActions } from '../../../hooks/useMenuActions.jsx';
 import { MenuContext } from '../../../context/MenuContext.jsx';
 import { OrderCard } from './OrderCard.jsx';
 import { useOrderActions } from '../../../hooks/useOrderActions.jsx';
-import moment from 'moment-timezone';
 
 // RECIBE PROPS DE ORDERFORM
 export const OrderMenu = ({
@@ -21,7 +20,7 @@ export const OrderMenu = ({
 	const { addOrderPrevAction } = useOrderActions();
 	const [currentDiners, setCurrentDiners] = useState(diners);
 
-	// DEVUELVE TODOS LOS MENUS DE LA CARTA
+	// CARGA TODOS LOS MENUS DE LA CARTA
 	useEffect(() => {
 		dataMenus();
 	}, []);
@@ -31,15 +30,14 @@ export const OrderMenu = ({
 		setCurrentDiners(diners);
 	}, [diners]);
 
-	// FUNCION PARA GUARDAR ORDEN EN REDUCER Y BACKEND CON TODOS LOS DATOS DE LA ORDEN
-	const updateOrder = (menu, quantity, text) => {
-		const openAt = moment().tz('America/Argentina/Buenos_Aires').toDate();
+	// PREPARA TODOS LOS DATOS DE LA ORDEN Y CADA ITEM SELECCINADO P ENVIAR A REDUCER Y BACKEND
+	const updateOrder = (menu, quantity, text, pending) => {
 		const values = {
 			salonName: salonName,
 			tableNum: tableNum,
 			tableId: tableId,
 			orderOpen: true,
-			openAt: openAt,
+			openAt: new Date().toString(),
 			server: server,
 			diners: currentDiners,
 			item: {
@@ -48,18 +46,23 @@ export const OrderMenu = ({
 				price: menu.price,
 				quantity: quantity,
 				text: text,
+				pending: pending,
 			},
 		};
 		console.log(values);
+		
+		// REGISTRA NUEVA ORDER
 		addOrderPrevAction(values);
 	};
 
 	// FILTRA MENUS POR CATEGORIA SELECCIONADA EN CATEGORYSELECTION
 	const filteredMenus = useMemo(() => {
 		if (selectedCategory) {
-			return menuState.menus.filter(
-				(menu) => menu.category === selectedCategory
-			);
+			return menuState.menus
+			// FILTRA POR ESTADO HABILITADO DE CADA MENU 
+				.filter((menu) => menu.status === true)
+				// FILTRA POR CATEGORIA DE MENU
+				.filter((menu) => menu.category === selectedCategory);
 		}
 		return menuState.menus;
 	}, [menuState.menus, selectedCategory]);
@@ -68,6 +71,7 @@ export const OrderMenu = ({
 		<div className='flex flex-row flex-wrap items-center justify-around gap-4'>
 			{filteredMenus &&
 				filteredMenus.map((menu, id) => (
+					// ENVIA DATOS DEL MENU. RECIBE ACTUALIZACION DE LA ORDER DESDE ORDERCARD
 					<OrderCard key={id} menu={menu} updateOrder={updateOrder} />
 				))}
 		</div>

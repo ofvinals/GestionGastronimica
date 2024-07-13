@@ -1,20 +1,21 @@
 /* eslint-disable react/prop-types */
 import { useLayoutActions } from '../../../hooks/useLayoutActions';
 
-export const CashOrder = ({ order, onClose }) => {
+export const CashOrder = ({ order, onClose, elapsedTime }) => {
 	const { loadAllLayoutAction } = useLayoutActions();
 	const salonName = order[0]?.salonName;
 	const tableNum = order[0]?.tableNum;
 	const diners = order[0]?.diners;
 	const server = order[0]?.server;
 
+	// MANEJA PAGO CON EFECTIVO. RECARGA LAYOUT
 	const handleCash = () => {
 		onClose();
 		loadAllLayoutAction();
 	};
+	// MANEJA PAGO CON TARJETA CREDITO/DEBITO
 	const handleCreditCard = () => {};
-
-	// Calcular la cantidad total de items y el precio total
+	// SUMA LA CANTIDAD DE ITEMS Y EL PRECIO DE TODOS LOS ITEMS DE LA ORDER
 	const { totalItems, totalPrice } = order.reduce(
 		(acc, currOrder) => {
 			currOrder.items.forEach((item) => {
@@ -39,14 +40,14 @@ export const CashOrder = ({ order, onClose }) => {
 								<span className='font-semibold'>Server:</span> {server}
 							</p>
 							<p className='mb-3'>
-								<span className='font-semibold'>Comensales:</span>{' '}
+								<span className='font-semibold'>Comensales:</span>
 								{diners}
 							</p>
 							<p className='mb-3'>
 								<span className='font-semibold'>
 									Tiempo de ocupacion:
 								</span>{' '}
-								{diners}
+								{elapsedTime.hours} horas {elapsedTime.minutes} minutos
 							</p>
 							{order.map((order) => (
 								<div
@@ -68,12 +69,16 @@ export const CashOrder = ({ order, onClose }) => {
 											</p>
 										</div>
 									))}
-									<p className=' font-semibold border-t-2 border-slate-300'>
-										Servicio de Mesa $
-									</p>
-									<span></span>
 								</div>
 							))}
+						</div>{' '}
+						<div className='flex flex-col ml-5'>
+							<p>Servicio de mesa: $</p>
+							<span></span>
+							<p>Descuento (%): </p>
+							<span></span>
+							<p>Tips:</p>
+							<span></span>
 						</div>
 					</>
 				)}

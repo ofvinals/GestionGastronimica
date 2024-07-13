@@ -8,12 +8,10 @@ import { AuthContext } from '../../context/AuthContext.jsx';
 import { useUserActions } from '../../hooks/useUserActions.jsx';
 import FormField from '../../helpers/FormField';
 
-const Profile = ({ onClose }) => {
-	const [loading, setLoading] = useState(false);
-	const { state } = useContext(AuthContext);
+const Profile = ({  onClose }) => {
+	const { state, loading } = useContext(AuthContext);
 	const { dataUsers, editUserAction } = useUserActions();
 	const [idUser, setIdUser] = useState(null);
-
 	const {
 		register,
 		handleSubmit,
@@ -21,13 +19,14 @@ const Profile = ({ onClose }) => {
 		formState: { errors },
 		watch,
 	} = useForm();
-	const [showPassword, setShowPassword] = useState(false);
-	const toggleShowPassword = () => setShowPassword(!showPassword);
+	const [showPasswordCurrent, setShowPasswordCurrent] = useState(false);
+	const [showPasswordNew, setShowPasswordNew] = useState(false);
+	const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
+	// FILTRA USUARIO Y CARGA DATOS
 	const loadUser = async () => {
 		try {
 			const users = await dataUsers();
-			setLoading(true);
 			const user = users.find((user) => user._id === state.user.id);
 			if (user) {
 				setValue('name', user.name);
@@ -38,20 +37,19 @@ const Profile = ({ onClose }) => {
 				setValue('status', user.status);
 			}
 			setIdUser(user._id);
-			setLoading(false);
 		} catch (error) {
 			console.error('Error al cargar los datos del usuario', error);
 		}
 	};
 
+	// CARGA DATOS DE USUARIOS
 	useEffect(() => {
 		loadUser();
 	}, []);
 
+	// PREPARA DATOS Y ENVIA A REDUCER Y BACKEND P ACTUALIZAR
 	const onSubmit = handleSubmit(async (values) => {
 		try {
-			setLoading(true);
-
 			const userData = {
 				name: values.name,
 				subname: values.subname,
@@ -60,14 +58,13 @@ const Profile = ({ onClose }) => {
 				status: values.status,
 				dni: values.dni,
 			};
-
 			if (values.password && values.newPassword) {
 				userData.password = values.password;
 				userData.newPassword = values.newPassword;
 			}
-
+			// EJECUTA FUNCION P ACTUALIZAR DATOS
 			await editUserAction(idUser, userData);
-			setLoading(false);
+			// CIERRA MODAL DE EDICION
 			onClose();
 		} catch (error) {
 			console.error(error);
@@ -151,18 +148,19 @@ const Profile = ({ onClose }) => {
 					<FormField
 						id='password'
 						label='Contraseña actual'
-						type={showPassword ? 'text' : 'password'}
+						type={showPasswordCurrent ? 'text' : 'password'}
 						register={register('password')}
 						errors={errors.password}
 						extraProps={{
-							togglePasswordVisibility: toggleShowPassword,
-							showPassword,
+							togglePasswordVisibility: () =>
+								setShowPasswordCurrent(!showPasswordCurrent),
+							showPassword: showPasswordCurrent,
 						}}
 					/>
 					<FormField
 						id='newPassword'
 						label='Nueva contraseña'
-						type={showPassword ? 'text' : 'password'}
+						type={showPasswordNew ? 'text' : 'password'}
 						register={register('newPassword', {
 							minLength: {
 								value: 7,
@@ -172,14 +170,15 @@ const Profile = ({ onClose }) => {
 						})}
 						errors={errors.newPassword}
 						extraProps={{
-							togglePasswordVisibility: toggleShowPassword,
-							showPassword,
+							togglePasswordVisibility: () =>
+								setShowPasswordNew(!showPasswordNew),
+							showPassword: showPasswordNew,
 						}}
 					/>
 					<FormField
 						id='confirmPassword'
 						label='Confirmar nueva contraseña'
-						type={showPassword ? 'text' : 'password'}
+						type={showPasswordConfirm ? 'text' : 'password'}
 						register={register('confirmPassword', {
 							validate: (value) =>
 								value === watch('newPassword') ||
@@ -187,8 +186,9 @@ const Profile = ({ onClose }) => {
 						})}
 						errors={errors.confirmPassword}
 						extraProps={{
-							togglePasswordVisibility: toggleShowPassword,
-							showPassword,
+							togglePasswordVisibility: () =>
+								setShowPasswordConfirm(!showPasswordConfirm),
+							showPassword: showPasswordConfirm,
 						}}
 					/>
 					<Form.Group className='flex flex-wrap items-center w-full justify-around mt-3'>

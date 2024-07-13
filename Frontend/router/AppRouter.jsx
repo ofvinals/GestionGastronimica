@@ -23,21 +23,25 @@ export const AppRouter = () => {
 							<MenuProvider>
 								<LoungeProvider>
 									<OrderProvider>
-										<Header />
-										<Routes>
-											<Route path='/' element={<Home />}></Route>
-											<Route path='/home' element={<Home />}></Route>
-											<Route
-												path='/admin'
-												element={<Admin />}></Route>
-											<Route
-												path='/server'
-												element={<Server />}></Route>
-											<Route
-												path='/kitchen'
-												element={<Kitcken />}></Route>
-										</Routes>
-										<Footer />
+										<div className='bg-[#DBD7CF] min-h-screen'>
+											<Header />
+											<Routes>
+												<Route path='/' element={<Home />}></Route>
+												<Route
+													path='/home'
+													element={<Home />}></Route>
+												<Route
+													path='/admin'
+													element={<Admin />}></Route>
+												<Route
+													path='/server'
+													element={<Server />}></Route>
+												<Route
+													path='/kitchen'
+													element={<Kitcken />}></Route>
+											</Routes>
+											<Footer />
+										</div>
 									</OrderProvider>
 								</LoungeProvider>
 							</MenuProvider>

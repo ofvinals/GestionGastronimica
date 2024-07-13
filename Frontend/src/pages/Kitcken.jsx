@@ -1,5 +1,10 @@
-import React from "react";
+import { MenuKitchen } from '../components/KitchenDashboard/Executive/MenuKitchen';
 
 export const Kitcken = () => {
-  return <div>Kitcken</div>;
+	return (
+		<div>
+			<h1 className='text-center text-4xl font-bold my-5'>Kitchen</h1>
+			<MenuKitchen />;
+		</div>
+	);
 };

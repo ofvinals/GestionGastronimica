@@ -8,6 +8,7 @@ const itemSchema = new Schema({
 	quantity: { type: Number, required: true },
 	text: { type: String },
 	pending: { type: Boolean },
+	cookedAt: { type: String },
 });
 
 const orderSchema = new Schema(
@@ -20,6 +21,7 @@ const orderSchema = new Schema(
 		orderOpen: { type: Boolean },
 		openAt: { type: Date },
 		closeTime: { type: Date },
+		elapsedDuration: [],
 		items: [itemSchema],
 	},
 	{ timestamps: true }

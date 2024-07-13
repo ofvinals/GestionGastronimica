@@ -7,23 +7,24 @@ import { MenuContext } from '../../../context/MenuContext';
 export const CategorySelection = ({ onCategorySelect }) => {
 	const { dataCategorys } = useCategoryActions();
 	const { state } = useContext(MenuContext);
+
+	// CARGA LAS CATEGORIAS 
 	useEffect(() => {
 		dataCategorys();
 	}, []);
-
 	const categorys = state.categorys;
 	
 	return (
 		<div className='flex flex-row flex-wrap w-full items-center justify-around my-5 '>
 			<button
 				onClick={() => onCategorySelect(null)}
-				className='mx-1 my-3 border-1 border-white p-2 bg-slate-700 hover:text-slate-600 text-slate-50 hover:bg-white rounded-md'>
+				className='flex items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
 				Todos
 			</button>
 			{categorys &&
 				categorys.map((category, id) => (
 					<button
-						className={`border-1 rounded-md border-white text-white p-2 ${
+						className={`flex items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded ${
 							onCategorySelect === category.name
 								? 'bg-green-700  rounded-t-lg shadowIndex'
 								: 'bg-slate-700 hover:font-bold'

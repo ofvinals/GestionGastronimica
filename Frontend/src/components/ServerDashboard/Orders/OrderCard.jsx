@@ -4,11 +4,14 @@ import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { useState } from 'react';
+import Modals from '../../Modals';
+import { InfoMenu } from './InfoMenu';
 
 // RECIBE DATOS DE ORDERMENU (UPDATEORDER GUARDA EL MENU, CANTIDAD Y OBSERVACIONES DE CADA PEDIDO)
 export const OrderCard = ({ menu, updateOrder }) => {
 	const [count, setCount] = useState(0);
 	const [text, setText] = useState('');
+	const [info, setInfo] = useState(false);
 
 	// CON CADA INCREMENTO ACTUALIZA UPDATEORDER EN ORDERMENU
 	const handleIncrement = () => {
@@ -33,6 +36,16 @@ export const OrderCard = ({ menu, updateOrder }) => {
 		updateOrder(menu, 0, newText);
 	};
 
+	// ABRE MODAL DE INFO DEL MENU
+	const handleInfo = () => {
+		setInfo(true);
+	};
+
+	// CIERRA MODAL DE INFO DEL MENU
+	const handleCloseModal = () => {
+		setInfo(false);
+	};
+
 	// MANEJA LOS BOTONES DE INC O DEC
 	const footer = (
 		<>
@@ -51,22 +64,33 @@ export const OrderCard = ({ menu, updateOrder }) => {
 	);
 
 	return (
-		<Card className='w-[250px] h-[300px] rounded-xl border-2 border-slate-700 flex flex-col justify-between'>
-			<div className='flex-grow flex flex-col justify-between w-full h-full '>
-				<div className='flex flex-col font-bold text-xl w-full'>
-					<h3 className='h-[50px]'>{menu.name}</h3>
-					<i className='text-center text-3xl my-2 fa-solid fa-circle-info text-blue-800'></i>
+		<>
+			<Card className='w-[250px] h-[300px] rounded-xl border-2 border-slate-700 flex flex-col justify-between'>
+				<div className='flex-grow flex flex-col justify-between w-full h-full '>
+					<div className='flex flex-col font-bold text-xl w-full'>
+						<h3 className='h-[50px]'>{menu.name}</h3>
+						<button onClick={handleInfo}>
+							<i className='text-center text-4xl mb-2 fa-solid fa-circle-info text-blue-800 hover:text-blue-500'></i>
+						</button>
+					</div>
+					<InputTextarea
+						value={text}
+						onChange={handleTextChange}
+						rows={3}
+						placeholder='Agregar nota'
+						className='w-full flex-grow border-2 border-slate-300'
+					/>
 				</div>
-
-				<InputTextarea
-					value={text}
-					onChange={handleTextChange}
-					rows={3}
-					placeholder='Agregar nota'
-					className='w-full flex-grow border-2 border-slate-300'
-				/>
-			</div>
-			{footer}
-		</Card>
+				{footer}
+			</Card>
+			{info && (
+				<Modals
+					isOpen={true}
+					onClose={handleCloseModal}
+					title='Info del menu'>
+					<InfoMenu onClose={handleCloseModal} menu={menu} />
+				</Modals>
+			)}
+		</>
 	);
 };

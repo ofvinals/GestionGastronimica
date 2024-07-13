@@ -4,12 +4,10 @@
 export const TableOpenForm = ({ table, onConfirm, onClose }) => {
 	// comprobar que la mesa este habilitada para el server usuario o para todos
 	return (
-
 		<div>
 			<p className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
 				¿Desea abrir la mesa {table && table.id}?
 			</p>
-
 			<div className='flex flex-wrap items-center justify-around mt-3'>
 				<button
 					className='text-white p-2 rounded-full hover:bg-green-800 hover:text-green-800'

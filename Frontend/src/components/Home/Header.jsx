@@ -8,10 +8,11 @@ import Swal from 'sweetalert2';
 import { DateTime } from './Date';
 import { useAuthActions } from '../../hooks/useAuthActions.jsx';
 import UserMenu from './UserMenu.jsx';
+import Loader from '../../helpers/Loader.jsx';
 
 export const Header = () => {
 	const [scrolled, setScrolled] = useState(false);
-	const { state } = useContext(AuthContext);
+	const { state, loading } = useContext(AuthContext);
 	const { logout } = useAuthActions();
 	const navigate = useNavigate();
 	const { displayName } = state.user ? state.user : 'No hay usuario logueado';
@@ -27,9 +28,7 @@ export const Header = () => {
 		navigate('/home');
 	};
 
-useEffect(() => {
-  
-}, [state]);
+	useEffect(() => {}, [state]);
 
 	// useEffect(() => {
 	// 	const handleScroll = () => {
@@ -49,38 +48,45 @@ useEffect(() => {
 	// }, []);
 	const navbarClassName = scrolled
 		? 'w-full bg-white sticky-top navbar rounded-b-3xl'
-		: 'w-full bg-slate-700 sticky-top navbar text-white rounded-b-3xl';
+		: 'w-full bg-slate-700 sticky-top navbar text-white rounded-b-3xl ';
 
 	return (
 		<>
-			<Navbar data-bs-theme='dark' id='navbar' className={navbarClassName}>
-				<Container className='flex w-full flex-row justify-between bg-slate-700'>
-					<Navbar.Brand href='/'>
-						<img
-							className='ms-3 rounded-lg'
-							src='/LOGO RESTOFLOW.png'
-							width={60}
-							alt='logomarca'
-						/>
-					</Navbar.Brand>
+			{loading ? (
+				<Loader />
+			) : (
+				<Navbar
+					data-bs-theme='dark'
+					id='navbar'
+					className={navbarClassName}>
+					<Container className='flex w-full flex-row justify-between bg-slate-700'>
+						<Navbar.Brand href='/'>
+							<img
+								className='ms-3 rounded-lg'
+								src='/LOGO RESTOFLOW.png'
+								width={60}
+								alt='logomarca'
+							/>
+						</Navbar.Brand>
 
-					<Nav className='flex w-full flex-row flex-wrap items-center justify-around'>
-						<div className='flex flex-row flex-wrap items-center justify-center'>
-							{displayName ? (
-								<>
-									<UserMenu
-										displayName={displayName}
-										handleLogOut={handleLogOut}
-									/>
-								</>
-							) : null}
-						</div>
-						<div className='flex flex-col flex-wrap items-center'>
-							<DateTime />
-						</div>
-					</Nav>
-				</Container>
-			</Navbar>
+						<Nav className='flex w-full flex-row flex-wrap items-center justify-around'>
+							<div className='flex flex-row flex-wrap items-center justify-center'>
+								{displayName ? (
+									<>
+										<UserMenu
+											displayName={displayName}
+											handleLogOut={handleLogOut}
+										/>
+									</>
+								) : null}
+							</div>
+							<div className='flex flex-col flex-wrap items-center'>
+								<DateTime />
+							</div>
+						</Nav>
+					</Container>
+				</Navbar>
+			)}
 		</>
 	);
 };

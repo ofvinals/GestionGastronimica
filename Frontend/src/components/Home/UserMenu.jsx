@@ -11,18 +11,22 @@ const UserMenu = ({ displayName }) => {
 	const { logout } = useAuthActions();
 	const [openProfileModal, setOpenProfileModal] = useState(false);
 
+	// FUNCION P MANEJAR ESTADO DEL BOTON C MENU (DROPDOWNBOTTON)
 	const handleToggle = (nextShow) => {
 		setShow(nextShow);
 	};
 
+	// FUNCION P EJECUTAR LOGOUT
 	const handleLogOut = () => {
 		logout();
 	};
-	
+
+	// FUNCION PARA ABRIR MODAL DE EDICION DE PROFILE
 	const handleProfileModal = () => {
 		setOpenProfileModal(true);
 	};
 
+	// CIERRA MODALES
 	const handleCloseModal = () => {
 		setOpenProfileModal(false);
 	};
