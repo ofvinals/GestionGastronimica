@@ -13,15 +13,18 @@ const itemSchema = new Schema({
 
 const orderSchema = new Schema(
 	{
-		salonName: { type: String },
-		tableNum: { type: Number },
-		tableId: { type: String },
-		diners: { type: Number },
-		server: { type: String },
-		orderOpen: { type: Boolean },
-		openAt: { type: Date },
+		salonName: { type: String, required: true },
+		tableNum: { type: Number, required: true },
+		tableId: { type: String, required: true },
+		diners: { type: Number, required: true },
+		server: { type: String, required: true },
+		orderOpen: { type: Boolean, required: true },
+		openAt: { type: Date, required: true },
 		closeTime: { type: Date },
 		elapsedDuration: [],
+		orderCash: { type: String },
+		finalPrice: { type: Number },
+		additionalCharges: [],
 		items: [itemSchema],
 	},
 	{ timestamps: true }

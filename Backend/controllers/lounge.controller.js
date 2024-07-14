@@ -25,8 +25,6 @@ const createLounge = async (req, res) => {
 const getLounge = async (req, res) => {
 	try {
 		const lounge = await Lounge.findById(req.params.id);
-		if (!lounge)
-			return res.status(404).json({ message: 'Producto no encontrado' });
 		res.json(lounge);
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
@@ -38,15 +36,11 @@ const updateLayout = async (req, res) => {
 		const { layouts } = req.body;
 		const { id: salonId } = req.params;
 		const salon = await Lounge.findById(salonId);
-		if (!salon) {
-			return res.status(404).json({ error: 'Salón no encontrado' });
-		}
 		salon.layouts = layouts;
 		await salon.save();
-		console.log('salon actualizado', salon);
 		res.status(200).json(salon);
 	} catch (error) {
-		res.status(500).json({ error: 'Error al actualizar el layout' });
+		return res.status(500).json({ message: error.message });
 	}
 };
 
@@ -56,18 +50,13 @@ const updateTable = async (req, res) => {
 		const { isOpen, layoutId, closeTime, openAt } = req.body;
 		const lounge = await Lounge.findById(id);
 		const layout = lounge.layouts.id(layoutId);
-		if (!layout) {
-			return res.status(404).send('Layout no encontrado');
-		}
-		// Realizar la actualización
 		layout.isOpen = isOpen;
 		layout.openAt = openAt;
 		layout.closeTime = closeTime;
 		await lounge.save();
-		res.status(200).send('Propiedad isOpen actualizada correctamente');
+		res.status(200).json(lounge);
 	} catch (error) {
-		console.error('Error en el servidor:', error);
-		res.status(500).send('Error al actualizar la propiedad isOpen');
+		return res.status(500).json({ message: error.message });
 	}
 };
 
@@ -90,8 +79,6 @@ const updateLounge = async (req, res) => {
 const deleteLounge = async (req, res) => {
 	try {
 		const deletedLounge = await Lounge.findByIdAndDelete(req.params.id);
-		if (!deletedLounge)
-			return res.status(404).json({ message: 'Producto no encontrado' });
 		res.json(deletedLounge);
 	} catch (error) {
 		return res.status(500).json({ message: error.message });

@@ -34,8 +34,6 @@ const createMenu = async (req, res) => {
 const getMenu = async (req, res) => {
 	try {
 		const menu = await Menu.findById(req.params.id);
-		if (!menu)
-			return res.status(404).json({ message: 'Proveedor no encontrado' });
 		res.json(menu);
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
@@ -77,8 +75,6 @@ const updateIngredients = async (req, res) => {
 const deleteMenu = async (req, res) => {
 	try {
 		const deletedMenu = await Menu.findByIdAndDelete(req.params.id);
-		if (!deletedMenu)
-			return res.status(404).json({ message: 'Proveedor no encontrado' });
 		res.json(deletedMenu);
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
@@ -112,8 +108,6 @@ const createCategory = async (req, res) => {
 const getCategory = async (req, res) => {
 	try {
 		const category = await Category.findById(req.params.id);
-		if (!category)
-			return res.status(404).json({ message: 'Categoria no encontrada' });
 		res.json(category);
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
@@ -139,9 +133,6 @@ const updateCategory = async (req, res) => {
 const deleteCategory = async (req, res) => {
 	try {
 		const deletedCategory = await Category.findByIdAndDelete(req.params.id);
-		if (!deletedCategory)
-			return res.status(404).json({ message: 'Categoria no encontrada' });
-
 		res.json(deletedCategory);
 	} catch (error) {
 		return res.status(500).json({ message: error.message });

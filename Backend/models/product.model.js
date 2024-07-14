@@ -9,7 +9,6 @@ const productSchema = new mongoose.Schema(
 		supplier: { type: String, require: true },
 		status: { type: Boolean },
 	},
-
 	{
 		timestamps: true,
 	}

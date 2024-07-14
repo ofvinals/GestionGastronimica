@@ -4,7 +4,7 @@ import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { useState } from 'react';
-import Modals from '../../Modals';
+import Modals from '../../../Modals';
 import { InfoMenu } from './InfoMenu';
 
 // RECIBE DATOS DE ORDERMENU (UPDATEORDER GUARDA EL MENU, CANTIDAD Y OBSERVACIONES DE CADA PEDIDO)

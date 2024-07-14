@@ -45,10 +45,10 @@ export const useOrderActions = () => {
 				type: 'DATA_ORDERS_ERROR',
 				payload: error.message,
 			});
-			console.error('Error al buscar comandas:', error);
+			console.error('Error al buscar ordens:', error);
 			showAlert({
 				icon: 'error',
-				title: 'Error al buscar comandas. Intente nuevamente!',
+				title: 'Error al buscar ordens. Intente nuevamente!',
 			});
 		}
 	};
@@ -71,7 +71,7 @@ export const useOrderActions = () => {
 			});
 			showAlert({
 				icon: 'success',
-				title: 'Comanda enviada correctamente',
+				title: 'Orden enviada correctamente',
 			});
 			console.log(order.data);
 			return order.data;
@@ -80,10 +80,10 @@ export const useOrderActions = () => {
 				type: 'DATA_ORDERS_ERROR',
 				payload: error.message,
 			});
-			console.error('Error al registrar la comanda:', error);
+			console.error('Error al registrar la orden:', error);
 			showAlert({
 				icon: 'error',
-				title: 'Error al registrar la comanda. Intente nuevamente!',
+				title: 'Error al registrar la orden. Intente nuevamente!',
 			});
 		}
 	};
@@ -127,31 +127,76 @@ export const useOrderActions = () => {
 
 	const updateOrderCooked = async (orderId, itemId, elapsed) => {
 		console.log(orderId, itemId, elapsed);
+		const isConfirmed = await confirmAction({
+			title: 'Confirmas la produccion del pedido?',
+			icon: 'warning',
+		});
+		if (isConfirmed) {
+			dispatch({
+				type: 'DATA_ORDERS_PENDING',
+			});
+			try {
+				const token = localStorage.getItem('token');
+				const updatedOrder = await apiURL.put(
+					`/api/orders/${orderId}/items/${itemId}`,
+					{ cookedAt: new Date(Date.now() - elapsed) },
+					{
+						withCredentials: true,
+						headers: { authorization: `Bearer ${token}` },
+					}
+				);
+				console.log(updatedOrder.data);
+				const cookedAt = new Date().toString();
+				dispatch({
+					type: 'UPDATE_ITEM_COOKED',
+					payload: { orderId, itemId, cookedAt },
+				});
+			} catch (error) {
+				dispatch({ type: 'DATA_ORDERS_ERROR', payload: error.message });
+				console.error('Error al editar la orden:', error);
+				showAlert({
+					icon: 'error',
+					title: 'Error al editar la orden. Intente nuevamente!',
+				});
+			}
+		}
+	};
+
+	const updateCashOrder = async (
+		orderId,
+		cash,
+		additionalCharges,
+		validFinalPrice
+	) => {
+		console.log(orderId, cash, additionalCharges, validFinalPrice);
 		dispatch({
 			type: 'DATA_ORDERS_PENDING',
 		});
 		try {
 			const token = localStorage.getItem('token');
 			const updatedOrder = await apiURL.put(
-				`/api/orders/${orderId}/items/${itemId}`,
-				{ cookedAt: new Date(Date.now() - elapsed) },
+				`/api/orders/${orderId}/cash`,
+				{ orderCash: cash, additionalCharges, validFinalPrice },
 				{
 					withCredentials: true,
 					headers: { authorization: `Bearer ${token}` },
 				}
 			);
 			console.log(updatedOrder.data);
-			const cookedAt = new Date().toString();
 			dispatch({
-				type: 'UPDATE_ITEM_COOKED',
-				payload: { orderId, itemId, cookedAt },
+				type: 'UPDATE_ITEM_CASH_SUCCESS',
+				payload: { orderId, cash, additionalCharges, validFinalPrice },
+			});
+			showAlert({
+				icon: 'success',
+				title: 'Orden cobrada correctamente',
 			});
 		} catch (error) {
 			dispatch({ type: 'DATA_ORDERS_ERROR', payload: error.message });
-			console.error('Error al editar la comanda:', error);
+			console.error('Error al cobrar la orden:', error);
 			showAlert({
 				icon: 'error',
-				title: 'Error al editar la comanda. Intente nuevamente!',
+				title: 'Error al cobrar la orden. Intente nuevamente!',
 			});
 		}
 	};
@@ -174,15 +219,15 @@ export const useOrderActions = () => {
 			});
 			showAlert({
 				icon: 'success',
-				title: 'Comanda editada correctamente',
+				title: 'Orden editada correctamente',
 			});
 			return updatedOrder.data;
 		} catch (error) {
 			dispatch({ type: 'DATA_ORDERS_ERROR', payload: error.message });
-			console.error('Error al editar la comanda:', error);
+			console.error('Error al editar la orden:', error);
 			showAlert({
 				icon: 'error',
-				title: 'Error al editar la comanda. Intente nuevamente!',
+				title: 'Error al editar la orden. Intente nuevamente!',
 			});
 		}
 	};
@@ -278,6 +323,7 @@ export const useOrderActions = () => {
 		addOrderAction,
 		updateOrderPending,
 		editOrderAction,
+		updateCashOrder,
 		updateOrderCooked,
 		deleteItemOrder,
 		orderCashAction,

@@ -23,6 +23,11 @@ export const SupplierDashboard = () => {
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const [rowId, setRowId] = useState(null);
 
+	// CARGA LOS DATOS DE PROVEEDORES
+	useEffect(() => {
+		dataSuppliers();
+	}, []);
+
 	// ABRE MODAL P AGREGAR
 	const handleOpenAddModal = (rowId) => {
 		setOpenAddModal(true);
@@ -41,11 +46,6 @@ export const SupplierDashboard = () => {
 		setOpenAddModal(false);
 		dataSuppliers();
 	};
-
-	// CARGA LOS DATOS DE PROVEEDORES
-	useEffect(() => {
-		dataSuppliers();
-	}, []);
 
 	// CONFIGURA COLUMNS PARA LA TABLE
 	const columns = useMemo(

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useContext } from 'react';
-import RestaurantLayout from './Layout/RestaurantLayout';
+import RestaurantLayout from './Layout/ServerLayout.jsx';
 import { LoungeContext } from '../../context/LoungeContext.jsx';
 import { useLoungeActions } from '../../hooks/useLoungeActions.jsx';
 
@@ -30,7 +30,7 @@ export const MenuServer = ({ reload }) => {
 	const handleSalonClick = (salonId) => {
 		setActiveSalonId(salonId);
 	};
-	
+
 	// RECARGA LA PAGINA
 	const handleReload = () => {
 		window.location.reload();

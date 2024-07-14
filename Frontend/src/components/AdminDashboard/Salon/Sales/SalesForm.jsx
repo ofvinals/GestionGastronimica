@@ -5,11 +5,11 @@ import { OrderContext } from '../../../../context/OrderContext.jsx';
 import { useForm } from 'react-hook-form';
 import { useOrderActions } from '../../../../hooks/useOrderActions.jsx';
 import Loader from '../../../../helpers/Loader.jsx';
-import { Form } from 'react-bootstrap';
+import { Form, FormSelect } from 'react-bootstrap';
 import { DateTime } from 'luxon';
 import { Button } from 'primereact/button';
 
-const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
+const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 	const [order, setOrder] = useState({});
 	const { state, loading } = useContext(OrderContext);
 	const { editOrderAction, addOrderAction } = useOrderActions();
@@ -32,6 +32,7 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 	// CARGA DATOS DE LA ORDEN
 	const loadOrder = () => {
 		const order = state.orders.find((order) => order._id === rowId);
+		console.log(order);
 		if (order) {
 			const fechaFormateadaOpen = formatFecha(order.openAt);
 			const fechaFormateadaClose = order.closeTime
@@ -44,9 +45,14 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 			setValue('openAt', fechaFormateadaOpen);
 			setValue('closeAt', fechaFormateadaClose);
 			setValue('items', order.items);
+			setValue('additionalCharges', order.additionalCharges);
+			setValue('finalPrice', order.finalPrice);
+			setValue('elapsedDuration', order.elapsedDuration);
+			setValue('orderCash', order.orderCash);
 			setOrder(order);
 		}
 	};
+
 	// SI ES EDIT O VIEW EJECUTA LOADORDER
 	useEffect(() => {
 		if (mode === 'edit' || mode === 'view') {
@@ -62,9 +68,13 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 				tableNum: values.tableNum,
 				diners: values.diners,
 				server: values.server,
-				openAt: values.openAt,
-				closeAt: values.closeAt,
+				openAt: order.openAt,
+				closeAt: order.closeAt,
 				items: values.items,
+				finalPrice: values.finalPrice,
+				additionalCharges: values.additionalCharges,
+				elapsedDuration: order.elapsedDuration,
+				orderCash: values.orderCash,
 			};
 			if (mode === 'edit') {
 				// SI EDIT ABRE MODAL DE EDICION
@@ -78,15 +88,15 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 			console.error(error);
 		}
 	});
-	// CALCULA LA CANTIDAD DE ITEMS DE LA ORDEN Y EL PRECIO TOTAL
+
+	// CALCULA LA CANTIDAD DE ITEMS DE LA ORDEN
 	const items = order.items || [];
-	const { totalItems, totalPrice } = items.reduce(
+	const { totalItems } = items.reduce(
 		(acc, item) => {
 			acc.totalItems += item.quantity;
-			acc.totalPrice += item.price * item.quantity;
 			return acc;
 		},
-		{ totalItems: 0, totalPrice: 0 }
+		{ totalItems: 0 }
 	);
 
 	// RENDERIZA CADA ITEMS Y MUESTRA SUS DATOS COMO TABLA
@@ -103,6 +113,21 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 		));
 	};
 
+	// RENDERIZA LOS ADDITIONAL CHARGES Y MUESTRA SUS DATOS EN LISTA
+	const charges = order.additionalCharges || [];
+	
+	const renderAdditionalCharges = (charges) => {
+		return charges.map((charge, index) => (
+			<div
+				key={index}
+				className='text-xl flex flex-col flex-wrap items-center justify-center mt-4'>
+				<p>Servicio de Mesa: $ {charge.tableService}</p>
+				<p>Descuento: {charge.discount} % </p>
+				<p>Tips: $ {charge.tips}</p>
+			</div>
+		));
+	};
+
 	return (
 		<>
 			{loading ? (
@@ -115,6 +140,11 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 								Salon
 							</Form.Label>
 							<Form.Control
+								className={`${
+									mode === 'view' || mode === 'edit'
+										? 'border-none focus:border-none focus:outline-none '
+										: ''
+								}`}
 								type='text'
 								{...register('salonName', {
 									required: 'El nombre del salon es requerido',
@@ -132,6 +162,11 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 								Mesa
 							</Form.Label>
 							<Form.Control
+								className={`${
+									mode === 'view'
+										? 'border-none focus:border-none focus:outline-none '
+										: ''
+								}`}
 								type='number'
 								{...register('tableNum', {
 									required: 'El numero de mesa es requerido',
@@ -151,6 +186,11 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 								Personas
 							</Form.Label>
 							<Form.Control
+								className={`${
+									mode === 'view'
+										? 'border-none focus:border-none focus:outline-none '
+										: ''
+								}`}
 								type='number'
 								{...register('diners', {
 									required: 'La cantidad de personas es requerida',
@@ -167,6 +207,11 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 								Server
 							</Form.Label>
 							<Form.Control
+								className={`${
+									mode === 'view'
+										? 'border-none focus:border-none focus:outline-none '
+										: ''
+								}`}
 								type='text'
 								{...register('server', {
 									required: 'El nombre del server es requerido',
@@ -186,6 +231,11 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 								Horario Apertura{' '}
 							</Form.Label>
 							<Form.Control
+								className={`${
+									mode === 'view'
+										? 'border-none focus:border-none focus:outline-none '
+										: ''
+								}`}
 								type='text'
 								{...register('openAt', {
 									required: 'El horario de apertura es requerido',
@@ -203,6 +253,11 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 								Horario Cierre
 							</Form.Label>
 							<Form.Control
+								className={`${
+									mode === 'view'
+										? 'border-none focus:border-none focus:outline-none '
+										: ''
+								}`}
 								type='text'
 								{...register('closeAt', {
 									required: 'El horario de cierre es requerido',
@@ -220,12 +275,42 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 					<Form.Group controlId='items'>
 						<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
 							Items
-						</Form.Label>
+						</Form.Label>{' '}
 						{renderItems(items)}
+						{renderAdditionalCharges(charges)}
 						<div className=' font-semibold text-xl flex flex-col flex-wrap items-center justify-center mt-4'>
 							<p>Items: {totalItems}</p>
-							<p>Precio Total: $ {totalPrice}</p>
+							<p>Precio Total: $ {order.finalPrice}</p>
 						</div>
+					</Form.Group>
+					<Form.Group
+						className='flex flex-row flex-wrap items-center justify-center'
+						controlId='cash'>
+						<Form.Label className='mr-2 text-start bg-transparent text-xl mb-0 mt-2 text-background font-medium'>
+							Forma de Pago
+						</Form.Label>
+						<FormSelect
+							className={`${
+								mode === 'view'
+									? 'w-1/2 border-none focus:border-none focus:outline-none mt-3 '
+									: 'w-1/2 mt-3'
+							}`}
+							type='text'
+							{...register('orderCash', {
+								required: 'La forma de pago es requerida',
+							})}
+							readOnly={mode === 'view'}>
+							<option value='Efectivo'>Efectivo</option>
+							<option value='Tarjeta Credito/Debito'>
+								Tarjeta Credito/Debito
+							</option>
+							<option value='Pago Digital'>Pago Digital</option>
+						</FormSelect>
+						{errors.orderCash && (
+							<span className='text-warning fs-6'>
+								{errors.orderCash.message}
+							</span>
+						)}
 					</Form.Group>
 					<Form.Group className='flex flex-wrap items-center justify-around mt-3'>
 						{mode !== 'view' && (
@@ -252,4 +337,4 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 	);
 };
 
-export default OrderForm;
+export default SalesForm;

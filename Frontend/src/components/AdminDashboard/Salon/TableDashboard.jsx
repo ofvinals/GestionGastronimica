@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useContext, useEffect, useState } from 'react';
-import RestaurantLayout from '../../ServerDashboard/Layout/RestaurantLayout';
+import RestaurantLayout from '../../ServerDashboard/Layout/ServerLayout';
 import { LoungeContext } from '../../../context/LoungeContext.jsx';
 import { useLoungeActions } from '../../../hooks/useLoungeActions.jsx';
 import Loader from '../../../helpers/Loader.jsx';

@@ -1,21 +1,41 @@
 /* eslint-disable react/prop-types */
-import { useLayoutActions } from '../../../hooks/useLayoutActions';
+import { useState } from 'react';
+import { AdditionalChargesForm } from './AditionalChargesForm';
+import { useLayoutActions } from '../../../../hooks/useLayoutActions';
+import { useOrderActions } from '../../../../hooks/useOrderActions';
+import Modals from '../../../Modals';
+import { CashPay } from './CashPay';
 
-export const CashOrder = ({ order, onClose, elapsedTime }) => {
+export const CashOrder = ({ order, onClose, elapsedDuration }) => {
 	const { loadAllLayoutAction } = useLayoutActions();
+	const { updateCashOrder } = useOrderActions();
+	const [additionalCharges, setAdditionalCharges] = useState({
+		tableService: 0,
+		discount: 0,
+		tips: 0,
+	});
+	const [cashPay, setCashPay] = useState(false);
 	const salonName = order[0]?.salonName;
 	const tableNum = order[0]?.tableNum;
 	const diners = order[0]?.diners;
+	const orderId = order[0]?._id;
 	const server = order[0]?.server;
-
-	// MANEJA PAGO CON EFECTIVO. RECARGA LAYOUT
+	
 	const handleCash = () => {
+		setCashPay(true);
+	};
+
+	const handleCreditCard = () => {
+		const cash = 'Credito';
+		updateCashOrder(orderId, cash, additionalCharges, validFinalPrice);
 		onClose();
 		loadAllLayoutAction();
 	};
-	// MANEJA PAGO CON TARJETA CREDITO/DEBITO
-	const handleCreditCard = () => {};
-	// SUMA LA CANTIDAD DE ITEMS Y EL PRECIO DE TODOS LOS ITEMS DE LA ORDER
+
+	const handleAdditionalChargesSubmit = (charges) => {
+		setAdditionalCharges(charges);
+	};
+
 	const { totalItems, totalPrice } = order.reduce(
 		(acc, currOrder) => {
 			currOrder.items.forEach((item) => {
@@ -27,8 +47,16 @@ export const CashOrder = ({ order, onClose, elapsedTime }) => {
 		{ totalItems: 0, totalPrice: 0 }
 	);
 
+	const finalPrice =
+		totalPrice +
+		((additionalCharges?.tableService ?? 0) +
+			(additionalCharges?.tips ?? 0) -
+			(totalPrice * (additionalCharges?.discount ?? 0)) / 100);
+
+	const validFinalPrice = isNaN(finalPrice) ? 0 : finalPrice;
+
 	return (
-		<div className=''>
+		<div>
 			<>
 				{order.length > 0 && (
 					<>
@@ -40,14 +68,15 @@ export const CashOrder = ({ order, onClose, elapsedTime }) => {
 								<span className='font-semibold'>Server:</span> {server}
 							</p>
 							<p className='mb-3'>
-								<span className='font-semibold'>Comensales:</span>
+								<span className='font-semibold'>Comensales:</span>{' '}
 								{diners}
 							</p>
 							<p className='mb-3'>
 								<span className='font-semibold'>
 									Tiempo de ocupacion:
 								</span>{' '}
-								{elapsedTime.hours} horas {elapsedTime.minutes} minutos
+								{elapsedDuration.hours} horas {elapsedDuration.minutes}{' '}
+								minutos
 							</p>
 							{order.map((order) => (
 								<div
@@ -71,18 +100,14 @@ export const CashOrder = ({ order, onClose, elapsedTime }) => {
 									))}
 								</div>
 							))}
-						</div>{' '}
-						<div className='flex flex-col ml-5'>
-							<p>Servicio de mesa: $</p>
-							<span></span>
-							<p>Descuento (%): </p>
-							<span></span>
-							<p>Tips:</p>
-							<span></span>
 						</div>
+						<AdditionalChargesForm
+							onSubmit={handleAdditionalChargesSubmit}
+						/>
 					</>
 				)}
 			</>
+			
 			<div className='flex flex-col flex-wrap items-center justify-between my-3 text-xl'>
 				<p className='font-semibold'>
 					Cantidad de items:{' '}
@@ -90,28 +115,46 @@ export const CashOrder = ({ order, onClose, elapsedTime }) => {
 				</p>
 				<p className='font-semibold'>
 					Total de la Orden:{' '}
-					<span className='font-normal'>$ {totalPrice.toFixed(2)}</span>
+					<span className='font-normal'>
+						$ {validFinalPrice.toFixed(2)}
+					</span>
 				</p>
 			</div>
 			<div className='flex flex-row flex-wrap items-center justify-around'>
 				<button
 					onClick={handleCash}
-					className='border-1 rounded-md border-white text-white p-2 bg-slate-700 hover:font-bold'>
+					className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
 					EFECTIVO
 				</button>
 				<a
 					href='https://link.mercadopago.com.ar/estudioposse'
 					target='_blank'>
-					<button className='border-1 rounded-md border-white text-white p-2 bg-slate-700 hover:font-bold'>
+					<button className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
 						MERCADO PAGO
 					</button>
 				</a>
 				<button
 					onClick={handleCreditCard}
-					className='border-1 rounded-md border-white text-white p-2 bg-slate-700 hover:font-bold'>
+					className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
 					TARJETA{' '}
 				</button>
 			</div>
+
+			{cashPay && (
+				<Modals
+					title='Generar Ticket/Factura'
+					isOpen={cashPay}
+					onClose={onClose}>
+					<CashPay
+						onClose={onClose}
+						order={order[0]}
+						orderId={orderId}
+						cash={'Efectivo'}
+						additionalCharges={additionalCharges}
+						validFinalPrice={validFinalPrice}
+					/>
+				</Modals>
+			)}
 		</div>
 	);
 };

@@ -60,6 +60,36 @@ const getOrder = async (req, res) => {
 	}
 };
 
+const updateOrder = async (req, res) => {
+	try {
+		const {
+			salonName,
+			tableNum,
+			tableId,
+			diners,
+			server,
+			orderOpen,
+			openAt,
+			closeTime,
+			elapsedDuration,
+			orderCash,
+			finalPrice,
+			additionalCharges,
+			items,
+		} = req.body;
+		const updateOrder = await Order.findByIdAndUpdate(
+			req.params.id,
+			req.body,
+			{
+				new: true,
+			}
+		);
+		res.json(updateOrder);
+	} catch (error) {
+		return res.status(500).json({ message: error.message });
+	}
+};
+
 const updateOrderPending = async (req, res) => {
 	const { itemIds } = req.body;
 	try {
@@ -129,6 +159,31 @@ const updateOrderOpen = async (req, res) => {
 	}
 };
 
+const updateCashOrder = async (req, res) => {
+	console.log('updateCashOrder', req.body);
+
+	const { id } = req.params;
+	const { orderCash, additionalCharges, validFinalPrice } = req.body;
+
+	try {
+		const order = await Order.findById(id);
+		if (!order) {
+			return res.status(404).json({ message: 'Order not found' });
+		}
+
+		order.orderCash = orderCash;
+		order.additionalCharges = additionalCharges;
+		order.finalPrice = validFinalPrice;
+
+		await order.save();
+
+		res.status(200).json({ message: 'Order updated successfully', order });
+	} catch (error) {
+		console.error('Error updating order:', error);
+		res.status(500).json({ message: 'Error updating order' });
+	}
+};
+
 const deleteOrder = async (req, res) => {
 	try {
 		const deletedOrder = await Order.findByIdAndDelete(req.params.id);
@@ -157,9 +212,11 @@ module.exports = {
 	getOrder,
 	getOrders,
 	createOrder,
+	updateOrder,
 	updateOrderPending,
 	updateItemCooked,
 	updateOrderOpen,
+	updateCashOrder,
 	deleteOrder,
 	deleteItem,
 };

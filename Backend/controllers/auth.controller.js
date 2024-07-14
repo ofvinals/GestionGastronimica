@@ -7,17 +7,18 @@ const login = async (req, res) => {
 	try {
 		const { email, password } = req.body;
 		const userFound = await User.findOne({ email });
-		// Validacion usuario y contraseña por backend
+		// VALIDACION DE USUARIO Y CONTRASEÑA
 		if (!userFound)
 			return res.status(400).json({
 				message: ['El mail y/o contraseña son incorrectos'],
 			});
+		// COMPARA CONTRASEÑA ENCRIPTADA
 		const isMatch = await bcrypt.compare(password, userFound.password);
 		if (!isMatch)
 			return res.status(400).json({
 				message: ['El mail y/o contraseña son incorrectos'],
 			});
-		// genera el token
+		// GENERA TOKEN CON DATOS DEL USUARIO
 		const token = await createAccessToken({
 			id: userFound._id,
 			displayName: `${userFound.name} ${userFound.subname}`,
@@ -25,9 +26,8 @@ const login = async (req, res) => {
 			rol: userFound.rol,
 			status: userFound.status,
 		});
-
+		// DEVUELVE TOKEN Y ENVIA RESPUESTA AL FRONT
 		res.cookie('token', token);
-		// envia respuesta al frontend
 		return res.status(200).json({
 			id: userFound._id,
 			displayName: `${userFound.name} ${userFound.subname}`,
@@ -41,7 +41,9 @@ const login = async (req, res) => {
 	}
 };
 
+// FUNCION DE LOGOUT
 const logout = (req, res) => {
+	// BORRA TOKEN
 	res.cookie('token', '', { expires: new Date(0) });
 	return res.sendStatus(200);
 };
@@ -49,7 +51,6 @@ const logout = (req, res) => {
 const profile = async (req, res) => {
 	const userFound = await User.findById(req.user.id);
 	if (!userFound) return res.status(400).json(['Usuario no encontrado']);
-
 	return res.json({
 		id: userFound._id,
 		email: userFound.email,
@@ -57,6 +58,7 @@ const profile = async (req, res) => {
 	});
 };
 
+// VERIFICA AUTENTICIDAD Y VIGENCIA DEL TOKEN
 const verifyToken = async (req, res) => {
 	const authHeader = req.headers['authorization'];
 	const token = authHeader && authHeader.split(' ')[1];
@@ -69,7 +71,7 @@ const verifyToken = async (req, res) => {
 			const userFound = await User.findById(decoded.id);
 			if (!userFound)
 				return res.status(404).json({ message: 'Usuario no existe' });
-
+			// DEVUELVE DATOS DEL USUARIO SI TOKEN ES VALIDO
 			return res.status(200).json({
 				id: userFound._id,
 				email: userFound.email,

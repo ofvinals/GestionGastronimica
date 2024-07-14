@@ -21,15 +21,11 @@ const RestaurantLayout = ({
 	const [currentLayout, setCurrentLayout] = useState([]);
 	const [showEditTableDetails, setShowEditTableDetails] = useState(false);
 	const firstLoad = useRef(true);
-
-	const { editLayoutAction, loadLayoutAction, addSalonAction } =
-		useLayoutActions();
+	const { loadLayoutAction, addSalonAction } = useLayoutActions();
 
 	const fetchLayout = async () => {
 		try {
-			console.log(salonId);
 			const layout = await loadLayoutAction(salonId);
-			console.log(layout);
 			setCurrentLayout(layout || []); // Asegura que si layout es null o undefined, se usa un array vacío
 		} catch (error) {
 			console.error('Error fetching layout:', error);

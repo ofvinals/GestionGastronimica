@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { Card } from 'primereact/card';
 import { DateTime } from 'luxon';
 import { useOrderActions } from '../../../hooks/useOrderActions';
+import { Button } from 'primereact/button';
 
 export const ExecutingItems = ({ executingItems }) => {
 	const [timers, setTimers] = useState({});
@@ -15,6 +16,7 @@ export const ExecutingItems = ({ executingItems }) => {
 	const filteredItems = executingItems.filter(
 		(filteredItem) => filteredItem.item.cookedAt === undefined
 	);
+
 	// CONVIERTE LA OPENAT A ZONA ARGENTINA Y CONFIGURA EL CRONOMETRO
 	const startTimerFromOpenAt = (orderId, itemId, openAt) => {
 		const startTime = DateTime.fromISO(openAt, { zone: 'utc' }).setZone(
@@ -32,7 +34,7 @@ export const ExecutingItems = ({ executingItems }) => {
 		}));
 	};
 
-	// ASIGNA UN CRONOMETRO A CADA ITEM INDIVIDUALMENTE
+	// ASIGNA UN CRONOMETRO A CADA ITEM INDIVIDUALMENTE ITERANDO EN CADA UNO
 	useEffect(() => {
 		filteredItems.forEach(({ order, item }) => {
 			if (order && order.openAt && !timers[`${order._id}-${item._id}`]) {
@@ -54,7 +56,7 @@ export const ExecutingItems = ({ executingItems }) => {
 		return `${hours}h ${minutes}m ${seconds}s`;
 	};
 
-	// FUNCION PARA PARAR EL CRONOMETRO Y GUARDAR EL TIEMPO TRANSCURRIDO EN KITCHEN
+	// FUNCION PARA PARAR EL CRONOMETRO Y GUARDAR EL TIEMPO TRANSCURRIDO EN KITCHEN CUANDO EL PEDIDO ESTA LISTO
 	const stopTimer = (orderId, itemId) => {
 		clearInterval(intervals[`${orderId}-${itemId}`]);
 		setIntervals((prevIntervals) => {
@@ -62,7 +64,7 @@ export const ExecutingItems = ({ executingItems }) => {
 			return rest;
 		});
 		const elapsed = timers[`${orderId}-${itemId}`] || 0;
-		// ACTUALIZA EL ESTADO DE COOKEDAT
+		// ACTUALIZA EL ESTADO DE COOKEDAT CON LA FECHA DE FINALIZACION
 		updateOrderCooked(orderId, itemId, elapsed);
 	};
 
@@ -111,12 +113,14 @@ export const ExecutingItems = ({ executingItems }) => {
 											<p className='text-center'>{item.name}</p>
 										</div>
 									</div>
-									<div className=' flex flex-row flex-wrap items-end justify-center w-full'>
-										<button
-											className='text-green-800 w-full'
+									<div className='flex flex-row flex-wrap items-center justify-center'>
+										<Button
+											className='text-green-800'
+											tooltip='Confirmar produccion'
+											tooltipOptions={{ position: 'top' }}
 											onClick={() => stopTimer(order._id, item._id)}>
 											<i className='text-center text-[70px] mb-2 fa-solid fa-square-check text-green-800 hover:text-green-500'></i>
-										</button>
+										</Button>
 									</div>
 									<div className='w-full text-center'>
 										<p className='w-full text-sm'>

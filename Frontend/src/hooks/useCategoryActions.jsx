@@ -6,6 +6,7 @@ import { showAlert, confirmAction } from '../helpers/showAlert';
 export const useCategoryActions = () => {
 	const { dispatch } = useContext(MenuContext);
 
+	// RECUPERA CATEGORIAS DE MENU GUARDADAS EN BACKEND
 	const dataCategorys = async () => {
 		dispatch({
 			type: 'DATA_CATEGORYS_PENDING',
@@ -34,6 +35,7 @@ export const useCategoryActions = () => {
 		}
 	};
 
+	// AGREGA NUEVAS CATEGORIAS DE MENU
 	const addCategoryAction = async (values) => {
 		dispatch({
 			type: 'DATA_CATEGORYS_PENDING',
@@ -66,6 +68,7 @@ export const useCategoryActions = () => {
 		}
 	};
 
+	// SUSPENDE CATEGORIA
 	const disableCategoryAction = async (id) => {
 		const isConfirmed = await confirmAction({
 			title: 'Confirmas la suspension de la categoria?',
@@ -109,6 +112,7 @@ export const useCategoryActions = () => {
 		}
 	};
 
+	// HABILITA CATEGORIA SUSPENDIDA
 	const enableCategoryAction = async (id) => {
 		const isConfirmed = await confirmAction({
 			title: 'Confirmas la habilitación de la categoria?',
@@ -152,6 +156,7 @@ export const useCategoryActions = () => {
 		}
 	};
 
+	// EDITA CATEGORIA DE MENU
 	const editCategoryAction = async (id, values) => {
 		dispatch({
 			type: 'DATA_CATEGORYS_PENDING',
@@ -188,6 +193,7 @@ export const useCategoryActions = () => {
 		}
 	};
 
+	// BORRA CATEGORIA DE MENU, CON MENSAJE DE CONFIRMACION
 	const deleteCategoryAction = async (id) => {
 		const isConfirmed = await confirmAction({
 			title: 'Confirmas la eliminacion definitiva de la categoria?',

@@ -10,7 +10,7 @@ import { useMenuActions } from '../../../hooks/useMenuActions.jsx';
 const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
 	const { state, loading } = useContext(MenuContext);
 	const categorys = state.categorys;
-	const { dataMenus, editMenuAction, addMenuAction } = useMenuActions();
+	const { editMenuAction, addMenuAction } = useMenuActions();
 	const {
 		register,
 		handleSubmit,
@@ -37,7 +37,6 @@ const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
 	// RECARGA DATOS DEL MENU
 	useEffect(() => {
 		if (mode === 'edit' || mode === 'view') {
-			dataMenus();
 			loadMenu();
 		}
 	}, [rowId, mode]);

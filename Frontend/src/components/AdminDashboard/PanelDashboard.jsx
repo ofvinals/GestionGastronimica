@@ -21,13 +21,13 @@ export const PanelDashboard = ({
 
 	return (
 		<section>
-			<div className='flex flex-row flex-wrap justify-around items-end sm:h-[75px]'>
+			<div className='flex flex-row flex-wrap justify-around items-end sm:h-auto'>
 				<button
 					onClick={() => {
 						handleUser();
 						setActiveButton('usuarios');
 					}}
-					className={`mx-3 border-none  p-3  ${
+					className={`mx-3 border-none  py-3 px-2  ${
 						activeButton === 'usuarios'
 							? 'bg-slate-600 text-white rounded-t-lg shadowIndex font-bold'
 							: 'bg-transparent text-white hover:text-black hover:font-bold'
@@ -39,7 +39,7 @@ export const PanelDashboard = ({
 						handleProduct();
 						setActiveButton('productos');
 					}}
-					className={`mx-3 border-none p-3  ${
+					className={`mx-3 border-none  py-3 px-2  ${
 						activeButton === 'productos'
 							? 'bg-slate-600 text-white rounded-t-lg shadowIndex font-bold'
 							: 'bg-transparent text-white hover:text-black hover:font-bold'
@@ -51,7 +51,7 @@ export const PanelDashboard = ({
 						handleMenu();
 						setActiveButton('cartaMenu');
 					}}
-					className={`mx-3 border-none p-3   ${
+					className={`mx-3 border-none  py-3 px-2  ${
 						activeButton === 'cartaMenu'
 							? 'bg-slate-600 text-white rounded-t-lg shadowIndex font-bold'
 							: 'bg-transparent text-white hover:text-black hover:font-bold'
@@ -63,7 +63,7 @@ export const PanelDashboard = ({
 						handleSalon();
 						setActiveButton('salon');
 					}}
-					className={`mx-3 border-none p-3   ${
+					className={`mx-3 border-none  py-3 px-2  ${
 						activeButton === 'salon'
 							? 'bg-slate-600 text-white rounded-t-lg shadowIndex font-bold'
 							: 'bg-transparent text-white hover:text-black hover:font-bold'
@@ -75,7 +75,7 @@ export const PanelDashboard = ({
 						handleKitchen();
 						setActiveButton('monitorCocina');
 					}}
-					className={`mx-3 border-none p-3   ${
+					className={`mx-3 border-none  py-3 px-2  ${
 						activeButton === 'monitorCocina'
 							? 'bg-slate-600 text-white rounded-t-lg shadowIndex font-bold'
 							: 'bg-transparent text-white hover:text-black hover:font-bold'
@@ -87,7 +87,7 @@ export const PanelDashboard = ({
 						handleCash();
 						setActiveButton('caja');
 					}}
-					className={`mx-3 border-none p-3   ${
+					className={`mx-3 border-none  py-3 px-2 ${
 						activeButton === 'caja'
 							? 'bg-slate-600 text-white rounded-t-lg shadowIndex font-bold'
 							: 'bg-transparent text-white hover:text-black hover:font-bold'
@@ -99,7 +99,7 @@ export const PanelDashboard = ({
 						handleReports();
 						setActiveButton('reportes');
 					}}
-					className={`mx-3 border-none p-3   ${
+					className={`mx-3 border-none  py-3 px-2  ${
 						activeButton === 'reportes'
 							? 'bg-slate-600 text-white rounded-t-lg shadowIndex font-bold'
 							: 'bg-transparent text-white hover:text-black hover:font-bold'

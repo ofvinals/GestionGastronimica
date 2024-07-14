@@ -5,14 +5,15 @@ import { Button } from 'primereact/button';
 import { useCounter } from 'primereact/hooks';
 import { CategorySelection } from './CategorySelection';
 import { OrderMenu } from './OrderMenu';
-import Modals from '../../Modals';
+import Modals from '../../../Modals';
 import { OrderResume } from './OrderResume';
-import { useOrderActions } from '../../../hooks/useOrderActions';
-import { useLayoutActions } from '../../../hooks/useLayoutActions';
-import { OrderContext } from '../../../context/OrderContext';
-import { AuthContext } from '../../../context/AuthContext';
+import { useOrderActions } from '../../../../hooks/useOrderActions';
+import { useLayoutActions } from '../../../../hooks/useLayoutActions';
+import { OrderContext } from '../../../../context/OrderContext';
+import { AuthContext } from '../../../../context/AuthContext';
+import { showAlert } from '../../../../helpers/showAlert';
 
-// RECIBE DATOS DE RESTAURANTLAYOUT
+// RECIBE DATOS DE SERVERLAYOUT
 export const OrderForm = ({
 	salonName,
 	salonId,
@@ -31,14 +32,21 @@ export const OrderForm = ({
 	const [selectedCategory, setSelectedCategory] = useState(null);
 	const [confirmComanda, setConfirmComanda] = useState(null);
 	const server = serverState.user.displayName;
-	
+
 	// RECIBE LA CATEGORIA SELECCIONADA EN CATEGORYSELECTION
 	const handleCategorySelect = (category) => {
 		setSelectedCategory(category);
 	};
 
-	// ABRE RESUMEN DE COMANDA P CONFIRMAR Y ENVIAR A COCINA
+	// ABRE RESUMEN DE COMANDA P CONFIRMAR Y ENVIAR A COCINA. VERIFICA QUE HAYA ITEMS EN PREVORDER
 	const handleComanda = () => {
+		if (prevOrder.prevOrder.length === 0) {
+			showAlert({
+				icon: 'error',
+				title: 'La orden esta vacia, debe agregar pedidos para continuar',
+			});
+			return;
+		}
 		setConfirmComanda(true);
 	};
 

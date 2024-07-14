@@ -6,6 +6,7 @@ import { showAlert, confirmAction } from '../helpers/showAlert';
 export const useProductActions = () => {
 	const { dispatch } = useContext(ProductContext);
 
+	// DEVUELVE PRODUCTOS GUARDADOS EN BACKEND
 	const dataProducts = async () => {
 		dispatch({
 			type: 'DATA_PRODUCTS_PENDING',
@@ -34,6 +35,7 @@ export const useProductActions = () => {
 		}
 	};
 
+	// AGREGA NUEVOS PRODUCTOS
 	const addProductAction = async (values) => {
 		dispatch({
 			type: 'DATA_PRODUCTS_PENDING',
@@ -66,6 +68,7 @@ export const useProductActions = () => {
 		}
 	};
 
+	// INHABILITA PRODUCTO
 	const disableProductAction = async (id) => {
 		const isConfirmed = await confirmAction({
 			title: 'Confirmas la suspension del producto?',
@@ -109,6 +112,7 @@ export const useProductActions = () => {
 		}
 	};
 
+	// HABILITA PRODUCTO
 	const enableProductAction = async (id) => {
 		const isConfirmed = await confirmAction({
 			title: 'Confirmas la habilitación del producto?',
@@ -152,6 +156,7 @@ export const useProductActions = () => {
 		}
 	};
 
+	// EDITA PRODUCTO
 	const editProductAction = async (id, values) => {
 		dispatch({
 			type: 'DATA_PRODUCTS_PENDING',
@@ -188,6 +193,7 @@ export const useProductActions = () => {
 		}
 	};
 
+	// BORRA PRODUCTO CON MENSAJE DE CONFIRMACION
 	const deleteProductAction = async (id) => {
 		const isConfirmed = await confirmAction({
 			title: 'Confirmas la eliminacion definitiva del producto?',

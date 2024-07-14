@@ -32,8 +32,6 @@ const createSupplier = async (req, res) => {
 const getSupplier = async (req, res) => {
 	try {
 		const supplier = await Supplier.findById(req.params.id);
-		if (!supplier)
-			return res.status(404).json({ message: 'Proveedor no encontrado' });
 		res.json(supplier);
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
@@ -59,9 +57,6 @@ const updateSupplier = async (req, res) => {
 const deleteSupplier = async (req, res) => {
 	try {
 		const deletedSupplier = await Supplier.findByIdAndDelete(req.params.id);
-		if (!deletedSupplier)
-			return res.status(404).json({ message: 'Proveedor no encontrado' });
-
 		res.json(deletedSupplier);
 	} catch (error) {
 		return res.status(500).json({ message: error.message });

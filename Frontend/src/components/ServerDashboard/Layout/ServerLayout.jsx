@@ -9,15 +9,15 @@ import Loader from '../../../helpers/Loader';
 import { LoungeContext } from '../../../context/LoungeContext';
 import Modals from '../../Modals';
 import { TableOpenForm } from './TableOpenForm';
-import { OrderForm } from '../Orders/OrderForm';
-import { OrderCheck } from '../Orders/OrderCheck';
+import { OrderForm } from '../Orders/PreOrder/OrderForm';
+import { OrderCheck } from '../Orders/CheckOrder/OrderCheck';
 import moment from 'moment-timezone';
 
 const CELL_SIZE = 50;
 const GRID_SIZE = 10;
 
 // RECIBE PROPS DE MENUSERVER
-export const RestaurantLayout = ({ salonId, onReload }) => {
+export const ServerLayout = ({ salonId, onReload }) => {
 	const { state, loading } = useContext(LoungeContext);
 	const {
 		loadAllLayoutAction,
@@ -158,7 +158,7 @@ export const RestaurantLayout = ({ salonId, onReload }) => {
 				<Modals
 					isOpen={true}
 					onClose={handleCloseModal}
-					title='Comanda de mesa'>
+					title='Orden de mesa'>
 					<OrderCheck
 						onConfirm={handleConfirm}
 						onClose={handleCloseModal}
@@ -175,4 +175,4 @@ export const RestaurantLayout = ({ salonId, onReload }) => {
 	);
 };
 
-export default RestaurantLayout;
+export default ServerLayout;

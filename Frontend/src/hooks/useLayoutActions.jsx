@@ -30,7 +30,6 @@ export const useLayoutActions = () => {
 	};
 
 	const loadLayoutAction = async (salonId) => {
-		console.log(salonId);
 		dispatch({ type: 'DATA_TABLE_PENDING' });
 		try {
 			const token = localStorage.getItem('token');
@@ -54,7 +53,6 @@ export const useLayoutActions = () => {
 	};
 
 	const editLayoutAction = async (salonId, layouts) => {
-		console.log(salonId, layouts);
 		dispatch({ type: 'DATA_TABLE_PENDING' });
 		try {
 			const token = localStorage.getItem('token');
@@ -159,7 +157,6 @@ export const useLayoutActions = () => {
 		index,
 		openAt
 	) => {
-		console.log(closeTime, salon_Id, tableId, isOpen, index, openAt);
 		dispatch({
 			type: 'DATA_TABLE_PENDING',
 		});
@@ -173,7 +170,6 @@ export const useLayoutActions = () => {
 					headers: { authorization: `Bearer ${token}` },
 				}
 			);
-			console.log(updatedTable.data);
 			dispatch({
 				type: 'OPEN_TABLE_SUCCESS',
 				payload: { closeTime, salon_Id, tableId, isOpen, index, openAt },

@@ -7,6 +7,7 @@ import { Box } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import { Button } from 'primereact/button';
 
 // RECIBE COLUMNS, DATA Y ACTIONS DE CADA COMPONENTE
 export const Table = ({ columns, data, actions }) => {
@@ -42,65 +43,75 @@ export const Table = ({ columns, data, actions }) => {
 					if (row.original.status === true) {
 						if (action.text === 'Inhabilitar') {
 							return (
-								<button
+								<Button
 									key={index}
+									tooltip='Inhabilitar'
+									tooltipOptions={{ position: 'top' }}
 									className='flex  items-center justify-center'
 									onClick={() => action.onClick(row)}
 									data-tip='Inhabilitar'>
 									<span className='bg-yellow-600 text-center text-white rounded-xl border-2 p-2 hover:opacity-50'>
 										{action.icon}
 									</span>
-								</button>
+								</Button>
 							);
 						}
 					} else {
 						if (action.text === 'Habilitar') {
 							return (
-								<button
+								<Button
 									key={index}
+									tooltip='Habilitar'
+									tooltipOptions={{ position: 'top' }}
 									className='flex items-center justify-center'
 									onClick={() => action.onClick(row)}>
 									<span className='bg-green-700 text-center text-white rounded-xl border-2 p-2 hover:opacity-50'>
 										{action.icon}
 									</span>
-								</button>
+								</Button>
 							);
 						}
 					}
 					if (action.text === 'Editar') {
 						return (
-							<button
+							<Button
 								key={index}
+								tooltip='Editar'
+								tooltipOptions={{ position: 'top' }}
 								className='flex items-center justify-center'
 								onClick={() => action.onClick(row)}>
 								<span className='bg-blue-700  text-center text-white rounded-xl border-2 p-2 hover:opacity-50'>
 									{action.icon}
 								</span>
-							</button>
+							</Button>
 						);
 					}
 					if (action.text === 'Eliminar') {
 						return (
-							<button
+							<Button
 								key={index}
+								tooltip='Eliminar'
+								tooltipOptions={{ position: 'top' }}
 								className='flex items-center justify-center'
 								onClick={() => action.onClick(row)}>
 								<span className='bg-red-700  text-center text-white rounded-xl border-2 p-2 hover:opacity-50'>
 									{action.icon}
 								</span>
-							</button>
+							</Button>
 						);
 					}
 					if (action.text === 'Ver') {
 						return (
-							<button
+							<Button
 								key={index}
+								tooltip='Ver'
+								tooltipOptions={{ position: 'top' }}
 								className='flex items-center justify-center'
 								onClick={() => action.onClick(row)}>
 								<span className='bg-yellow-700  text-center text-white rounded-xl border-2 p-2 hover:opacity-50'>
 									{action.icon}
 								</span>
-							</button>
+							</Button>
 						);
 					}
 					return null;

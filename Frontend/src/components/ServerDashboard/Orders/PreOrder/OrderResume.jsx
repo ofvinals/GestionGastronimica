@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useContext, useState } from 'react';
-import { OrderContext } from '../../../context/OrderContext';
-import { useOrderActions } from '../../../hooks/useOrderActions';
-import { MenuServer } from '../MenuServer';
-import { useLayoutActions } from '../../../hooks/useLayoutActions';
+import { OrderContext } from '../../../../context/OrderContext';
+import { useOrderActions } from '../../../../hooks/useOrderActions';
+import { MenuServer } from '../../MenuServer';
+import { useLayoutActions } from '../../../../hooks/useLayoutActions';
 
 // RECIBE PROPS DE ORDERFORM
 export const OrderResume = ({ onClose, setOpenLayout, setOrderForm }) => {
@@ -20,21 +20,17 @@ export const OrderResume = ({ onClose, setOpenLayout, setOrderForm }) => {
 			!updatedOrders[orderIndex].items[itemIndex].pending;
 		setOrders(updatedOrders);
 	};
-	
+
 	// FUNCION PARA COMFIRMAR LA ORDEN Y ENVIAR A COCINA. BORRA LA PREVORDER DEL REDUCER Y VUELVE AL LAYOUT
 	const handleConfirm = async () => {
 		try {
-
 			// AGREGA NUEVA ORDEN
 			await addOrderAction(orders);
-
 			// ABRE MODAL DE CONFIRMACION
 			setConfirmOrder(true);
-
 			// BORRA PREVORDER DEL REDUCER
 			await deleteOrderPrevAction(Order.prevOrder[0].tableId);
 			setOrderForm(false);
-
 			// RECARGA LAYOUT P ACTUALIZAR ESTADO DE LAS MESAS
 			loadAllLayoutAction();
 			setOpenLayout(true);

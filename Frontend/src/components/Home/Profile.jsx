@@ -7,8 +7,9 @@ import Loader from '../../helpers/Loader.jsx';
 import { AuthContext } from '../../context/AuthContext.jsx';
 import { useUserActions } from '../../hooks/useUserActions.jsx';
 import FormField from '../../helpers/FormField';
+import { Button } from 'primereact/button';
 
-const Profile = ({  onClose }) => {
+const Profile = ({ onClose }) => {
 	const { state, loading } = useContext(AuthContext);
 	const { dataUsers, editUserAction } = useUserActions();
 	const [idUser, setIdUser] = useState(null);
@@ -192,17 +193,21 @@ const Profile = ({  onClose }) => {
 						}}
 					/>
 					<Form.Group className='flex flex-wrap items-center w-full justify-around mt-3'>
-						<button
+						<Button
 							type='submit'
+							tooltip='Confirmar'
+							tooltipOptions={{ position: 'top' }}
 							className='text-white p-2 rounded-full hover:bg-green-800 hover:text-green-800'>
 							<i className='fa-solid fa-circle-check text-[40px] text-green-800 hover:text-white'></i>
-						</button>
-						<button
+						</Button>
+						<Button
 							type='button'
+							tooltip='Cerrar'
+							tooltipOptions={{ position: 'top' }}
 							className='text-white p-2 rounded-full hover:bg-red-800 hover:text-red-800'
 							onClick={onClose}>
 							<i className='fa-solid fa-circle-xmark text-[40px] text-red-800 hover:text-white'></i>
-						</button>
+						</Button>
 					</Form.Group>
 				</Form>
 			)}

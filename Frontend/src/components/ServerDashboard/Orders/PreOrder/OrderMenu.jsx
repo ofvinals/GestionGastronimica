@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { useMenuActions } from '../../../hooks/useMenuActions.jsx';
-import { MenuContext } from '../../../context/MenuContext.jsx';
+import { useMenuActions } from '../../../../hooks/useMenuActions.jsx';
+import { MenuContext } from '../../../../context/MenuContext.jsx';
 import { OrderCard } from './OrderCard.jsx';
-import { useOrderActions } from '../../../hooks/useOrderActions.jsx';
+import { useOrderActions } from '../../../../hooks/useOrderActions.jsx';
 
 // RECIBE PROPS DE ORDERFORM
 export const OrderMenu = ({
@@ -50,7 +50,7 @@ export const OrderMenu = ({
 			},
 		};
 		console.log(values);
-		
+
 		// REGISTRA NUEVA ORDER
 		addOrderPrevAction(values);
 	};
@@ -58,11 +58,13 @@ export const OrderMenu = ({
 	// FILTRA MENUS POR CATEGORIA SELECCIONADA EN CATEGORYSELECTION
 	const filteredMenus = useMemo(() => {
 		if (selectedCategory) {
-			return menuState.menus
-			// FILTRA POR ESTADO HABILITADO DE CADA MENU 
-				.filter((menu) => menu.status === true)
-				// FILTRA POR CATEGORIA DE MENU
-				.filter((menu) => menu.category === selectedCategory);
+			return (
+				menuState.menus
+					// FILTRA POR ESTADO HABILITADO DE CADA MENU
+					.filter((menu) => menu.status === true)
+					// FILTRA POR CATEGORIA DE MENU
+					.filter((menu) => menu.category === selectedCategory)
+			);
 		}
 		return menuState.menus;
 	}, [menuState.menus, selectedCategory]);

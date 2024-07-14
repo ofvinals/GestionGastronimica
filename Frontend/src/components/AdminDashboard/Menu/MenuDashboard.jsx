@@ -41,7 +41,6 @@ export const MenuDashboard = () => {
 	const handleCloseModal = () => {
 		setOpenEditModal(false);
 		setOpenAddModal(false);
-		dataMenus();
 	};
 	// AGARRA LA SELECCION DE CATEGORIA DEL COMPONENTE CATEGORY SELECTION Y LA CARGA EN SETSELECTEDCATEGORY P USAR EL FILTRO
 	const handleCategorySelect = (category) => {

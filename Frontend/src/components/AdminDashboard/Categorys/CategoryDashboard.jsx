@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { FaPause, FaPlay, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -17,12 +17,8 @@ export const CategoryProducts = () => {
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const [rowId, setRowId] = useState(null);
 	const [openEditModal, setOpenEditModal] = useState(false);
-	const {
-		dataCategorys,
-		deleteCategoryAction,
-		disableCategoryAction,
-		enableCategoryAction,
-	} = useCategoryActions();
+	const { deleteCategoryAction, disableCategoryAction, enableCategoryAction } =
+		useCategoryActions();
 
 	// ABRE MODAL P AGREGAR USUARIO Y ENVIA PROPS ROWID
 	const handleOpenAddModal = (rowId) => {
@@ -40,13 +36,7 @@ export const CategoryProducts = () => {
 	const handleCloseModal = () => {
 		setOpenEditModal(false);
 		setOpenAddModal(false);
-		dataCategorys();
 	};
-
-	// ACTUALIZA CATEGORIAS
-	useEffect(() => {
-		dataCategorys();
-	}, []);
 
 	// ENVIA DATOS Y CONFIG DE COLUMNAS A TABLES
 	const columns = useMemo(

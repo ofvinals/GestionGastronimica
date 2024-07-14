@@ -6,6 +6,7 @@ import { showAlert, confirmAction } from '../helpers/showAlert';
 export const useMenuActions = () => {
 	const { dispatch } = useContext(MenuContext);
 
+	// DEVUELVE DATOS DE TODOS LOS MENUS CARGADOS
 	const dataMenus = async () => {
 		dispatch({
 			type: 'DATA_MENUS_PENDING',
@@ -34,8 +35,8 @@ export const useMenuActions = () => {
 		}
 	};
 
+	// AGREGA NUEVO MENU
 	const addMenuAction = async (values) => {
-		console.log(values);
 		dispatch({
 			type: 'DATA_MENUS_PENDING',
 		});
@@ -67,6 +68,7 @@ export const useMenuActions = () => {
 		}
 	};
 
+	// INHABILITA MENU
 	const disableMenuAction = async (id) => {
 		const isConfirmed = await confirmAction({
 			title: 'Confirmas la suspension del menu?',
@@ -110,6 +112,7 @@ export const useMenuActions = () => {
 		}
 	};
 
+	// HABILITA MENU
 	const enableMenuAction = async (id) => {
 		const isConfirmed = await confirmAction({
 			title: 'Confirmas la habilitación del menu?',
@@ -153,6 +156,7 @@ export const useMenuActions = () => {
 		}
 	};
 
+	// EDITA DATOS DEL MENU
 	const editMenuAction = async (id, values) => {
 		dispatch({
 			type: 'DATA_MENUS_PENDING',
@@ -185,6 +189,7 @@ export const useMenuActions = () => {
 		}
 	};
 
+	// BORRA MENU CON MENSAJE DE CONFIRMACION
 	const deleteMenuAction = async (id) => {
 		const isConfirmed = await confirmAction({
 			title: 'Confirmas la eliminacion definitiva del menu?',

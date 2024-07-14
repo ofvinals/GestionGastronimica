@@ -30,8 +30,6 @@ const createProduct = async (req, res) => {
 const getProduct = async (req, res) => {
 	try {
 		const product = await Product.findById(req.params.id);
-		if (!product)
-			return res.status(404).json({ message: 'Producto no encontrado' });
 		res.json(product);
 	} catch (error) {
 		return res.status(500).json({ message: error.message });
@@ -43,15 +41,10 @@ const updateProduct = async (req, res) => {
 		const { name, cant, cost, unit, supplier, status } = req.body;
 		const updateProduct = await Product.findByIdAndUpdate(
 			req.params.id,
+			req.body,
 			{
-				name,
-				cant,
-				cost,
-				unit,
-				supplier,
-				status,
-			},
-			{ new: true }
+				new: true,
+			}
 		);
 		res.json(updateProduct);
 	} catch (error) {
@@ -62,8 +55,6 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
 	try {
 		const deletedProduct = await Product.findByIdAndDelete(req.params.id);
-		if (!deletedProduct)
-			return res.status(404).json({ message: 'Producto no encontrado' });
 		res.json(deletedProduct);
 	} catch (error) {
 		return res.status(500).json({ message: error.message });

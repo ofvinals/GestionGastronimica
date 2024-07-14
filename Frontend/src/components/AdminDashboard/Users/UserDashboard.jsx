@@ -19,6 +19,11 @@ export const UserDashboard = () => {
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const [rowId, setRowId] = useState(null);
 
+		// CARGA DATOS DE USUARIOS
+		useEffect(() => {
+			dataUsers();
+		}, []);
+
 	// ABRE MODAL P AGERGAR Y ENVIA PROP ROWID
 	const handleOpenAddModal = (rowId) => {
 		setOpenAddModal(true);
@@ -35,13 +40,7 @@ export const UserDashboard = () => {
 	const handleCloseModal = () => {
 		setOpenEditModal(false);
 		setOpenAddModal(false);
-		dataUsers();
 	};
-
-	// CARGA DATOS DE USUARIOS
-	useEffect(() => {
-		dataUsers();
-	}, []);
 
 	// CONFIGURA COLUMNS PARA LA TABLE
 	const columns = useMemo(
