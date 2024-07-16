@@ -8,7 +8,6 @@ export const useOrderActions = () => {
 
 	// AGREGA SOLO A REDUCER LA PREVORDER
 	const addOrderPrevAction = async (values) => {
-		console.log(values);
 		dispatch({
 			type: 'ADD_ORDERS_PREV_SUCCESS',
 			payload: values,
@@ -34,7 +33,6 @@ export const useOrderActions = () => {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
-			console.log(orders);
 			dispatch({
 				type: 'DATA_ORDERS_SUCCESS',
 				payload: orders.data,
@@ -55,7 +53,6 @@ export const useOrderActions = () => {
 
 	// GUARDA LA ORDEN
 	const addOrderAction = async (values) => {
-		console.log(values);
 		dispatch({
 			type: 'DATA_ORDERS_PENDING',
 		});
@@ -73,7 +70,6 @@ export const useOrderActions = () => {
 				icon: 'success',
 				title: 'Orden enviada correctamente',
 			});
-			console.log(order.data);
 			return order.data;
 		} catch (error) {
 			dispatch({
@@ -126,9 +122,8 @@ export const useOrderActions = () => {
 	};
 
 	const updateOrderCooked = async (orderId, itemId, elapsed) => {
-		console.log(orderId, itemId, elapsed);
 		const isConfirmed = await confirmAction({
-			title: 'Confirmas la produccion del pedido?',
+			title: 'Confirmas la elaboracion del pedido?',
 			icon: 'warning',
 		});
 		if (isConfirmed) {
@@ -145,12 +140,12 @@ export const useOrderActions = () => {
 						headers: { authorization: `Bearer ${token}` },
 					}
 				);
-				console.log(updatedOrder.data);
 				const cookedAt = new Date().toString();
 				dispatch({
 					type: 'UPDATE_ITEM_COOKED',
 					payload: { orderId, itemId, cookedAt },
 				});
+				return updatedOrder.data;
 			} catch (error) {
 				dispatch({ type: 'DATA_ORDERS_ERROR', payload: error.message });
 				console.error('Error al editar la orden:', error);
@@ -168,7 +163,6 @@ export const useOrderActions = () => {
 		additionalCharges,
 		validFinalPrice
 	) => {
-		console.log(orderId, cash, additionalCharges, validFinalPrice);
 		dispatch({
 			type: 'DATA_ORDERS_PENDING',
 		});
@@ -182,7 +176,6 @@ export const useOrderActions = () => {
 					headers: { authorization: `Bearer ${token}` },
 				}
 			);
-			console.log(updatedOrder.data);
 			dispatch({
 				type: 'UPDATE_ITEM_CASH_SUCCESS',
 				payload: { orderId, cash, additionalCharges, validFinalPrice },
@@ -191,6 +184,7 @@ export const useOrderActions = () => {
 				icon: 'success',
 				title: 'Orden cobrada correctamente',
 			});
+			return updatedOrder.data;
 		} catch (error) {
 			dispatch({ type: 'DATA_ORDERS_ERROR', payload: error.message });
 			console.error('Error al cobrar la orden:', error);
@@ -202,7 +196,6 @@ export const useOrderActions = () => {
 	};
 
 	const editOrderAction = async (id, values) => {
-		console.log(id, values);
 		dispatch({
 			type: 'DATA_ORDERS_PENDING',
 		});
@@ -212,7 +205,6 @@ export const useOrderActions = () => {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
-			console.log(updatedOrder);
 			dispatch({
 				type: 'EDIT_ORDERS_SUCCESS',
 				payload: updatedOrder.data,
@@ -242,7 +234,6 @@ export const useOrderActions = () => {
 				type: 'DATA_ORDERS_PENDING',
 			});
 			try {
-				console.log(orderId, itemId);
 				const token = localStorage.getItem('token');
 				const response = await apiURL.delete(
 					`/api/orders/${orderId}/items/${itemId}`,
@@ -251,7 +242,6 @@ export const useOrderActions = () => {
 						headers: { authorization: `Bearer ${token}` },
 					}
 				);
-				console.log(response.data);
 				dispatch({
 					type: 'DELETE_ITEM_SUCCESS',
 					payload: response.data,
@@ -281,7 +271,6 @@ export const useOrderActions = () => {
 		filteredOrder,
 		elapsedDuration
 	) => {
-		console.log(closeTime, orderOpen, filteredOrder, elapsedDuration);
 		dispatch({
 			type: 'DATA_ORDERS_PENDING',
 		});

@@ -1,6 +1,8 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-case-declarations */
 /* eslint-disable react/prop-types */
 export const OrderReducer = (state, action) => {
+	console.log(state, action)
 	switch (action.type) {
 		case 'DATA_ORDERS_PENDING':
 			return { ...state, loading: true, error: null };
@@ -101,7 +103,6 @@ export const OrderReducer = (state, action) => {
 				error: null,
 			};
 		case 'DELETE_PREV_ORDERS_SUCCESS':
-			console.log(action.payload);
 			return {
 				...state,
 				prevOrder: state.prevOrder.filter(
@@ -129,7 +130,6 @@ export const OrderReducer = (state, action) => {
 				}),
 			};
 		case 'UPDATE_ITEM_COOKED':
-			console.log(action);
 			return {
 				...state,
 				orders: state.orders.map((order) =>

@@ -32,7 +32,6 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 	// CARGA DATOS DE LA ORDEN
 	const loadOrder = () => {
 		const order = state.orders.find((order) => order._id === rowId);
-		console.log(order);
 		if (order) {
 			const fechaFormateadaOpen = formatFecha(order.openAt);
 			const fechaFormateadaClose = order.closeTime
@@ -115,7 +114,7 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 
 	// RENDERIZA LOS ADDITIONAL CHARGES Y MUESTRA SUS DATOS EN LISTA
 	const charges = order.additionalCharges || [];
-	
+
 	const renderAdditionalCharges = (charges) => {
 		return charges.map((charge, index) => (
 			<div

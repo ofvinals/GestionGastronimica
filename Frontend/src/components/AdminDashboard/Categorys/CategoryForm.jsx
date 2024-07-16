@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import GenericForm from '../../../helpers/GenericForm';
 import FormField from '../../../helpers/FormField';
 import { useCategoryActions } from '../../../hooks/useCategoryActions.jsx';
+import Loader from '../../../helpers/Loader.jsx';
 
 const CategoryForm = ({ rowId, onClose, mode = 'edit' }) => {
 	const { state, loading } = useContext(MenuContext);
@@ -55,31 +56,39 @@ const CategoryForm = ({ rowId, onClose, mode = 'edit' }) => {
 	});
 
 	return (
-		<GenericForm
-			loading={loading}
-			onSubmit={onSubmit}
-			onClose={onClose}
-			mode={mode}>
-			<FormField
-				id='name'
-				label='Nombre*'
-				register={register('name', {
-					required: 'El nombre es obligatorio',
-				})}
-				errors={errors.name}
-			/>{' '}
-			{errors.name && (
-				<span className='text-red-700 fs-6'>{errors.name.message}</span>
+		<>
+			{loading ? (
+				<Loader />
+			) : (
+				<GenericForm
+					loading={loading}
+					onSubmit={onSubmit}
+					onClose={onClose}
+					mode={mode}>
+					<FormField
+						id='name'
+						label='Nombre*'
+						register={register('name', {
+							required: 'El nombre es obligatorio',
+						})}
+						errors={errors.name}
+					/>{' '}
+					{errors.name && (
+						<span className='text-red-700 fs-6'>
+							{errors.name.message}
+						</span>
+					)}
+					<FormField
+						id='status'
+						label='Categoría Activa?'
+						type='checkbox'
+						register={register('status')}
+						renderAs='toggle'
+					/>
+					<p className='text-sm'>(*) Campos obligatorios</p>
+				</GenericForm>
 			)}
-			<FormField
-				id='status'
-				label='Categoría Activa?'
-				type='checkbox'
-				register={register('status')}
-				renderAs='toggle'
-			/>
-			<p className='text-sm'>(*) Campos obligatorios</p>
-		</GenericForm>
+		</>
 	);
 };
 

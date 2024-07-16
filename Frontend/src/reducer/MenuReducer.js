@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 
 export const MenuReducer = (state, action) => {
+	console.log(state, action)
 	switch (action.type) {
 		case 'DATA_MENUS_PENDING':
 			return { ...state, loading: true, error: null };
@@ -40,7 +41,7 @@ export const MenuReducer = (state, action) => {
 			return {
 				...state,
 				menus: state.menus.map((menu) =>
-					menu._id === action.payload.id ? action.payload : menu
+					menu._id === action.payload._id ? action.payload : menu
 				),
 				loading: false,
 				error: null,
@@ -55,7 +56,6 @@ export const MenuReducer = (state, action) => {
 		case 'DATA_MENUS_ERROR':
 			return { ...state, loading: false, error: action.payload };
 
-			
 		case 'DATA_CATEGORYS_PENDING':
 			return { ...state, loading: true, error: null };
 		case 'DATA_CATEGORYS_SUCCESS':

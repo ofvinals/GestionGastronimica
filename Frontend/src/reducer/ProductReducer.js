@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 
 export const ProductReducer = (state, action) => {
+	console.log(state, action)
 	switch (action.type) {
 		case 'DATA_PRODUCTS_PENDING':
 			return { ...state, loading: true, error: null };

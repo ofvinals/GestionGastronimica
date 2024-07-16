@@ -3,15 +3,20 @@
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { InputTextarea } from 'primereact/inputtextarea';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Modals from '../../../Modals';
 import { InfoMenu } from './InfoMenu';
 
 // RECIBE DATOS DE ORDERMENU (UPDATEORDER GUARDA EL MENU, CANTIDAD Y OBSERVACIONES DE CADA PEDIDO)
-export const OrderCard = ({ menu, updateOrder }) => {
+export const OrderCard = ({ menu, updateOrder, resetCount }) => {
 	const [count, setCount] = useState(0);
 	const [text, setText] = useState('');
 	const [info, setInfo] = useState(false);
+
+	// Reset count when resetCount changes
+	useEffect(() => {
+		setCount(0);
+	}, [resetCount]);
 
 	// CON CADA INCREMENTO ACTUALIZA UPDATEORDER EN ORDERMENU
 	const handleIncrement = () => {

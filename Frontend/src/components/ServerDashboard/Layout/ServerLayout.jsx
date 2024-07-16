@@ -20,7 +20,7 @@ const GRID_SIZE = 10;
 export const ServerLayout = ({ salonId, onReload }) => {
 	const { state, loading } = useContext(LoungeContext);
 	const {
-		loadAllLayoutAction,
+		loadLayoutAction,
 		updateTableIsOpenAction,
 		updateTablePositionAction,
 	} = useLayoutActions();
@@ -34,7 +34,7 @@ export const ServerLayout = ({ salonId, onReload }) => {
 
 	// CARGA TODAS LAS MESAS DEL SALON
 	useEffect(() => {
-		loadAllLayoutAction(salonId);
+		loadLayoutAction(salonId);
 		if (state.lounges) {
 			const layout = state.lounges.find((layout) => layout._id === salonId);
 			if (layout && layout.layouts) {
@@ -44,8 +44,8 @@ export const ServerLayout = ({ salonId, onReload }) => {
 				setCurrentLayout([]);
 			}
 		}
-	}, [state.lounges, salonId]);
-	
+	}, [salonId]);
+
 	// ACCION AL HACER CLICK EN UNA MESA
 	const handleTableClick = (table) => {
 		setConfirmTable(table);
@@ -60,7 +60,7 @@ export const ServerLayout = ({ salonId, onReload }) => {
 
 	// AL CONFIRMAR ACTUALIZA LOS DATOS DE LA MESA Y ABRE LA ORDEN (ORDERFORM)
 	const handleConfirm = () => {
-		// CIERRA MODALES. Y PREPARA DATOS P ENVIAR A REDUCER Y BACKEND 
+		// CIERRA MODALES. Y PREPARA DATOS P ENVIAR A REDUCER Y BACKEND
 		setOpenConfirm(false);
 		setOpenOrderCheck(false);
 		setOpenLayout(false);

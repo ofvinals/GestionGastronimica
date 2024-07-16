@@ -19,6 +19,7 @@ export const OrderMenu = ({
 	const { dataMenus } = useMenuActions();
 	const { addOrderPrevAction } = useOrderActions();
 	const [currentDiners, setCurrentDiners] = useState(diners);
+	const [resetCount, setResetCount] = useState(false);
 
 	// CARGA TODOS LOS MENUS DE LA CARTA
 	useEffect(() => {
@@ -29,6 +30,10 @@ export const OrderMenu = ({
 	useEffect(() => {
 		setCurrentDiners(diners);
 	}, [diners]);
+
+	useEffect(() => {
+		setResetCount((prev) => !prev);
+	}, [selectedCategory]);
 
 	// PREPARA TODOS LOS DATOS DE LA ORDEN Y CADA ITEM SELECCINADO P ENVIAR A REDUCER Y BACKEND
 	const updateOrder = (menu, quantity, text, pending) => {
@@ -74,7 +79,7 @@ export const OrderMenu = ({
 			{filteredMenus &&
 				filteredMenus.map((menu, id) => (
 					// ENVIA DATOS DEL MENU. RECIBE ACTUALIZACION DE LA ORDER DESDE ORDERCARD
-					<OrderCard key={id} menu={menu} updateOrder={updateOrder} />
+					<OrderCard key={id} menu={menu} updateOrder={updateOrder} resetCount={resetCount}/>
 				))}
 		</div>
 	);

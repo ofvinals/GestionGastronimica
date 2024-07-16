@@ -4,9 +4,10 @@ import { OrderContext } from '../../../context/OrderContext';
 import { useOrderActions } from '../../../hooks/useOrderActions';
 import { PendingItems } from './PendingItems';
 import { ExecutingItems } from './ExecutingItems';
+import Loader from '../../../helpers/Loader';
 
 export const MenuKitchen = () => {
-	const { state } = useContext(OrderContext);
+	const { state, loading } = useContext(OrderContext);
 	const { dataOrders } = useOrderActions();
 
 	// CARGA TODAS LAS ORDENES
@@ -33,9 +34,15 @@ export const MenuKitchen = () => {
 	});
 
 	return (
-		<div className='flex flex-col flex-wrap md:flex-row'>
-			<PendingItems pendingItems={pendingItems} />
-			<ExecutingItems executingItems={executingItems} />
-		</div>
+		<>
+			{loading ? (
+				<Loader />
+			) : (
+				<div className='flex flex-col flex-wrap md:flex-row'>
+					<PendingItems pendingItems={pendingItems} />
+					<ExecutingItems executingItems={executingItems} />
+				</div>
+			)}
+		</>
 	);
 };

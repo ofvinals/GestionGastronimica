@@ -6,6 +6,7 @@ import GenericForm from '../../../helpers/GenericForm';
 import FormField from '../../../helpers/FormField';
 import { MenuContext } from '../../../context/MenuContext.jsx';
 import { useMenuActions } from '../../../hooks/useMenuActions.jsx';
+import Loader from '../../../helpers/Loader.jsx';
 
 const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
 	const { state, loading } = useContext(MenuContext);
@@ -87,114 +88,129 @@ const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
 	});
 
 	return (
-		<GenericForm
-			loading={loading}
-			onSubmit={onSubmit}
-			onClose={onClose}
-			mode={mode}>
-			<FormField
-				id='name'
-				label='Nombre*'
-				register={register('name', { required: 'El nombre es requerido' })}
-				errors={errors.name}
-			/>{' '}
-			{errors.name && (
-				<span className='text-red-700 fs-6'>{errors.name.message}</span>
-			)}
-			<FormField
-				id='category'
-				label='Categoría*'
-				as='select'
-				register={register('category', {
-					required: 'La categoría es requerida',
-				})}
-				errors={errors.category}>
-				<option value=''>Selecciona la categoría</option>
-				{categorys.map((category, id) => (
-					<option key={id} value={category.name}>
-						{category.name}
-					</option>
-				))}
-			</FormField>{' '}
-			{errors.category && (
-				<span className='text-red-700 fs-6'>{errors.category.message}</span>
-			)}
-			<FormField
-				id='description'
-				label='Descripción*'
-				as='textarea'
-				register={register('description', {
-					required: 'La descripción es requerida',
-				})}
-				errors={errors.description}
-			/>{' '}
-			{errors.description && (
-				<span className='text-red-700 fs-6'>
-					{errors.description.message}
-				</span>
-			)}
-			<FormField
-				id='price'
-				label='Precio*'
-				type='number'
-				register={register('price', { required: 'El precio es requerido' })}
-				errors={errors.price}
-			/>{' '}
-			{errors.price && (
-				<span className='text-red-700 fs-6'>{errors.price.message}</span>
-			)}
-			<FormField
-				id='status'
-				label='Menú Activo?'
-				type='checkbox'
-				register={register('status')}
-				renderAs={'toggle'}
-			/>
-			{/* Campo para agregar ingredientes */}
-			<div className='ingredient-field'>
-				<label className='text-start bg-transparent text-xl mb-0 mt-2 text-background font-medium'>
-					Ingredientes
-				</label>
-				<ul className='ingredient-list'>
-					{ingredients.map((ingredient, index) => (
-						<li key={index} className='ml-5 list-disc'>
-							<input
-								type='text'
-								value={ingredient.name}
-								onChange={(e) =>
-									handleIngredientChange(index, e.target.value)
-								}
-								placeholder='Nombre del ingrediente'
-							/>
-							<button
-								type='button'
-								onClick={() => handleRemoveIngredient(index)}>
-								<i className='fa-solid fa-ban text-xl bg-red-100 text-red-800 mx-2 border-2 hover:text-red-100 hover:border-red-800 hover:bg-red-800 rounded-full'></i>
-							</button>
-						</li>
-					))}
-				</ul>
-				<div className='flex flex-row flex-wrap items-center '>
+		<>
+			{loading ? (
+				<Loader />
+			) : (
+				<GenericForm
+					loading={loading}
+					onSubmit={onSubmit}
+					onClose={onClose}
+					mode={mode}>
 					<FormField
-						type='text'
-						value={newIngredient}
-						onChange={(e) => setNewIngredient(e.target.value)}
-						placeholder='Agregar ingrediente'
+						id='name'
+						label='Nombre*'
+						register={register('name', {
+							required: 'El nombre es requerido',
+						})}
+						errors={errors.name}
+					/>{' '}
+					{errors.name && (
+						<span className='text-red-700 fs-6'>
+							{errors.name.message}
+						</span>
+					)}
+					<FormField
+						id='category'
+						label='Categoría*'
+						as='select'
+						register={register('category', {
+							required: 'La categoría es requerida',
+						})}
+						errors={errors.category}>
+						{categorys.map((category, id) => (
+							<option key={id} value={category.name}>
+								{category.name}
+							</option>
+						))}
+					</FormField>{' '}
+					{errors.category && (
+						<span className='text-red-700 fs-6'>
+							{errors.category.message}
+						</span>
+					)}
+					<FormField
+						id='description'
+						label='Descripción*'
+						as='textarea'
+						register={register('description', {
+							required: 'La descripción es requerida',
+						})}
+						errors={errors.description}
+					/>{' '}
+					{errors.description && (
+						<span className='text-red-700 fs-6'>
+							{errors.description.message}
+						</span>
+					)}
+					<FormField
+						id='price'
+						label='Precio*'
+						type='number'
+						register={register('price', {
+							required: 'El precio es requerido',
+						})}
+						errors={errors.price}
+					/>{' '}
+					{errors.price && (
+						<span className='text-red-700 fs-6'>
+							{errors.price.message}
+						</span>
+					)}
+					<FormField
+						id='status'
+						label='Menú Activo?'
+						type='checkbox'
+						register={register('status')}
+						renderAs={'toggle'}
 					/>
-					<button type='button' onClick={handleAddIngredient}>
-						<i className='mx-4 mt-4 fa-solid fa-circle-plus text-2xl text-green-800 hover:text-green-100 border-2 hover:border-green-800 rounded-full hover:bg-green-800'></i>
-					</button>
-				</div>
-			</div>
-			<FormField
-				id='recipe'
-				label='Receta'
-				type='textarea'
-				register={register('recipe')}
-				as='textarea'
-			/>
-			<p className='text-sm'>(*) Campos obligatorios</p>
-		</GenericForm>
+					{/* Campo para agregar ingredientes */}
+					<div className='ingredient-field'>
+						<label className='text-start bg-transparent text-xl mb-0 mt-2 text-background font-medium'>
+							Ingredientes
+						</label>
+						<ul className='ingredient-list'>
+							{ingredients.map((ingredient, index) => (
+								<li key={index} className='ml-5 list-disc'>
+									<input
+										type='text'
+										value={ingredient.name}
+										onChange={(e) =>
+											handleIngredientChange(index, e.target.value)
+										}
+										placeholder='Nombre del ingrediente'
+									/>
+									<button
+										type='button'
+										onClick={() => handleRemoveIngredient(index)}>
+										<i className='fa-solid fa-ban text-xl bg-red-100 text-red-800 mx-2 border-2 hover:text-red-100 hover:border-red-800 hover:bg-red-800 rounded-full'></i>
+									</button>
+								</li>
+							))}
+						</ul>
+						<div className='flex flex-row flex-wrap items-center '>
+							<FormField
+								type='text'
+								value={newIngredient}
+								onChange={(e) => setNewIngredient(e.target.value)}
+								placeholder='Agregar ingrediente'
+							/>
+							<button type='button' onClick={handleAddIngredient}>
+								<i className='mx-4 mt-4 fa-solid fa-circle-plus text-2xl text-green-800 hover:text-green-100 border-2 hover:border-green-800 rounded-full hover:bg-green-800'></i>
+							</button>
+						</div>
+					</div>
+					<FormField
+						id='recipe'
+						label='Receta'
+						type='textarea'
+						register={register('recipe')}
+						as='textarea'
+					/>
+					<p className='text-sm'>(*) Campos obligatorios</p>
+				</GenericForm>
+			)}
+		</>
 	);
 };
 

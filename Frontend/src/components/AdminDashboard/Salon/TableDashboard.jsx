@@ -25,7 +25,7 @@ export const TableDashboard = ({ reload, onReload }) => {
 			setActiveSalonId(loungeState.lounges[0]._id);
 		}
 	}, [loungeState.lounges]);
-
+console.log(activeSalonId)
 	const handleReload = () => {
 		window.location.reload();
 	};

@@ -1,4 +1,5 @@
 export const UserReducer = (state, action) => {
+	console.log(state, action)
 	switch (action.type) {
 		case 'DATA_USERS_PENDING':
 			return { ...state, loading: true, error: null };
@@ -39,7 +40,7 @@ export const UserReducer = (state, action) => {
 				...state,
 				loading: false,
 				users: state.users.map((user) =>
-					user._id === action.payload.id ? action.payload : user
+					user._id === action.payload._id ? action.payload : user
 				),
 				error: null,
 			};

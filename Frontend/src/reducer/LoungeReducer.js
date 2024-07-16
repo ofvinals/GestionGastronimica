@@ -1,6 +1,7 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable no-mixed-spaces-and-tabs */
 export const LoungeReducer = (state, action) => {
+	console.log(state, action)
 	switch (action.type) {
 		case 'DATA_TABLE_PENDING':
 		case 'DATA_SALON_PENDING':
@@ -92,7 +93,6 @@ export const LoungeReducer = (state, action) => {
 			};
 		}
 		case 'OPEN_TABLE_SUCCESS':
-			console.log(action)
 		const { salon_Id, tableId, isOpen, closeTime } = action.payload;
 			return {
 				...state,
