@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect } from 'react';
-import { MenuContext } from '../../../context/MenuContext.jsx';
+import { MenuContext } from '../../../context/MenuContext';
 import { useForm } from 'react-hook-form';
 import GenericForm from '../../../helpers/GenericForm';
 import FormField from '../../../helpers/FormField';
-import { useCategoryActions } from '../../../hooks/useCategoryActions.jsx';
-import Loader from '../../../helpers/Loader.jsx';
+import { useCategoryActions } from '../../../hooks/useCategoryActions.js';
+import Loader from '../../../helpers/Loader';
 
 const CategoryForm = ({ rowId, onClose, mode = 'edit' }) => {
 	const { state, loading } = useContext(MenuContext);

@@ -3,7 +3,7 @@
 import { useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { ProductContext } from '../../../context/ProductContext';
-import { useProductActions } from '../../../hooks/useProductActions';
+import { useProductActions } from '../../../hooks/useProductActions.js';
 import GenericForm from '../../../helpers/GenericForm';
 import FormField from '../../../helpers/FormField';
 import Loader from '../../../helpers/Loader';

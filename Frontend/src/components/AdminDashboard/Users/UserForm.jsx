@@ -2,11 +2,11 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { UserContext } from '../../../context/UserContext.jsx';
-import { useUserActions } from '../../../hooks/useUserActions.jsx';
+import { UserContext } from '../../../context/UserContext';
+import { useUserActions } from '../../../hooks/useUserActions.js';
 import GenericForm from '../../../helpers/GenericForm';
 import FormField from '../../../helpers/FormField';
-import Loader from '../../../helpers/Loader.jsx';
+import Loader from '../../../helpers/Loader';
 
 const UserForm = ({ rowId, onClose, mode = 'edit' }) => {
 	const { state, loading } = useContext(UserContext);

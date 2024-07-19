@@ -4,9 +4,9 @@ import { useEffect, useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import GenericForm from '../../../helpers/GenericForm';
 import FormField from '../../../helpers/FormField';
-import { MenuContext } from '../../../context/MenuContext.jsx';
-import { useMenuActions } from '../../../hooks/useMenuActions.jsx';
-import Loader from '../../../helpers/Loader.jsx';
+import { MenuContext } from '../../../context/MenuContext';
+import { useMenuActions } from '../../../hooks/useMenuActions.js';
+import Loader from '../../../helpers/Loader';
 
 const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
 	const { state, loading } = useContext(MenuContext);

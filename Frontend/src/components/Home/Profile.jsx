@@ -3,9 +3,9 @@
 import { useEffect, useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { Form } from 'react-bootstrap';
-import Loader from '../../helpers/Loader.jsx';
-import { AuthContext } from '../../context/AuthContext.jsx';
-import { useUserActions } from '../../hooks/useUserActions.jsx';
+import Loader from '../../helpers/Loader';
+import { AuthContext } from '../../context/AuthContext';
+import { useUserActions } from '../../hooks/useUserActions.js';
 import FormField from '../../helpers/FormField';
 import { Button } from 'primereact/button';
 

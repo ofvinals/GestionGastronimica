@@ -7,10 +7,10 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Table } from '../../Table.jsx';
 import Modals from '../../Modals.jsx';
-import { useCategoryActions } from '../../../hooks/useCategoryActions.jsx';
-import CategoryForm from './CategoryForm.jsx';
-import { MenuContext } from '../../../context/MenuContext.jsx';
-import Loader from '../../../helpers/Loader.jsx';
+import { useCategoryActions } from '../../../hooks/useCategoryActions.js';
+import CategoryForm from './CategoryForm';
+import { MenuContext } from '../../../context/MenuContext';
+import Loader from '../../../helpers/Loader';
 
 export const CategoryProducts = () => {
 	const { state, loading } = useContext(MenuContext);

@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from 'react';
-import { OrderContext } from '../../../../context/OrderContext.jsx';
+import { OrderContext } from '../../../../context/OrderContext';
 import { useForm } from 'react-hook-form';
-import { useOrderActions } from '../../../../hooks/useOrderActions.jsx';
-import Loader from '../../../../helpers/Loader.jsx';
+import { useOrderActions } from '../../../../hooks/useOrderActions.js';
+import Loader from '../../../../helpers/Loader';
 import { Form } from 'react-bootstrap';
 import { DateTime } from 'luxon';
 import { Button } from 'primereact/button';

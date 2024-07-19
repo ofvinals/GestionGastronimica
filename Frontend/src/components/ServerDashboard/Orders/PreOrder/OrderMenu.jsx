@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { useMenuActions } from '../../../../hooks/useMenuActions.jsx';
-import { MenuContext } from '../../../../context/MenuContext.jsx';
+import { useMenuActions } from '../../../../hooks/useMenuActions';
+import { MenuContext } from '../../../../context/MenuContext';
 import { OrderCard } from './OrderCard.jsx';
-import { useOrderActions } from '../../../../hooks/useOrderActions.jsx';
+import { useOrderActions } from '../../../../hooks/useOrderActions.js';
 
 // RECIBE PROPS DE ORDERFORM
 export const OrderMenu = ({

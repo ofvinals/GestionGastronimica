@@ -4,7 +4,7 @@ import { useReducer, useEffect } from 'react';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { KitchenReducer, initialState } from '../../../reducer/KitchenReducer';
-import { useKitchenActions } from '../../../hooks/useKitchenActions';
+import { useKitchenActions } from '../../../hooks/useKitchenActions.js';
 import { formatElapsedTime } from '../../../helpers/ElapsedTime';
 import Loader from '../../../helpers/Loader';
 
@@ -47,7 +47,7 @@ export const ExecutingItems = ({ executingItems }) => {
 
 	return (
 		<>
-			{initialState.loading ? (
+			{state.loading ? (
 				<Loader />
 			) : (
 				<div className='md:w-3/4 border-l-2 border-slate-700'>

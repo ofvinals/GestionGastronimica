@@ -4,7 +4,7 @@
 import { useEffect, useReducer } from 'react';
 import { AuthReducer } from '../reducer/AuthReducer';
 import { createContext } from 'react';
-import { apiURL } from '/api/apiURL.js';
+import { apiURL } from '/api/apiURL';
 import { useNavigate } from 'react-router-dom';
 
 const initialState = {

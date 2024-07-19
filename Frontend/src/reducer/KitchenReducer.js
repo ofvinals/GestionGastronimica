@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-case-declarations */
 const initialState = {
 	timers: {},
 	intervals: {},
@@ -8,13 +6,17 @@ const initialState = {
 };
 
 export const KitchenReducer = (state = initialState, action) => {
-	console.log(state, action);
 	switch (action.type) {
 		case 'TIMER_PENDING':
 			return { ...state, loading: true, error: null };
 		case 'START_TIMER':
 			return {
 				...state,
+				timers: {
+					...state.timers,
+					[`${action.payload.orderId}-${action.payload.itemId}`]:
+						action.payload.startTime,
+				},
 				intervals: {
 					...state.intervals,
 					[`${action.payload.orderId}-${action.payload.itemId}`]:
@@ -22,17 +24,21 @@ export const KitchenReducer = (state = initialState, action) => {
 				},
 			};
 		case 'STOP_TIMER':
-			const {
-				[`${action.payload.orderId}-${action.payload.itemId}`]: _,
-				...restIntervals
-			} = state.intervals;
+			const newTimers = { ...state.timers };
+			const newIntervals = { ...state.intervals };
+
+			delete newTimers[`${action.payload.orderId}-${action.payload.itemId}`];
+			clearInterval(
+				newIntervals[`${action.payload.orderId}-${action.payload.itemId}`]
+			);
+			delete newIntervals[
+				`${action.payload.orderId}-${action.payload.itemId}`
+			];
+
 			return {
 				...state,
-				intervals: restIntervals,
-				timers: {
-					...state.timers,
-					[`${action.payload.orderId}-${action.payload.itemId}`]: 0,
-				},
+				timers: newTimers,
+				intervals: newIntervals,
 			};
 		case 'UPDATE_TIMER':
 			return {

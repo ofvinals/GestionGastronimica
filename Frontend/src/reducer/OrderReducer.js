@@ -2,7 +2,7 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable react/prop-types */
 export const OrderReducer = (state, action) => {
-	console.log(state, action)
+	console.log(state, action);
 	switch (action.type) {
 		case 'DATA_ORDERS_PENDING':
 			return { ...state, loading: true, error: null };
@@ -79,6 +79,15 @@ export const OrderReducer = (state, action) => {
 				...state,
 				prevOrder: updatedPrevOrder,
 			};
+		case 'DELETE_PREV_ORDERS_SUCCESS':
+			return {
+				...state,
+				prevOrder: state.prevOrder.filter(
+					(order) => order.tableId !== action.payload
+				),
+				error: null,
+				loading: false,
+			};
 		case 'DATA_ORDERS_SUCCESS':
 			return {
 				...state,
@@ -93,23 +102,13 @@ export const OrderReducer = (state, action) => {
 				loading: false,
 				error: null,
 			};
-
-		case 'EDIT_ORDERS_SUCCESS':
+		case 'UPDATE_ORDER_SUCCESS':
 			return {
 				...state,
 				orders: state.orders.map((order) =>
 					order._id === action.payload._id ? action.payload : order
 				),
 				error: null,
-			};
-		case 'DELETE_PREV_ORDERS_SUCCESS':
-			return {
-				...state,
-				prevOrder: state.prevOrder.filter(
-					(order) => order.tableId !== action.payload
-				),
-				error: null,
-				loading: false,
 			};
 		case 'UPDATE_ORDER_PENDING_SUCCESS':
 			return {
@@ -161,17 +160,17 @@ export const OrderReducer = (state, action) => {
 					return order;
 				}),
 			};
-		case 'CASH_ORDER_SUCCESS':
-			return {
-				...state,
-				orders: state.orders.map((order) =>
-					order._id === action.payload
-						? { ...order, isOpen: false }
-						: order
-				),
-				loading: false,
-				error: null,
-			};
+		// case 'CASH_ORDER_SUCCESS':
+		// 	return {
+		// 		...state,
+		// 		orders: state.orders.map((order) =>
+		// 			order._id === action.payload
+		// 				? { ...order, isOpen: false }
+		// 				: order
+		// 		),
+		// 		loading: false,
+		// 		error: null,
+		// 	};
 		case 'DATA_ORDERS_ERROR':
 			return { ...state, loading: false, error: action.payload };
 

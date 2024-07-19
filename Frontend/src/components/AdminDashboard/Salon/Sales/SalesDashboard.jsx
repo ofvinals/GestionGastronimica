@@ -3,13 +3,13 @@ import { useContext, useState, useMemo } from 'react';
 import { FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Table } from '../../../Table.jsx';
-import Modals from '../../../Modals.jsx';
-import { OrderContext } from '../../../../context/OrderContext.jsx';
-import { useOrderActions } from '../../../../hooks/useOrderActions.jsx';
+import { Table } from '../../../Table';
+import Modals from '../../../Modals';
+import { OrderContext } from '../../../../context/OrderContext';
+import { useOrderActions } from '../../../../hooks/useOrderActions.js';
 import { Button } from 'react-bootstrap';
-import Loader from '../../../../helpers/Loader.jsx';
-import SalesForm from './SalesForm.jsx';
+import Loader from '../../../../helpers/Loader';
+import SalesForm from './SalesForm';
 
 export const SalesDashboard = () => {
 	const { state, loading } = useContext(OrderContext);
@@ -19,7 +19,8 @@ export const SalesDashboard = () => {
 	const [openViewModal, setOpenViewModal] = useState(false);
 	const [rowId, setRowId] = useState(null);
 
-		// ABRE MODAL P AGREGAR VENTA
+	const filteredPayOrder = state.orders.filter((order) => order.orderOpen === false);
+	// ABRE MODAL P AGREGAR VENTA
 	const handleOpenAddModal = () => {
 		setOpenAddModal(true);
 	};
@@ -152,7 +153,7 @@ export const SalesDashboard = () => {
 							<CssBaseline />
 							<Table
 								columns={columns}
-								data={state.orders}
+								data={filteredPayOrder}
 								actions={actions}
 							/>
 						</ThemeProvider>

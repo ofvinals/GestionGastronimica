@@ -5,8 +5,8 @@ import { Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../../helpers/Loader';
 import { UserContext } from '../../context/UserContext';
-import { useUserActions } from '../../hooks/useUserActions';
-import { useAuthActions } from '../../hooks/useAuthActions';
+import { useUserActions } from '../../hooks/useUserActions.js';
+import { useAuthActions } from '../../hooks/useAuthActions.js';
 
 export const LoginForm = () => {
 	const navigate = useNavigate();

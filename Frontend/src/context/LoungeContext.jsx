@@ -5,6 +5,7 @@ import { LoungeReducer } from '../reducer/LoungeReducer';
 
 const initialState = {
 	lounges: [],
+	loungeById: [],
 	loading: false,
 	error: null,
 };

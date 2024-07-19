@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-import { useUserActions } from '../../../../hooks/useUserActions';
+import { useUserActions } from '../../../../hooks/useUserActions.js';
 import { UserContext } from '../../../../context/UserContext';
 import { useContext, useEffect } from 'react';
 
@@ -10,13 +10,16 @@ const EditTableDetails = ({
 	onWaiterChange,
 	onTableBlur,
 	salonName,
+	onClose,
 }) => {
 	const { state } = useContext(UserContext);
 	const { dataUsers } = useUserActions();
 	const users = state.users;
+
 	useEffect(() => {
 		dataUsers();
 	}, []);
+	
 	if (!selectedTable) return null;
 
 	return (
@@ -55,6 +58,14 @@ const EditTableDetails = ({
 							))
 					: null}
 			</select>
+			
+			<div className='flex flex-row items-center justify-center'>
+				<button
+					onClick={onClose}
+					className=' text-white p-2 rounded-full hover:bg-red-800 hover:text-red-800 '>
+					<i className='fa-solid fa-circle-xmark text-[40px] text-red-800 hover:text-white'></i>{' '}
+				</button>
+			</div>
 		</div>
 	);
 };

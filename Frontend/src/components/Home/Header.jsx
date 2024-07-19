@@ -6,9 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import Swal from 'sweetalert2';
 import { DateTime } from './Date';
-import { useAuthActions } from '../../hooks/useAuthActions.jsx';
-import UserMenu from './UserMenu.jsx';
-import Loader from '../../helpers/Loader.jsx';
+import { useAuthActions } from '../../hooks/useAuthActions.js';
+import UserMenu from './UserMenu';
+import Loader from '../../helpers/Loader';
 
 export const Header = () => {
 	const [scrolled, setScrolled] = useState(false);

@@ -3,13 +3,13 @@ import { useEffect, useContext, useState, useMemo } from 'react';
 import { FaPause, FaPlay, FaUserEdit, FaTrashAlt } from 'react-icons/fa';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Table } from '../../Table.jsx';
-import Modals from '../../Modals.jsx';
-import UserForm from './UserForm.jsx';
-import { UserContext } from '../../../context/UserContext.jsx';
-import { useUserActions } from '../../../hooks/useUserActions.jsx';
+import { Table } from '../../Table';
+import Modals from '../../Modals';
+import UserForm from './UserForm';
+import { UserContext } from '../../../context/UserContext';
+import { useUserActions } from '../../../hooks/useUserActions.js';
 import '../../../css/Custom.css';
-import Loader from '../../../helpers/Loader.jsx';
+import Loader from '../../../helpers/Loader';
 
 export const UserDashboard = () => {
 	const { state, loading } = useContext(UserContext);

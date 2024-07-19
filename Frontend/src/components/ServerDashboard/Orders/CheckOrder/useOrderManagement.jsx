@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useContext } from 'react';
 import { OrderContext } from '../../../../context/OrderContext';
-import { useOrderActions } from '../../../../hooks/useOrderActions';
+import { useOrderActions } from '../../../../hooks/useOrderActions.js';
 
 const originalState = {
 	1: { pending: false },
@@ -21,13 +21,13 @@ export const useOrderManagement = (tableId) => {
 
 	useEffect(() => {
 		if (stateOrders && tableId) {
-			const filteredOrders = stateOrders.orders.filter(
-				(order) => order.tableId === tableId
-			);
+			const filteredOrders = stateOrders.orders
+				.filter((order) => order.tableId === tableId)
+				.filter((order) => order.orderOpen === true);
 			setOrders(filteredOrders);
 		}
 	}, [stateOrders, tableId]);
-
+	
 	useEffect(() => {
 		if (modifiedItems.length > 0) {
 			const hasChanges = modifiedItems.some(

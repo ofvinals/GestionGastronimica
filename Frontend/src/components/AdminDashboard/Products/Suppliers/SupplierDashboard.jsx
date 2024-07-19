@@ -3,13 +3,13 @@ import { useEffect, useContext, useState, useMemo } from 'react';
 import { FaPause, FaPlay, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Table } from '../../../Table.jsx';
-import Modals from '../../../Modals.jsx';
-import ProductForm from './SupplierForm.jsx';
-import { ProductContext } from '../../../../context/ProductContext.jsx';
+import { Table } from '../../../Table';
+import Modals from '../../../Modals';
+import ProductForm from './SupplierForm';
+import { ProductContext } from '../../../../context/ProductContext';
 import { Button } from 'react-bootstrap';
-import { useSupplierActions } from '../../../../hooks/useSupplierActions.jsx';
-import Loader from '../../../../helpers/Loader.jsx';
+import { useSupplierActions } from '../../../../hooks/useSupplierActions.js';
+import Loader from '../../../../helpers/Loader';
 
 export const SupplierDashboard = () => {
 	const { state, loading } = useContext(ProductContext);

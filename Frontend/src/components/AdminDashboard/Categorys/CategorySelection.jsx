@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
-import { useCategoryActions } from '../../../hooks/useCategoryActions';
+import { useCategoryActions } from '../../../hooks/useCategoryActions.js';
 
 export const CategorySelection = ({ categorys, onCategorySelect }) => {
 	const { dataCategorys } = useCategoryActions();

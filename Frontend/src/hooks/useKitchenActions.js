@@ -36,6 +36,7 @@ export const useKitchenActions = (dispatch) => {
 		if (intervalId) {
 			clearInterval(intervalId);
 		}
+		const cookedAt = new Date().toISOString();
 		const elapsed = state.timers[`${orderId}-${itemId}`] || 0;
 		dispatch({
 			type: STOP_TIMER,
@@ -44,7 +45,7 @@ export const useKitchenActions = (dispatch) => {
 				itemId,
 			},
 		});
-		updateOrderCooked(orderId, itemId, elapsed);
+		updateOrderCooked(orderId, itemId, elapsed, cookedAt);
 	};
 
 	return { startTimer, stopTimer };

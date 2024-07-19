@@ -2,10 +2,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useContext, useEffect, useState } from 'react';
-import RestaurantLayout from '../../ServerDashboard/Layout/ServerLayout';
-import { LoungeContext } from '../../../context/LoungeContext.jsx';
-import { useLoungeActions } from '../../../hooks/useLoungeActions.jsx';
-import Loader from '../../../helpers/Loader.jsx';
+import { LoungeContext } from '../../../context/LoungeContext';
+import { useLoungeActions } from '../../../hooks/useLoungeActions.js';
+import Loader from '../../../helpers/Loader';
+import ServerLayout from '../../ServerDashboard/Layout/ServerLayout';
 
 export const TableDashboard = ({ reload, onReload }) => {
 	const { dataSalons } = useLoungeActions();
@@ -14,7 +14,7 @@ export const TableDashboard = ({ reload, onReload }) => {
 
 	useEffect(() => {
 		dataSalons();
-	}, [reload]);
+	}, []);
 
 	useEffect(() => {
 		if (
@@ -25,9 +25,13 @@ export const TableDashboard = ({ reload, onReload }) => {
 			setActiveSalonId(loungeState.lounges[0]._id);
 		}
 	}, [loungeState.lounges]);
-console.log(activeSalonId)
+
 	const handleReload = () => {
 		window.location.reload();
+	};
+
+	const handleSalonClick = (salonId) => {
+		setActiveSalonId(salonId);
 	};
 
 	return (
@@ -35,15 +39,31 @@ console.log(activeSalonId)
 			{loading ? (
 				<Loader />
 			) : (
-				<RestaurantLayout
-					onReload={handleReload}
-					salonId={activeSalonId}
-					salonName={
-						loungeState.lounges.find(
-							(salon) => salon._id === activeSalonId
-						)?.name || 'Nombre no encontrado'
-					}
-				/>
+				<section>
+					<div className='pt-3 shadowIndex rounded-t-md bg-slate-600 flex flex-wrap flex-row items-center justify-around'>
+						<h2 className='text-white text-2xl font-semibold mb-3'>
+							Salones
+						</h2>
+						{loungeState.lounges &&
+							loungeState.lounges.map((lounge) => (
+								<button
+									key={lounge._id}
+									onClick={() => handleSalonClick(lounge._id)}
+									className={`border-none text-white p-2 ${
+										activeSalonId === lounge._id
+											? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
+											: 'bg-transparent text-white hover:font-bold'
+									}`}>
+									{lounge.name}
+								</button>
+							))}
+					</div>
+					<ServerLayout
+						onReload={handleReload}
+						salonId={activeSalonId}
+						salonName={loungeState.lounges.name}
+					/>
+				</section>
 			)}
 		</div>
 	);

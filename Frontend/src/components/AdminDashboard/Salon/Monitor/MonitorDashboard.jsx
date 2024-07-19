@@ -3,15 +3,15 @@ import { useEffect, useContext, useState, useMemo } from 'react';
 import { FaEye } from 'react-icons/fa';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Table } from '../../../Table.jsx';
-import Modals from '../../../Modals.jsx';
-import { OrderContext } from '../../../../context/OrderContext.jsx';
+import { Table } from '../../../Table';
+import Modals from '../../../Modals';
+import { OrderContext } from '../../../../context/OrderContext';
 import { LoungeContext } from '../../../../context/LoungeContext';
-import { useOrderActions } from '../../../../hooks/useOrderActions.jsx';
-import Loader from '../../../../helpers/Loader.jsx';
-import MonitorForm from './MonitorForm.jsx';
+import { useOrderActions } from '../../../../hooks/useOrderActions.js';
+import Loader from '../../../../helpers/Loader';
+import MonitorForm from './MonitorForm';
 import { DateTime } from 'luxon';
-import { useLayoutActions } from '../../../../hooks/useLayoutActions.jsx';
+import { useLayoutActions } from '../../../../hooks/useLayoutActions.js';
 
 export const MonitorDashboard = () => {
 	const { state, loading } = useContext(OrderContext);

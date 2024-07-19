@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
 import { Form } from 'react-bootstrap';
-import { useOrderActions } from '../../../../hooks/useOrderActions';
-import { useLayoutActions } from '../../../../hooks/useLayoutActions';
+import { useOrderActions } from '../../../../hooks/useOrderActions.js';
+import { useLoungeActions } from '../../../../hooks/useLoungeActions.js';
+import { useLayoutActions } from '../../../../hooks/useLayoutActions.js';
 
 export const CashPay = ({
 	onClose,
@@ -10,22 +11,64 @@ export const CashPay = ({
 	cash,
 	additionalCharges,
 	validFinalPrice,
+	closeTime,
+	salonId,
+	tableId,
+	isOpen,
+	index,
+	openAt,
 }) => {
-	const { updateCashOrder } = useOrderActions();
-	const { loadAllLayoutAction } = useLayoutActions();
+	const { orderCashAction } = useOrderActions();
+	const { dataSalons } = useLoungeActions();
+	const { updateTableIsOpenAction } = useLayoutActions();
 	const [paymentAmount, setPaymentAmount] = useState(0);
 	const [change, setChange] = useState(0);
+	const orderOpen = false;
 
 	const handleCons = () => {
-		updateCashOrder(orderId, cash, additionalCharges, validFinalPrice);
+		const values = {
+			onClose,
+			cash,
+			additionalCharges,
+			validFinalPrice,
+			closeTime,
+			orderOpen,
+			recipe: 'Comsumidor Final C',
+		};
+		orderCashAction(orderId, values);
+		updateTableIsOpenAction(
+			closeTime,
+			salonId,
+			tableId,
+			isOpen,
+			index,
+			openAt
+		);
+		dataSalons();
 		onClose();
-		loadAllLayoutAction();
 	};
 
 	const handleFactA = () => {
-		updateCashOrder(orderId, cash, additionalCharges, validFinalPrice);
+		const values = {
+			onClose,
+			cash,
+			additionalCharges,
+			validFinalPrice,
+			closeTime,
+			orderOpen,
+			recipe: 'Comsumidor Final C',
+		};
+		orderCashAction(orderId, values);
+		updateTableIsOpenAction(
+			closeTime,
+			salonId,
+			tableId,
+			isOpen,
+			index,
+			openAt
+		);
 		onClose();
-		loadAllLayoutAction();
+		dataSalons();
 	};
 
 	const handlePaymentChange = (e) => {
@@ -56,7 +99,9 @@ export const CashPay = ({
 				<p className='text-start bg-transparent text-xl mb-0 mt-2 text-background font-medium'>
 					Vuelto
 				</p>
-				<p className='text-start bg-transparent text-xl mb-0 mt-2 text-background font-medium'>{change >= 0 ? change.toFixed(2) : 'Monto insuficiente'}</p>
+				<p className='text-start bg-transparent text-xl mb-0 mt-2 text-background font-medium'>
+					{change >= 0 ? change.toFixed(2) : 'Monto insuficiente'}
+				</p>
 			</div>
 			<div className='mt-5 flex flex-row flex-wrap items-center justify-around'>
 				<button

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect } from 'react';
-import { useCategoryActions } from '../../../../hooks/useCategoryActions';
+import { useCategoryActions } from '../../../../hooks/useCategoryActions.js';
 import { MenuContext } from '../../../../context/MenuContext';
 
 export const CategorySelection = ({ onCategorySelect }) => {

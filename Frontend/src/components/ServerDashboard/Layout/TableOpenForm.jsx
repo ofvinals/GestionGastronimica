@@ -11,7 +11,7 @@ export const TableOpenForm = ({ table, onConfirm, onClose }) => {
 			<div className='flex flex-wrap items-center justify-around mt-3'>
 				<button
 					className='text-white p-2 rounded-full hover:bg-green-800 hover:text-green-800'
-					onClick={onConfirm}>
+					onClick={() => onConfirm(null)}>
 					<i className='fa-solid fa-circle-check text-[40px] text-green-800 hover:text-white'></i>
 				</button>
 				<button

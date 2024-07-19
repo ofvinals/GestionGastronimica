@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import MenuLayout from '../Salon/Layout/MenuLayout';
-import { TableDashboard } from './TableDashboard';
 import { SalesDashboard } from './Sales/SalesDashboard';
 import { MonitorDashboard } from './Monitor/MonitorDashboard';
+import { TableDashboard } from './TableDashboard';
 
 export const SalonMenu = () => {
 	const [activeButton, setActiveButton] = useState('monitor');
@@ -53,7 +53,7 @@ export const SalonMenu = () => {
 								? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
 								: 'bg-transparent text-white hover:font-bold'
 						}`}>
-						Monitor de Salon
+						Estado de Mesas
 					</button>
 					<button
 						onClick={() => {
@@ -65,7 +65,7 @@ export const SalonMenu = () => {
 								? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
 								: 'bg-transparent text-white hover:font-bold'
 						}`}>
-						Mesas
+						Monitor de Salon
 					</button>
 
 					<button

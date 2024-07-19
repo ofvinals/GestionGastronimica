@@ -1,7 +1,7 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable no-mixed-spaces-and-tabs */
 export const LoungeReducer = (state, action) => {
-	console.log(state, action)
+	console.log(state, action);
 	switch (action.type) {
 		case 'DATA_TABLE_PENDING':
 		case 'DATA_SALON_PENDING':
@@ -9,17 +9,29 @@ export const LoungeReducer = (state, action) => {
 		case 'DATA_SALONID_SUCCESS':
 			return {
 				...state,
-				lounges: action.payload,
+				loungeById: action.payload,
 			};
 		case 'DATA_SALONS_SUCCESS':
 			return {
 				...state,
 				lounges: action.payload,
+				loading: false,
+				error: null,
 			};
+
 		case 'ADD_SALON_SUCCESS':
 			return {
 				...state,
 				lounges: [...state.lounges, action.payload],
+			};
+		case 'DELETE_SALON_SUCCESS':
+			return {
+				...state,
+				lounges: state.lounges.filter(
+					(lounge) => lounge._id !== action.payload
+				),
+				loading: false,
+				error: null,
 			};
 
 		case 'UPDATE_LAYOUTS_SUCCESS':
@@ -93,7 +105,7 @@ export const LoungeReducer = (state, action) => {
 			};
 		}
 		case 'OPEN_TABLE_SUCCESS':
-		const { salon_Id, tableId, isOpen, closeTime } = action.payload;
+			const { salon_Id, tableId, isOpen, closeTime } = action.payload;
 			return {
 				...state,
 				lounges: state.lounges.map((salon) =>
@@ -101,7 +113,9 @@ export const LoungeReducer = (state, action) => {
 						? {
 								...salon,
 								layouts: salon.layouts.map((table) =>
-									table.id === tableId ? { ...table, isOpen, closeTime } : table
+									table.id === tableId
+										? { ...table, isOpen, closeTime }
+										: table
 								),
 						  }
 						: salon

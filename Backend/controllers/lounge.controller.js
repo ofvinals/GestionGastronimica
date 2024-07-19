@@ -10,11 +10,14 @@ const getLounges = async (req, res) => {
 };
 
 const createLounge = async (req, res) => {
-	const { name } = req.body;
+	const { newLoungeName } = req.body;
+	console.log('newLoungeName', newLoungeName);
 	try {
 		const newLounge = new Lounge({
-			name,
+			name: newLoungeName,
+			layouts: [],
 		});
+		console.log(newLounge);
 		const savedLounge = await newLounge.save();
 		res.json(savedLounge);
 	} catch (error) {
@@ -33,9 +36,12 @@ const getLounge = async (req, res) => {
 
 const updateLayout = async (req, res) => {
 	try {
+		console.log('updateLayout', req.body);
+		console.log(req.params);
 		const { layouts } = req.body;
 		const { id: salonId } = req.params;
 		const salon = await Lounge.findById(salonId);
+		console.log(salon);
 		salon.layouts = layouts;
 		await salon.save();
 		res.status(200).json(salon);
@@ -45,6 +51,7 @@ const updateLayout = async (req, res) => {
 };
 
 const updateTable = async (req, res) => {
+	console.log('updateTable', req.body);
 	try {
 		const { id } = req.params;
 		const { isOpen, layoutId, closeTime, openAt } = req.body;
@@ -60,21 +67,21 @@ const updateTable = async (req, res) => {
 	}
 };
 
-const updateLounge = async (req, res) => {
-	try {
-		const { name } = req.body;
-		const updateLounge = await Lounge.findByIdAndUpdate(
-			req.params.id,
-			{
-				name,
-			},
-			{ new: true }
-		);
-		res.json(updateLounge);
-	} catch (error) {
-		return res.status(500).json({ message: error.message });
-	}
-};
+// const updateLounge = async (req, res) => {
+// 	try {
+// 		const { name } = req.body;
+// 		const updateLounge = await Lounge.findByIdAndUpdate(
+// 			req.params.id,
+// 			{
+// 				name,
+// 			},
+// 			{ new: true }
+// 		);
+// 		res.json(updateLounge);
+// 	} catch (error) {
+// 		return res.status(500).json({ message: error.message });
+// 	}
+// };
 
 const deleteLounge = async (req, res) => {
 	try {
@@ -89,7 +96,7 @@ module.exports = {
 	getLounge,
 	getLounges,
 	createLounge,
-	updateLounge,
+	// updateLounge,
 	updateLayout,
 	deleteLounge,
 	updateTable,

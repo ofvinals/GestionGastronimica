@@ -1,50 +1,46 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Stage, Layer } from 'react-konva';
-import { useLayoutActions } from '../../../../hooks/useLayoutActions.jsx';
+import { useLayoutActions } from '../../../../hooks/useLayoutActions.js';
 import GridLines from './GridLines';
 import TableRect from './TableRect';
 import EditTableDetails from './EditTableDetails';
 import LoungeForm from './LoungeForm';
-
+import { useLoungeActions } from '../../../../hooks/useLoungeActions.js';
 const GRID_SIZE = 10;
 const CELL_SIZE = 50;
 
-const RestaurantLayout = ({
-	salonName,
-	salonId,
-	showLoungeForm,
-	onCloseForm,
-}) => {
+const RestaurantLayout = ({ salonId, showLoungeForm, onCloseForm }) => {
 	const [selectedTable, setSelectedTable] = useState(null);
 	const [currentLayout, setCurrentLayout] = useState([]);
 	const [showEditTableDetails, setShowEditTableDetails] = useState(false);
-	const firstLoad = useRef(true);
-	const { loadLayoutAction, addSalonAction } = useLayoutActions();
+	const { addSalonAction, dataSalons } = useLoungeActions();
+	const [isRound, setIsRound] = useState(true); // Estado para la forma de la mesa
 
-	const fetchLayout = async () => {
+	// const firstLoad = useRef(true);
+	const { loadLayoutAction, addTableAction } = useLayoutActions();
+
+	const getLayout = async () => {
 		try {
 			const layout = await loadLayoutAction(salonId);
-			setCurrentLayout(layout || []); // Asegura que si layout es null o undefined, se usa un array vacío
+			setCurrentLayout(layout?.layouts || []);
 		} catch (error) {
 			console.error('Error fetching layout:', error);
-			// Puedes manejar el error aquí, como mostrar un mensaje al usuario o intentar recuperar de alguna manera
 		}
 	};
 
 	useEffect(() => {
-		fetchLayout();
+		getLayout();
 	}, [salonId]);
-	console.log(currentLayout);
 
-	useEffect(() => {
-		if (firstLoad.current) {
-			firstLoad.current = false;
-		} else {
-			// editLayoutAction(salonId, currentLayout);
-		}
-	}, [currentLayout]);
+	// useEffect(() => {
+	// 	if (!firstLoad.current) {
+	// 		addTableAction(salonId, currentLayout);
+	// 	} else {
+	// 		firstLoad.current = false;
+	// 	}
+	// }, [currentLayout]);
 
 	const addTable = (x, y) => {
 		const gridX = Math.floor(x / CELL_SIZE) * CELL_SIZE;
@@ -66,13 +62,17 @@ const RestaurantLayout = ({
 					y: gridY,
 					id: newId,
 					waiter: '',
+					isOpen: false,
+					closeTime: null,
+					openAt: null,
 					salonId,
 				};
-				setCurrentLayout([...currentLayout, newTable]);
+				const newLayout = [...currentLayout, newTable];
+				setCurrentLayout(newLayout);
+				addTableAction(salonId, newLayout);
 			}
 		}
 	};
-	console.log(currentLayout);
 
 	const handleDragEnd = (e, id) => {
 		const gridX = Math.floor(e.target.x() / CELL_SIZE) * CELL_SIZE;
@@ -84,11 +84,12 @@ const RestaurantLayout = ({
 			gridY >= 0 &&
 			gridY < GRID_SIZE * CELL_SIZE
 		) {
-			setCurrentLayout((prevLayout) =>
-				prevLayout.map((table) =>
-					table.id === id ? { ...table, x: gridX, y: gridY } : table
-				)
+			const values = currentLayout.map((table) =>
+				table.id === id ? { ...table, x: gridX, y: gridY } : table
 			);
+			console.log(values);
+			setCurrentLayout(values);
+			addTableAction(salonId, values);
 		}
 	};
 
@@ -130,18 +131,26 @@ const RestaurantLayout = ({
 					table.id === selectedTable.id ? selectedTable : table
 				)
 			);
+			addTableAction(salonId, currentLayout);
 		}
 	};
 
 	const handleAddSalon = (newLoungeName) => {
-		const newSalon = { newLoungeName, layouts: [] };
-		addSalonAction(newSalon);
+		console.log(newLoungeName);
+		addSalonAction(newLoungeName).then(() => {
+			dataSalons();
+		});
 	};
 
 	const handleCloseForm = () => {
 		setShowEditTableDetails(false);
+		onCloseForm();
 	};
-	console.log(currentLayout);
+
+	const toggleShape = () => {
+		setIsRound((prev) => !prev); // Alterna entre redondo y cuadrado
+	};
+
 	return (
 		<div className='flex flex-row w-full'>
 			<div className='w-4/6 m-2 border-2 border-black'>
@@ -155,8 +164,8 @@ const RestaurantLayout = ({
 					onContextMenu={(e) => e.evt.preventDefault()}>
 					<Layer>
 						<GridLines />
-						{currentLayout.layouts &&
-							currentLayout.layouts.map((table) => (
+						{currentLayout &&
+							currentLayout.map((table) => (
 								<TableRect
 									key={table.id}
 									table={table}
@@ -172,15 +181,16 @@ const RestaurantLayout = ({
 				</Stage>
 			</div>
 			<div className='w-2/6 pr-1'>
-				{/* Mostrar EditTableDetails o LoungeForm según el estado */}
 				{showEditTableDetails && (
 					<EditTableDetails
-						salonName={salonName}
+						salonName={currentLayout.name}
 						selectedTable={selectedTable}
 						onTableNumberChange={handleTableNumberChange}
 						onWaiterChange={handleWaiterChange}
 						onTableBlur={handleTableBlur}
 						onClose={handleCloseForm}
+						isRound={isRound} // Pasar el estado actual de la forma
+						toggleShape={toggleShape} // P
 					/>
 				)}
 				{showLoungeForm && (

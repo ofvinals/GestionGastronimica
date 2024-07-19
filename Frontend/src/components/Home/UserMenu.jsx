@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
-import { useAuthActions } from '../../hooks/useAuthActions.jsx';
+import { useAuthActions } from '../../hooks/useAuthActions.js';
 import '../../css/Custom.css';
-import Modals from '../Modals.jsx';
-import Profile from './Profile.jsx';
+import Modals from '../Modals';
+import Profile from './Profile';
 
 const UserMenu = ({ displayName }) => {
 	const [show, setShow] = useState(false);

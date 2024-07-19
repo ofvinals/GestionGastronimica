@@ -61,31 +61,32 @@ const getOrder = async (req, res) => {
 };
 
 const updateOrder = async (req, res) => {
+	console.log(req.body);
 	try {
-		const {
-			salonName,
-			tableNum,
-			tableId,
-			diners,
-			server,
-			orderOpen,
-			openAt,
-			closeTime,
-			elapsedDuration,
-			orderCash,
-			finalPrice,
-			additionalCharges,
-			items,
-		} = req.body;
-		const updateOrder = await Order.findByIdAndUpdate(
-			req.params.id,
-			req.body,
-			{
-				new: true,
-			}
-		);
-		res.json(updateOrder);
+		const { items, ...updateFields } = req.body;
+
+		// Encuentra la orden por ID
+		const order = await Order.findById(req.params.id);
+		console.log('order', order);
+		if (!order) {
+			return res.status(404).json({ message: 'Orden no encontrada' });
+		}
+
+		// Si hay ítems en la solicitud, combínalos con los existentes
+		if (items && Array.isArray(items)) {
+			order.items = [...order.items, ...items];
+		}
+
+		// Actualiza los campos de la orden sin reemplazar los ítems
+		Object.keys(updateFields).forEach((key) => {
+			order[key] = updateFields[key];
+		});
+
+		// Guarda la orden actualizada
+		const updatedOrder = await order.save();
+		res.json(updatedOrder);
 	} catch (error) {
+		console.error('Error al actualizar la orden:', error);
 		return res.status(500).json({ message: error.message });
 	}
 };
@@ -118,8 +119,10 @@ const updateOrderPending = async (req, res) => {
 };
 
 const updateItemCooked = async (req, res) => {
+	console.log('itemcooked', req.body);
 	const { orderId, itemId } = req.params;
 	const { cookedAt } = req.body;
+	console.log(cookedAt);
 	try {
 		const order = await Order.findById(orderId);
 		if (!order) {
@@ -129,7 +132,7 @@ const updateItemCooked = async (req, res) => {
 		if (!item) {
 			return res.status(404).send('Item not found');
 		}
-		item.cookedAt = cookedAt;
+		item.cookedAt = cookedAt; // Asegura que se guarde en formato ISO
 		await order.save();
 		res.send(order);
 	} catch (error) {
@@ -161,20 +164,21 @@ const updateOrderOpen = async (req, res) => {
 
 const updateCashOrder = async (req, res) => {
 	console.log('updateCashOrder', req.body);
-
+console.log(req.params)
 	const { id } = req.params;
-	const { orderCash, additionalCharges, validFinalPrice } = req.body;
+	const { cash, additionalCharges, validFinalPrice, orderOpen, closeTime } =
+		req.body;
 
 	try {
 		const order = await Order.findById(id);
 		if (!order) {
 			return res.status(404).json({ message: 'Order not found' });
 		}
-
-		order.orderCash = orderCash;
+		order.orderCash = cash;
 		order.additionalCharges = additionalCharges;
 		order.finalPrice = validFinalPrice;
-
+		order.orderOpen = orderOpen;
+		order.closeTime = closeTime;
 		await order.save();
 
 		res.status(200).json({ message: 'Order updated successfully', order });

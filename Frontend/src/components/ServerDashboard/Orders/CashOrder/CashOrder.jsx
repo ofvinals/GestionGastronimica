@@ -1,35 +1,76 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
 import { AdditionalChargesForm } from './AditionalChargesForm';
-import { useLayoutActions } from '../../../../hooks/useLayoutActions';
-import { useOrderActions } from '../../../../hooks/useOrderActions';
+import { useLayoutActions } from '../../../../hooks/useLayoutActions.js';
+import { useOrderActions } from '../../../../hooks/useOrderActions.js';
 import Modals from '../../../Modals';
 import { CashPay } from './CashPay';
+import moment from 'moment';
+import { useLoungeActions } from '../../../../hooks/useLoungeActions.js';
 
-export const CashOrder = ({ order, onClose, elapsedDuration }) => {
-	const { loadAllLayoutAction } = useLayoutActions();
-	const { updateCashOrder } = useOrderActions();
+export const CashOrder = ({
+	order,
+	onClose,
+	tableId,
+	currentLayout,
+	salonId,
+}) => {
+	const { dataSalons } = useLoungeActions();
+	const { updateTableIsOpenAction } = useLayoutActions();
+	const { updateOrderAction } = useOrderActions();
 	const [additionalCharges, setAdditionalCharges] = useState({
 		tableService: 0,
 		discount: 0,
 		tips: 0,
 	});
+	const { salonName, tableNum, diners, _id, server, openAt } = order[0];
 	const [cashPay, setCashPay] = useState(false);
-	const salonName = order[0]?.salonName;
-	const tableNum = order[0]?.tableNum;
-	const diners = order[0]?.diners;
-	const orderId = order[0]?._id;
-	const server = order[0]?.server;
-	
+	const closeTime = new Date().toString();
+	const isOpen = false;
+	const orderOpen = false;
+	const index = currentLayout.findIndex((table) => table._id === tableId);
+	// CALCULA EL TIEMPO DE USO ENTRE CLOSE Y OPEN
+	const duration = moment.duration(moment(closeTime).diff(moment(openAt)));
+	// EXTRAE HORA Y MINUTO DE LA DURACION
+	const elapsedHours = Math.floor(duration.asHours());
+	const elapsedMinutes = duration.minutes();
+	const elapsedDuration = {
+		hours: elapsedHours,
+		minutes: elapsedMinutes,
+	};
+	// EXTRAER IDs DE ORDENES PENDIENTES
+	const values = {
+		closeTime,
+		orderOpen,
+		order,
+		elapsedDuration,
+	};
+	console.log(values);
+	console.log(_id);
+
 	const handleCash = () => {
 		setCashPay(true);
 	};
 
 	const handleCreditCard = () => {
 		const cash = 'Credito';
-		updateCashOrder(orderId, cash, additionalCharges, validFinalPrice);
+		const values = {
+			_id,
+			cash,
+			additionalCharges,
+			validFinalPrice,
+		};
+		updateOrderAction(_id, values);
+		updateTableIsOpenAction(
+			closeTime,
+			salonId,
+			tableId,
+			isOpen,
+			index,
+			openAt
+		);
 		onClose();
-		loadAllLayoutAction();
+		dataSalons();
 	};
 
 	const handleAdditionalChargesSubmit = (charges) => {
@@ -107,7 +148,7 @@ export const CashOrder = ({ order, onClose, elapsedDuration }) => {
 					</>
 				)}
 			</>
-			
+
 			<div className='flex flex-col flex-wrap items-center justify-between my-3 text-xl'>
 				<p className='font-semibold'>
 					Cantidad de items:{' '}
@@ -130,13 +171,13 @@ export const CashOrder = ({ order, onClose, elapsedDuration }) => {
 					href='https://link.mercadopago.com.ar/estudioposse'
 					target='_blank'>
 					<button className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
-						MERCADO PAGO
+						PAGO DIGITAL (MODO)
 					</button>
 				</a>
 				<button
 					onClick={handleCreditCard}
 					className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
-					TARJETA{' '}
+					PAGO TARJETA
 				</button>
 			</div>
 
@@ -144,14 +185,26 @@ export const CashOrder = ({ order, onClose, elapsedDuration }) => {
 				<Modals
 					title='Generar Ticket/Factura'
 					isOpen={cashPay}
-					onClose={onClose}>
+					onClose={() => {
+						setCashPay(false);
+						onClose();
+					}}>
 					<CashPay
-						onClose={onClose}
+						onClose={() => {
+							setCashPay(false);
+							onClose();
+						}}
 						order={order[0]}
-						orderId={orderId}
+						orderId={_id}
 						cash={'Efectivo'}
 						additionalCharges={additionalCharges}
 						validFinalPrice={validFinalPrice}
+						closeTime={closeTime}
+						salonId={salonId}
+						tableId={tableId}
+						isOpen={isOpen}
+						index={index}
+						openAt={openAt}
 					/>
 				</Modals>
 			)}

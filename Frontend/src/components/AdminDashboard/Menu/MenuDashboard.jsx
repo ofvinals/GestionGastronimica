@@ -3,14 +3,14 @@ import { useEffect, useContext, useState, useMemo } from 'react';
 import { FaPause, FaPlay, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Table } from '../../Table.jsx';
-import Modals from '../../Modals.jsx';
-import MenuForm from '../Menu/MenuForm.jsx';
-import { MenuContext } from '../../../context/MenuContext.jsx';
-import { useMenuActions } from '../../../hooks/useMenuActions.jsx';
+import { Table } from '../../Table';
+import Modals from '../../Modals';
+import MenuForm from '../Menu/MenuForm';
+import { MenuContext } from '../../../context/MenuContext';
+import { useMenuActions } from '../../../hooks/useMenuActions.js';
 import { Button } from 'react-bootstrap';
-import { CategorySelection } from '../Categorys/CategorySelection.jsx';
-import Loader from '../../../helpers/Loader.jsx';
+import { CategorySelection } from '../Categorys/CategorySelection';
+import Loader from '../../../helpers/Loader';
 
 export const MenuDashboard = () => {
 	const { state, loading } = useContext(MenuContext);

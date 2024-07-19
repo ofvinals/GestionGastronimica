@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect } from 'react';
 import { OrderContext } from '../../../context/OrderContext';
-import { useOrderActions } from '../../../hooks/useOrderActions';
+import { useOrderActions } from '../../../hooks/useOrderActions.js';
 import { PendingItems } from './PendingItems';
 import { ExecutingItems } from './ExecutingItems';
 import Loader from '../../../helpers/Loader';

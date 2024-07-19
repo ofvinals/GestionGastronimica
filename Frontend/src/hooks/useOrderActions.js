@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { OrderContext } from '../context/OrderContext';
-import { apiURL } from '/api/apiURL.js';
+import { apiURL } from '/api/apiURL';
 import { showAlert, confirmAction } from '../helpers/showAlert';
 
 export const useOrderActions = () => {
@@ -84,15 +84,49 @@ export const useOrderActions = () => {
 		}
 	};
 
-	// ACTUALIZA EL ESTADO PENDIENTE A FALSE DEL ITEM SELECCIONADO.
-	const updateOrderPending = async (itemIds) => {
+	const updateOrderAction = async (orderId, values) => {
+		console.log(orderId, values);
 		dispatch({
 			type: 'DATA_ORDERS_PENDING',
 		});
 		try {
 			const token = localStorage.getItem('token');
 			const updatedOrder = await apiURL.put(
-				`/api/orders/`,
+				`/api/orders/${orderId}`,
+				values,
+				{
+					withCredentials: true,
+					headers: { authorization: `Bearer ${token}` },
+				}
+			);
+			dispatch({
+				type: 'UPDATE_ORDER_SUCCESS',
+				payload: updatedOrder.data,
+			});
+			showAlert({
+				icon: 'success',
+				title: 'Orden actualizada correctamente',
+			});
+			return updatedOrder.data;
+		} catch (error) {
+			dispatch({ type: 'DATA_ORDERS_ERROR', payload: error.message });
+			console.error('Error al actualizar la orden:', error);
+			showAlert({
+				icon: 'error',
+				title: 'Error al actualizar la orden. Intente nuevamente!',
+			});
+		}
+	};
+
+	// ACTUALIZA EL ESTADO PENDIENTE A FALSE DEL ITEM SELECCIONADO.
+	const updateItemsPending = async (itemIds) => {
+		dispatch({
+			type: 'DATA_ORDERS_PENDING',
+		});
+		try {
+			const token = localStorage.getItem('token');
+			const updatedOrder = await apiURL.put(
+				`/api/orders/update-pending`,
 				{ itemIds },
 				{
 					withCredentials: true,
@@ -121,7 +155,8 @@ export const useOrderActions = () => {
 		}
 	};
 
-	const updateOrderCooked = async (orderId, itemId, elapsed) => {
+	// ACTUALIZA EL VALOR DE COOKEDAT DE CADA ITEM TERMINADO DE PRODUCIR
+	const updateOrderCooked = async (orderId, itemId, cookedAt) => {
 		const isConfirmed = await confirmAction({
 			title: 'Confirmas la elaboracion del pedido?',
 			icon: 'warning',
@@ -134,13 +169,12 @@ export const useOrderActions = () => {
 				const token = localStorage.getItem('token');
 				const updatedOrder = await apiURL.put(
 					`/api/orders/${orderId}/items/${itemId}`,
-					{ cookedAt: new Date(Date.now() - elapsed) },
+					{ cookedAt },
 					{
 						withCredentials: true,
 						headers: { authorization: `Bearer ${token}` },
 					}
 				);
-				const cookedAt = new Date().toString();
 				dispatch({
 					type: 'UPDATE_ITEM_COOKED',
 					payload: { orderId, itemId, cookedAt },
@@ -154,73 +188,6 @@ export const useOrderActions = () => {
 					title: 'Error al editar la orden. Intente nuevamente!',
 				});
 			}
-		}
-	};
-
-	const updateCashOrder = async (
-		orderId,
-		cash,
-		additionalCharges,
-		validFinalPrice
-	) => {
-		dispatch({
-			type: 'DATA_ORDERS_PENDING',
-		});
-		try {
-			const token = localStorage.getItem('token');
-			const updatedOrder = await apiURL.put(
-				`/api/orders/${orderId}/cash`,
-				{ orderCash: cash, additionalCharges, validFinalPrice },
-				{
-					withCredentials: true,
-					headers: { authorization: `Bearer ${token}` },
-				}
-			);
-			dispatch({
-				type: 'UPDATE_ITEM_CASH_SUCCESS',
-				payload: { orderId, cash, additionalCharges, validFinalPrice },
-			});
-			showAlert({
-				icon: 'success',
-				title: 'Orden cobrada correctamente',
-			});
-			return updatedOrder.data;
-		} catch (error) {
-			dispatch({ type: 'DATA_ORDERS_ERROR', payload: error.message });
-			console.error('Error al cobrar la orden:', error);
-			showAlert({
-				icon: 'error',
-				title: 'Error al cobrar la orden. Intente nuevamente!',
-			});
-		}
-	};
-
-	const editOrderAction = async (id, values) => {
-		dispatch({
-			type: 'DATA_ORDERS_PENDING',
-		});
-		try {
-			const token = localStorage.getItem('token');
-			const updatedOrder = await apiURL.put(`/api/orders/${id}`, values, {
-				withCredentials: true,
-				headers: { authorization: `Bearer ${token}` },
-			});
-			dispatch({
-				type: 'EDIT_ORDERS_SUCCESS',
-				payload: updatedOrder.data,
-			});
-			showAlert({
-				icon: 'success',
-				title: 'Orden editada correctamente',
-			});
-			return updatedOrder.data;
-		} catch (error) {
-			dispatch({ type: 'DATA_ORDERS_ERROR', payload: error.message });
-			console.error('Error al editar la orden:', error);
-			showAlert({
-				icon: 'error',
-				title: 'Error al editar la orden. Intente nuevamente!',
-			});
 		}
 	};
 
@@ -265,20 +232,42 @@ export const useOrderActions = () => {
 		}
 	};
 
-	const orderCashAction = async (
-		closeTime,
-		orderOpen,
-		filteredOrder,
-		elapsedDuration
-	) => {
+	const orderCashAction = async (orderId, values) => {
 		dispatch({
 			type: 'DATA_ORDERS_PENDING',
 		});
 		try {
+			const {
+				onClose,
+				cash,
+				additionalCharges,
+				validFinalPrice,
+				closeTime,
+				salonId,
+				tableId,
+				isOpen,
+				index,
+				openAt,
+				orderOpen,
+				recipe,
+			} = values;
 			const token = localStorage.getItem('token');
 			const closedOrders = await apiURL.put(
-				`/api/orders/update`,
-				{ closeTime, orderOpen, filteredOrder, elapsedDuration },
+				`/api/orders/${orderId}/cash`,
+				{
+					closeTime,
+					orderOpen,
+					onClose,
+					cash,
+					additionalCharges,
+					validFinalPrice,
+					salonId,
+					tableId,
+					isOpen,
+					index,
+					openAt,
+					recipe,
+				},
 				{
 					withCredentials: true,
 					headers: { authorization: `Bearer ${token}` },
@@ -290,7 +279,7 @@ export const useOrderActions = () => {
 			});
 			showAlert({
 				icon: 'success',
-				title: 'Mesa cerrada correctamente. A continuación ingrese el método de pago',
+				title: 'Mesa cerrada correctamente!',
 			});
 			return closedOrders.data;
 		} catch (error) {
@@ -309,13 +298,12 @@ export const useOrderActions = () => {
 	return {
 		dataOrders,
 		addOrderPrevAction,
-		addOrderAction,
-		updateOrderPending,
-		editOrderAction,
-		updateCashOrder,
-		updateOrderCooked,
-		deleteItemOrder,
-		orderCashAction,
 		deleteOrderPrevAction,
+		addOrderAction,
+		updateOrderCooked,
+		updateOrderAction,
+		deleteItemOrder,
+		updateItemsPending,
+		orderCashAction,
 	};
 };

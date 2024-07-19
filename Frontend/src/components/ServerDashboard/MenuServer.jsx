@@ -1,19 +1,20 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useContext } from 'react';
-import RestaurantLayout from './Layout/ServerLayout.jsx';
-import { LoungeContext } from '../../context/LoungeContext.jsx';
-import { useLoungeActions } from '../../hooks/useLoungeActions.jsx';
+import ServerLayout from './Layout/ServerLayout';
+import { LoungeContext } from '../../context/LoungeContext';
+import { useLoungeActions } from '../../hooks/useLoungeActions.js';
 
 export const MenuServer = ({ reload }) => {
 	const { state: loungeState } = useContext(LoungeContext);
 	const { dataSalons } = useLoungeActions();
 	const [activeSalonId, setActiveSalonId] = useState(null);
+	const [salonActive, setSalonActive] = useState({});
 
 	// CARGA TODOS LOS SALONES GUARDADOS
 	useEffect(() => {
 		dataSalons();
-	}, [reload]);
+	}, [loungeState.lounges]);
 
 	// SI NO HAY SALON ACTIVO. CARGA EL PRIMER SALON DEL ARRAY LOUNGES
 	useEffect(() => {
@@ -29,11 +30,14 @@ export const MenuServer = ({ reload }) => {
 	// MANEJA LA SELECCION DEL SALON
 	const handleSalonClick = (salonId) => {
 		setActiveSalonId(salonId);
+		const selectedLounge = loungeState.lounges.find(
+			(lounge) => lounge._id === salonId
+		);
+		setSalonActive(selectedLounge);
 	};
 
-	// RECARGA LA PAGINA
 	const handleReload = () => {
-		window.location.reload();
+		window.reload;
 	};
 
 	return (
@@ -59,14 +63,11 @@ export const MenuServer = ({ reload }) => {
 			</div>
 			<div className='flex w-full'>
 				{activeSalonId !== null && (
-					<RestaurantLayout
+					<ServerLayout
 						onReload={handleReload}
 						salonId={activeSalonId}
-						salonName={
-							loungeState.lounges.find(
-								(salon) => salon._id === activeSalonId
-							)?.name || 'Nombre de salon no encontrado'
-						}
+						salonName={salonActive.name}
+						reload={handleReload}
 					/>
 				)}
 			</div>

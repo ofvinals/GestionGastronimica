@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useContext, useState } from 'react';
 import { Button } from 'primereact/button';
@@ -7,8 +6,8 @@ import { CategorySelection } from './CategorySelection';
 import { OrderMenu } from './OrderMenu';
 import Modals from '../../../Modals';
 import { OrderResume } from './OrderResume';
-import { useOrderActions } from '../../../../hooks/useOrderActions';
-import { useLayoutActions } from '../../../../hooks/useLayoutActions';
+import { useOrderActions } from '../../../../hooks/useOrderActions.js';
+import { useLayoutActions } from '../../../../hooks/useLayoutActions.js';
 import { OrderContext } from '../../../../context/OrderContext';
 import { AuthContext } from '../../../../context/AuthContext';
 import { showAlert } from '../../../../helpers/showAlert';
@@ -23,8 +22,11 @@ export const OrderForm = ({
 	currentLayout,
 	setOpenLayout,
 	setOrderForm,
+	openedOrder,
 }) => {
-	const { count, increment, decrement } = useCounter(0);
+	const { count, increment, decrement } = useCounter(
+		openedOrder.diners && openedOrder[0].diners
+	);
 	const { deleteOrderPrevAction } = useOrderActions();
 	const { updateTableIsOpenAction } = useLayoutActions();
 	const { state: prevOrder } = useContext(OrderContext);
@@ -40,10 +42,10 @@ export const OrderForm = ({
 
 	// ABRE RESUMEN DE COMANDA P CONFIRMAR Y ENVIAR A COCINA. VERIFICA QUE HAYA ITEMS EN PREVORDER
 	const handleComanda = () => {
-		if (prevOrder.prevOrder.length === 0) {
+		if (!prevOrder.prevOrder || prevOrder.prevOrder.length === 0) {
 			showAlert({
 				icon: 'error',
-				title: 'La orden esta vacia, debe agregar pedidos para continuar',
+				title: 'La orden está vacía. Debe agregar pedidos para continuar',
 			});
 			return;
 		}
@@ -65,12 +67,12 @@ export const OrderForm = ({
 			// ACTUALIZA ESTADO DE LA MESA
 			updateTableIsOpenAction(salonId, tableId, isOpen, index);
 			if (prevOrder.prevOrder && prevOrder.prevOrder.length > 0) {
-				// BORRAR PREVORDER DE REDUCER
-				await deleteOrderPrevAction(prevOrder.prevOrder[0].tableId);
+				// BORRA PREVORDER DE REDUCER
+				await deleteOrderPrevAction(prevOrder.prevOrder[0]._id);
 			} else {
-				console.error('No hay ordenes previas para eliminar');
+				console.error('No hay órdenes previas para eliminar');
 			}
-			// CIERRA EL FORM Y ABRE LAYOUT
+			// CIERRA EL FORMULARIO Y ABRE LAYOUT
 			setOrderForm(false);
 			setOpenLayout(true);
 		} catch (error) {
@@ -104,7 +106,7 @@ export const OrderForm = ({
 					<div className='w-full flex flex-row flex-wrap items-center justify-center'>
 						<div className='flex flex-col flex-wrap items-center border-1 mx-4 px-2 rounded-xl bg-white border-slate-800 w-full'>
 							<h2 className='text-xl font-semibold mt-2'>
-								Categorias del Menu
+								Categorías del Menú
 							</h2>
 							<CategorySelection
 								onCategorySelect={handleCategorySelect}
@@ -125,7 +127,7 @@ export const OrderForm = ({
 					</div>
 				</div>
 				<div>
-					<h2 className='my-4 text-2xl font-semibold'>Menu</h2>
+					<h2 className='my-4 text-2xl font-semibold'>Menú</h2>
 					<OrderMenu
 						selectedCategory={selectedCategory}
 						tableNum={tableNum}
@@ -146,6 +148,7 @@ export const OrderForm = ({
 						setOrderForm={setOrderForm}
 						onClose={handleCloseModal}
 						onReload={onReload}
+						openedOrder={openedOrder}
 					/>
 				</Modals>
 			)}

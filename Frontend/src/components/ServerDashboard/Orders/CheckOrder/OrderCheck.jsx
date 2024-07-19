@@ -5,18 +5,19 @@ import { OrderItems } from './OrderItems';
 import { ActionButtons } from './ActionButtons';
 import Modals from '../../../Modals';
 import { CashOrder } from '../CashOrder/CashOrder';
-import { useState, useMemo } from 'react';
-import { useOrderActions } from '../../../../hooks/useOrderActions';
-import moment from 'moment-timezone';
-import { useLayoutActions } from '../../../../hooks/useLayoutActions';
+import { useState } from 'react';
+import { useOrderActions } from '../../../../hooks/useOrderActions.js';
 import { showAlert, confirmAction } from '../../../../helpers/showAlert';
 
+// RECIBE PROPS DE SERVERLAYOUT
 export const OrderCheck = ({
 	onClose,
 	tableId,
 	onConfirm,
 	currentLayout,
 	salonId,
+	salonName,
+	tableNum,
 }) => {
 	const {
 		orders,
@@ -25,24 +26,15 @@ export const OrderCheck = ({
 		handleCheckboxChange,
 		handleDeleteItem,
 	} = useOrderManagement(tableId);
-	const { updateOrderPending, orderCashAction } = useOrderActions();
-	const { updateTableIsOpenAction } = useLayoutActions();
-	const [cashOrder, setCashOrder] = useState(false);
-	const [elapsedDuration, setElapsedDuration] = useState({
-		hours: 0,
-		minutes: 0,
-	});
+	const { updateItemsPending } = useOrderActions();
 
-	// FILTRA ORDENES QUE ESTEN ABIERTAS
-	const filteredOrder = useMemo(() => {
-		return orders.filter((order) => order.orderOpen === true);
-	}, [orders]);
+	const [cashOrder, setCashOrder] = useState(false);
 
 	// ACTUALIZA EL ESTADO PENDIENTE DEL ITEM SELECCIONADO
 	const handlePending = async () => {
 		const itemIds = modifiedItems.map((item) => item._id);
 		try {
-			await updateOrderPending(itemIds);
+			await updateItemsPending(itemIds);
 			onClose();
 		} catch (error) {
 			console.error('Error al actualizar el item:', error);
@@ -64,48 +56,24 @@ export const OrderCheck = ({
 				icon: 'warning',
 			});
 			if (isConfirmed) {
-				const closeTime = new Date().toString();
-				const isOpen = false;
-				const orderOpen = false;
-				const index = currentLayout.findIndex(
-					(table) => table._id === tableId
-				);
-				// ACTUALIZA EL ESTADO DE LA MESA
-				updateTableIsOpenAction(closeTime, salonId, tableId, isOpen, index);
-				// CALCULA EL TIEMPO DE USO ENTRE CLOSE Y OPEN
-				const duration = moment.duration(
-					moment(closeTime).diff(moment(openAt))
-				);
-				// EXTRAE HORA Y MINUTO DE LA DURACION
-				const elapsedHours = Math.floor(duration.asHours());
-				const elapsedMinutes = duration.minutes();
-				const elapsedDuration = {
-					hours: elapsedHours,
-					minutes: elapsedMinutes,
-				};
-				setElapsedDuration(elapsedDuration);
-				// EJECUTA ACCION P COBRAR. ENVIA DATOS A REDUCER Y BACKEND
-				orderCashAction(
-					closeTime,
-					orderOpen,
-					filteredOrder,
-					elapsedDuration
-				);
-				// ABRE MODAL DE COBRO
 				setCashOrder(true);
 			}
 		} else {
 			showAlert({
 				icon: 'error',
-				title: 'Tienes ítems pendientes en la comanda. No puedes cerrar la mesa.',
+				title: 'Tienes ítems pendientes en la orden. No puedes cerrar la mesa.',
 			});
 		}
 	};
 
-	if (filteredOrder.length === 0) return null;
+	const handleReopenOrder = () => {
+		const openedOrder = orders.length > 0 ? orders : null;
+		onConfirm(openedOrder);
+	};
 
-	const { salonName, tableNum, diners, server, openAt } = filteredOrder[0];
-
+	if (orders.length === 0) return null;
+	const { diners, server, openAt } = orders[0];
+	
 	return (
 		<div>
 			<TableDetails
@@ -116,13 +84,13 @@ export const OrderCheck = ({
 				openAt={openAt}
 			/>
 			<OrderItems
-				orders={filteredOrder}
+				orders={orders}
 				handleCheckboxChange={handleCheckboxChange}
 				handleDeleteItem={handleDeleteItem}
 				modifiedItems={modifiedItems}
 			/>
 			<ActionButtons
-				onConfirm={onConfirm}
+				onConfirm={handleReopenOrder}
 				onClose={onClose}
 				handlePending={handlePending}
 				handleCash={handleCash}
@@ -140,8 +108,7 @@ export const OrderCheck = ({
 						tableId={tableId}
 						onClose={onClose}
 						diners={diners}
-						order={filteredOrder}
-						elapsedDuration={elapsedDuration}
+						order={orders}
 						salonId={salonId}
 					/>
 				</Modals>
@@ -149,4 +116,5 @@ export const OrderCheck = ({
 		</div>
 	);
 };
+
 export default OrderCheck;
