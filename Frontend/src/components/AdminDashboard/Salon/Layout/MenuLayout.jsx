@@ -3,28 +3,33 @@ import { useState, useEffect, useContext } from 'react';
 import RestaurantLayout from '../Layout/RestaurantLayout';
 import { LoungeContext } from '../../../../context/LoungeContext';
 import { useLoungeActions } from '../../../../hooks/useLoungeActions.js';
+import { useLayoutActions } from '../../../../hooks/useLayoutActions.js';
 
 const MenuLayout = () => {
 	const { state: loungeState } = useContext(LoungeContext);
-	const { dataSalons, addSalonAction, deleteSalonAction } = useLoungeActions();
+	const { addSalonAction, deleteSalonAction } = useLoungeActions();
+	const { loadAllLayoutAction } = useLayoutActions();
 	const [activeSalonId, setActiveSalonId] = useState(null);
 	const [showLoungeForm, setShowLoungeForm] = useState(false);
 	const [salonActive, setSalonActive] = useState({});
 
+	// CARGA DATOS DE SALONES
 	useEffect(() => {
-		dataSalons();
+		loadAllLayoutAction();
 	}, []);
 
+	// SI NO HAY SALONES CREA EL SALON PRINCIPAL, SINO CARGA EL PRIMER ARRAY
 	useEffect(() => {
 		if (loungeState.lounges.length === 0) {
 			const newLoungeName = 'Salón Principal';
-			addSalonAction(newLoungeName).then(() => dataSalons());
+			addSalonAction(newLoungeName).then(() => loadAllLayoutAction());
 		} else {
 			setActiveSalonId(loungeState.lounges[0]._id);
 			setSalonActive(loungeState.lounges[0]);
 		}
 	}, []);
 
+	// FUNCION PARA CAMBIAR DE SALON
 	const handleSalonClick = (salonId) => {
 		setActiveSalonId(salonId);
 		setShowLoungeForm(false);
@@ -34,14 +39,17 @@ const MenuLayout = () => {
 		setSalonActive(selectedLounge);
 	};
 
+	// ABRE MODAL P AGREGAR SALON
 	const handleOpenForm = () => {
 		setShowLoungeForm(true);
 	};
 
+	// CIERRA MODAL
 	const handleCloseForm = () => {
 		setShowLoungeForm(false);
 	};
 
+	// FUNCION PARA BORRAR SALON SELECCIONADO
 	const handleDeleteSalon = (activeSalonId) => {
 		const salonToDelete = loungeState.lounges.find(
 			(lounge) => lounge._id === activeSalonId

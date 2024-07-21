@@ -27,11 +27,12 @@ export const MonitorDashboard = () => {
 		loadAllLayoutAction();
 	}, []);
 
+	// FILTRA SOLO LAS ORDENES QUE ESTEN ABIERTAS
 	const filteredOrders = state.orders.filter(
 		(order) => order.orderOpen === true
 	);
 
-	// ITERA SOBRE LAYOUTS PARA CALCULAR EL TOTAL DE MESAS HABILITADAS Y MESAS OCUPADAS
+	// ITERA SOBRE LAYOUTS PARA CALCULAR LA CANTIDAD DE MESAS OCUPADAS
 	const countAllLayouts = (lounges) => {
 		let openTables = 0;
 		let totalTables = 0;
@@ -41,12 +42,12 @@ export const MonitorDashboard = () => {
 				(layout) => layout.isOpen === true
 			).length;
 		});
-
 		return {
 			openTables,
 			totalTables,
 		};
 	};
+	// CALCULA EL TOTAL DE MESAS
 	const tableCounts = countAllLayouts(stateLayouts.lounges);
 
 	// ABRE MODAL P VER ORDEN Y ENVIA PROPS ROWID

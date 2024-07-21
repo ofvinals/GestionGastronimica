@@ -141,7 +141,7 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 							<Form.Control
 								className={`${
 									mode === 'view' || mode === 'edit'
-										? 'border-none focus:border-none focus:outline-none '
+										? 'border-none focus:border-none focus:outline-none bg-transparent'
 										: ''
 								}`}
 								type='text'
@@ -162,8 +162,8 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 							</Form.Label>
 							<Form.Control
 								className={`${
-									mode === 'view'
-										? 'border-none focus:border-none focus:outline-none '
+									mode === 'view' || mode === 'edit'
+										? 'border-none focus:border-none focus:outline-none bg-transparent'
 										: ''
 								}`}
 								type='number'
@@ -187,7 +187,7 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 							<Form.Control
 								className={`${
 									mode === 'view'
-										? 'border-none focus:border-none focus:outline-none '
+										? 'border-none focus:border-none focus:outline-none bg-transparent'
 										: ''
 								}`}
 								type='number'
@@ -207,8 +207,8 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 							</Form.Label>
 							<Form.Control
 								className={`${
-									mode === 'view'
-										? 'border-none focus:border-none focus:outline-none '
+									mode === 'view' || mode === 'edit'
+										? 'border-none focus:border-none focus:outline-none bg-transparent'
 										: ''
 								}`}
 								type='text'
@@ -231,8 +231,8 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 							</Form.Label>
 							<Form.Control
 								className={`${
-									mode === 'view'
-										? 'border-none focus:border-none focus:outline-none '
+									mode === 'view' || mode === 'edit'
+										? 'border-none focus:border-none focus:outline-none bg-transparent'
 										: ''
 								}`}
 								type='text'
@@ -253,8 +253,8 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 							</Form.Label>
 							<Form.Control
 								className={`${
-									mode === 'view'
-										? 'border-none focus:border-none focus:outline-none '
+									mode === 'view' || mode === 'edit'
+										? 'border-none focus:border-none focus:outline-none bg-transparent'
 										: ''
 								}`}
 								type='text'
@@ -291,9 +291,10 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 						<FormSelect
 							className={`${
 								mode === 'view'
-									? 'w-1/2 border-none focus:border-none focus:outline-none mt-3 '
+									? 'w-1/2 border-none focus:border-none focus:outline-none mt-3 bg-transparent'
 									: 'w-1/2 mt-3'
 							}`}
+							disabled={mode === 'view'}
 							type='text'
 							{...register('orderCash', {
 								required: 'La forma de pago es requerida',

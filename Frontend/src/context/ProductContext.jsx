@@ -5,6 +5,7 @@ import { ProductReducer } from '../reducer/ProductReducer';
 const initialState = {
 	products: [],
 	suppliers: [],
+	purchases: [],
 	loading: false,
 	error: null,
 };

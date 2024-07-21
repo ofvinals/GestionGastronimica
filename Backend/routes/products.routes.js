@@ -10,10 +10,10 @@ const {
 
 const router = express.Router();
 
-router.get('/products',  getProducts);
-router.post('/products',  createProduct)
-router.get('/products/:id',  getProduct);
-router.delete('/products/:id',  deleteProduct);
-router.put('/products/:id',  updateProduct);
+router.get('/products',authRequired,  getProducts);
+router.post('/products',authRequired,  createProduct)
+router.get('/products/:id', authRequired, getProduct);
+router.delete('/products/:id', authRequired, deleteProduct);
+router.put('/products/:id', authRequired, updateProduct);
 
 module.exports = router;

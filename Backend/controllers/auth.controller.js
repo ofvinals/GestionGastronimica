@@ -48,16 +48,6 @@ const logout = (req, res) => {
 	return res.sendStatus(200);
 };
 
-const profile = async (req, res) => {
-	const userFound = await User.findById(req.user.id);
-	if (!userFound) return res.status(400).json(['Usuario no encontrado']);
-	return res.json({
-		id: userFound._id,
-		email: userFound.email,
-		createdAt: userFound.createdAt,
-	});
-};
-
 // VERIFICA AUTENTICIDAD Y VIGENCIA DEL TOKEN
 const verifyToken = async (req, res) => {
 	const authHeader = req.headers['authorization'];
@@ -69,8 +59,6 @@ const verifyToken = async (req, res) => {
 			return res.status(401).json({ message: 'Token no autorizado' });
 		try {
 			const userFound = await User.findById(decoded.id);
-			if (!userFound)
-				return res.status(404).json({ message: 'Usuario no existe' });
 			// DEVUELVE DATOS DEL USUARIO SI TOKEN ES VALIDO
 			return res.status(200).json({
 				id: userFound._id,
@@ -91,6 +79,5 @@ const verifyToken = async (req, res) => {
 module.exports = {
 	login,
 	logout,
-	profile,
 	verifyToken,
 };

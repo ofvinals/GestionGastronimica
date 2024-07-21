@@ -17,6 +17,12 @@ export const CategorySelection = ({ onCategorySelect }) => {
 		(category) => category.status === true
 	);
 
+	const sortedCategories = categorys?.slice().sort((a, b) => {
+		if (a.name < b.name) return -1;
+		if (a.name > b.name) return 1;
+		return 0;
+	});
+
 	return (
 		<div className='gap-3 flex flex-row flex-wrap w-full items-center justify-around my-5 '>
 			<button
@@ -24,8 +30,8 @@ export const CategorySelection = ({ onCategorySelect }) => {
 				className='flex items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
 				Todos
 			</button>
-			{categorys &&
-				categorys.map((category, id) => (
+			{sortedCategories &&
+				sortedCategories.map((category, id) => (
 					<button
 						className={` flex items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded ${
 							onCategorySelect === category.name

@@ -10,9 +10,12 @@ const FormField = ({
 	as = 'input',
 	extraProps,
 	renderAs,
+	mode,
 	...rest
 }) => {
 	const { togglePasswordVisibility, showPassword } = extraProps || {};
+
+	const readOnlyClass = mode === 'view' ? 'bg-transparent' : '';
 
 	return (
 		<Form.Group controlId={id} className='relative'>
@@ -30,7 +33,7 @@ const FormField = ({
 							{...rest}
 							className={`${
 								errors ? 'is-invalid text-red-800' : ''
-							} ml-5 mt-1 text-2xl`}
+							} ml-5 mt-1 text-2xl ${readOnlyClass}`}
 						/>
 					</div>
 				) : (
@@ -44,9 +47,10 @@ const FormField = ({
 								type={type}
 								{...register}
 								{...rest}
-								className={errors ? 'is-invalid' : ''}
+								className={`${
+									errors ? 'is-invalid' : ''
+								} ${readOnlyClass}`}
 							/>
-							{/* Renderiza el botón de mostrar/ocultar contraseña si el tipo es 'password' */}
 							{type === 'password' && togglePasswordVisibility && (
 								<button
 									type='button'

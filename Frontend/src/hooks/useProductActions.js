@@ -223,7 +223,6 @@ export const useProductActions = () => {
 					type: 'DATA_PRODUCTS_ERROR',
 					payload: error.message,
 				});
-				console.log(error);
 				showAlert({
 					icon: 'error',
 					title: 'Error al eliminar el producto. Intente nuevamente!',

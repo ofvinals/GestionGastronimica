@@ -10,10 +10,17 @@ import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { Button } from 'primereact/button';
 
 // RECIBE COLUMNS, DATA Y ACTIONS DE CADA COMPONENTE
-export const Table = ({ columns, data, actions }) => {
+export const Table = ({ columns, data, actions, initialSortColumn  }) => {
 	const table = useMaterialReactTable({
 		columns,
 		data: data || [],
+		initialState: {
+			showGlobalFilter: true,
+			sorting: initialSortColumn
+				? [{ id: initialSortColumn, desc: false }]
+				: [], // Ordenar por la columna especificada
+		},
+		positionGlobalFilter: 'left',
 		enableColumnFilterModes: true,
 		enableColumnOrdering: true,
 		enableGlobalFilterModes: true,
@@ -33,6 +40,15 @@ export const Table = ({ columns, data, actions }) => {
 			shape: 'rounded',
 			variant: 'outlined',
 		},
+		// Agregar estilos personalizados a las filas
+		muiTableBodyRowProps: ({ row }) => ({
+			sx: {
+				backgroundColor: row.index % 2 === 0 ? 'white' : '#cbd5e1',
+				'&:hover': {
+					backgroundColor: row.index % 2 === 0 ? 'lightgrey' : 'grey',
+				},
+			},
+		}),
 		// RENDERIZA LOS BOTONES DE ACCIONES
 		renderRowActions: ({ row }) => (
 			<Box sx={{ display: 'flex', gap: '5px' }}>
@@ -47,10 +63,10 @@ export const Table = ({ columns, data, actions }) => {
 									key={index}
 									tooltip='Inhabilitar'
 									tooltipOptions={{ position: 'top' }}
-									className='flex  items-center justify-center'
+									className='flex  items-center justify-center border-none'
 									onClick={() => action.onClick(row)}
 									data-tip='Inhabilitar'>
-									<span className='bg-yellow-600 text-center text-white rounded-xl border-2 p-2 hover:opacity-50'>
+									<span className='bg-yellow-600  text-center text-white rounded-xl border-2 p-2 hover:opacity-50'>
 										{action.icon}
 									</span>
 								</Button>
@@ -78,7 +94,7 @@ export const Table = ({ columns, data, actions }) => {
 								key={index}
 								tooltip='Editar'
 								tooltipOptions={{ position: 'top' }}
-								className='flex items-center justify-center'
+								className='flex items-center justify-center focus:border-none'
 								onClick={() => action.onClick(row)}>
 								<span className='bg-blue-700  text-center text-white rounded-xl border-2 p-2 hover:opacity-50'>
 									{action.icon}

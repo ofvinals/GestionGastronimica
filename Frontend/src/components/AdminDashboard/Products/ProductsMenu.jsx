@@ -3,18 +3,21 @@ import { useState } from 'react';
 import { SupplierDashboard } from '../Products/Suppliers/SupplierDashboard';
 import '../../../css/Custom.css';
 import { UnderConstruction } from '../UnderConstruction';
+import { PurchaseDashboard } from './Purchases/PurchaseDashboard';
 
 export const ProductsMenu = () => {
 	const [activeButton, setActiveButton] = useState('productos');
 	const [showDataProducts, setShowDataProducts] = useState(true);
 	const [showDataSuppliers, setShowDataSuppliers] = useState(false);
 	const [showDataStocks, setShowDataStocks] = useState(false);
+	const [showDataOrders, setShowDataOrders] = useState(false);
 
 	// ABRE SECCION PRODUCTOS Y CIERRA OTROS MODALES
 	const handleProduct = () => {
 		setShowDataProducts(true);
 		setShowDataSuppliers(false);
 		setShowDataStocks(false);
+		setShowDataOrders(false);
 	};
 
 	// ABRE SECCION PROVEEDORES Y CIERRA OTROS MODALES
@@ -22,6 +25,7 @@ export const ProductsMenu = () => {
 		setShowDataProducts(false);
 		setShowDataSuppliers(true);
 		setShowDataStocks(false);
+		setShowDataOrders(false);
 	};
 
 	// ABRE SECCION STOCK Y CIERRA OTROS MODALES
@@ -29,6 +33,15 @@ export const ProductsMenu = () => {
 		setShowDataProducts(false);
 		setShowDataSuppliers(false);
 		setShowDataStocks(true);
+		setShowDataOrders(false);
+	};
+
+	// ABRE SECCION PEDIDOS Y CIERRA OTROS MODALES
+	const handleOrder = () => {
+		setShowDataProducts(false);
+		setShowDataSuppliers(false);
+		setShowDataStocks(false);
+		setShowDataOrders(true);
 	};
 
 	return (
@@ -61,6 +74,18 @@ export const ProductsMenu = () => {
 					</button>
 					<button
 						onClick={() => {
+							handleOrder();
+							setActiveButton('pedidos');
+						}}
+						className={`mx-3 border-none text-white p-2  ${
+							activeButton === 'pedidos'
+								? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
+								: 'bg-transparent text-white hover:font-bold'
+						}`}>
+						Pedidos a Proveedor
+					</button>
+					<button
+						onClick={() => {
 							handleStock();
 							setActiveButton('controlStock');
 						}}
@@ -75,6 +100,7 @@ export const ProductsMenu = () => {
 				<div className='w-full'>
 					{showDataProducts && <ProductDashboard />}
 					{showDataSuppliers && <SupplierDashboard />}
+					{showDataOrders && <PurchaseDashboard />}
 					{showDataStocks && <UnderConstruction />}
 				</div>
 			</section>

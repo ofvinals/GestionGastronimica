@@ -15,7 +15,6 @@ export const useLayoutActions = () => {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
-			console.log(response.data);
 			dispatch({
 				type: 'DATA_SALONS_SUCCESS',
 				payload: response.data,
@@ -38,7 +37,6 @@ export const useLayoutActions = () => {
 				withCredentials: true,
 				headers: { authorization: `Bearer ${token}` },
 			});
-			console.log(response.data);
 			dispatch({
 				type: 'DATA_SALONID_SUCCESS',
 				payload: response.data,

@@ -1,5 +1,4 @@
 export const UserReducer = (state, action) => {
-	console.log(state, action)
 	switch (action.type) {
 		case 'DATA_USERS_PENDING':
 			return { ...state, loading: true, error: null };

@@ -11,7 +11,7 @@ export const TableDetails = ({
 	const fechaUTC = DateTime.fromISO(openAt, { zone: 'utc' });
 	const fechaBuenosAires = fechaUTC.setZone('America/Argentina/Buenos_Aires');
 	const fechaFormateada = fechaBuenosAires.toFormat('dd/MM/yyyy - HH:mm:ss');
-
+	
 	return (
 		<div className='border-b-2 border-gray-300 pb-2 mb-2'>
 			<p className='text-lg font-semibold mb-1 '>

@@ -18,6 +18,7 @@ const SupplierForm = ({ rowId, onClose, mode = 'edit' }) => {
 		formState: { errors },
 	} = useForm();
 
+	// BUSCA Y CARGA EL PROVEEDOR SELECCIONADO
 	const loadSupplier = () => {
 		const supplier = state.suppliers.find(
 			(supplier) => supplier._id === rowId
@@ -32,13 +33,14 @@ const SupplierForm = ({ rowId, onClose, mode = 'edit' }) => {
 			setValue('status', supplier.status);
 		}
 	};
-
+	// SI EL MODE ES EDIT O VIEW CARGA LOS DATOS
 	useEffect(() => {
 		if (mode === 'edit' || mode === 'view') {
 			loadSupplier();
 		}
 	}, [rowId, mode]);
 
+	// PREPARA DATOS P ENVIAR A BACKEND
 	const onSubmit = handleSubmit(async (values) => {
 		try {
 			const supplierData = {
@@ -51,10 +53,13 @@ const SupplierForm = ({ rowId, onClose, mode = 'edit' }) => {
 				status: values.status,
 			};
 			if (mode === 'edit') {
+				// SI MODE ES EDIT EJECUTA ACCION P EDITAR
 				await editSupplierAction(rowId, supplierData);
 			} else {
+				// SI ES ADD EJECUTA ACCION P AGREGAR
 				await addSupplierAction(supplierData);
 			}
+			// CIERRA MODAL
 			onClose();
 		} catch (error) {
 			console.error(error);
@@ -73,6 +78,7 @@ const SupplierForm = ({ rowId, onClose, mode = 'edit' }) => {
 					mode={mode}>
 					<FormField
 						id='name'
+						mode={mode}
 						label='Nombre / Razon Social*'
 						register={register('name', {
 							required: 'El nombre es requerido',
@@ -88,6 +94,7 @@ const SupplierForm = ({ rowId, onClose, mode = 'edit' }) => {
 					<FormField
 						id='email'
 						label='Email*'
+						mode={mode}
 						type='email'
 						register={register('email', {
 							required: 'El email es requerido',
@@ -104,6 +111,7 @@ const SupplierForm = ({ rowId, onClose, mode = 'edit' }) => {
 						id='tel'
 						label='Teléfono*'
 						type='number'
+						mode={mode}
 						register={register('tel', {
 							required: 'El teléfono es requerido',
 						})}
@@ -118,6 +126,7 @@ const SupplierForm = ({ rowId, onClose, mode = 'edit' }) => {
 					<FormField
 						id='address'
 						label='Domicilio*'
+						mode={mode}
 						register={register('address', {
 							required: 'El domicilio es requerido',
 						})}
@@ -132,6 +141,7 @@ const SupplierForm = ({ rowId, onClose, mode = 'edit' }) => {
 					<FormField
 						id='cuit'
 						label='CUIT*'
+						mode={mode}
 						register={register('cuit', {
 							required: 'El CUIT es requerido',
 						})}
@@ -147,6 +157,7 @@ const SupplierForm = ({ rowId, onClose, mode = 'edit' }) => {
 						id='comment'
 						label='Comentarios'
 						as='textarea'
+						mode={mode}
 						register={register('comment')}
 						readOnly={mode === 'view'}
 					/>{' '}
@@ -154,6 +165,7 @@ const SupplierForm = ({ rowId, onClose, mode = 'edit' }) => {
 						id='status'
 						label='Proveedor Activo?'
 						type='checkbox'
+						mode={mode}
 						renderAs='toggle'
 						register={register('status')}
 						readOnly={mode === 'view'}

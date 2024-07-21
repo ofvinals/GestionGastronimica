@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
-const itemSchema = new Schema({
+const itemSchema = new mongoose.Schema({
 	category: { type: String, required: true },
 	name: { type: String, required: true },
 	price: { type: String, required: true },
@@ -11,7 +10,7 @@ const itemSchema = new Schema({
 	cookedAt: { type: Date },
 });
 
-const orderSchema = new Schema(
+const orderSchema = new mongoose.Schema(
 	{
 		salonName: { type: String },
 		tableNum: { type: Number },
@@ -24,7 +23,7 @@ const orderSchema = new Schema(
 		elapsedDuration: [],
 		orderCash: { type: String },
 		finalPrice: { type: Number },
-		recipe: { type: String },
+		receipt: { type: String },
 		additionalCharges: [],
 		items: [itemSchema],
 	},

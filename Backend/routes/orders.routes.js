@@ -14,19 +14,19 @@ const {
 } = require('../controllers/order.controller.js');
 
 const router = express.Router();
-router.delete('/orders/:orderId/items/:itemId', deleteItem);
-router.put('/orders/update-pending', updateOrderPending);
+router.delete('/orders/:orderId/items/:itemId',authRequired, deleteItem);
+router.put('/orders/update-pending',authRequired, updateOrderPending);
 
-router.get('/orders', getOrders);
-router.post('/orders', createOrder);
-router.get('/orders/:id', getOrder);
-router.delete('/orders/:id', deleteOrder);
-router.put('/orders/:id', updateOrder);
+router.get('/orders',authRequired, getOrders);
+router.post('/orders',authRequired, createOrder);
+router.get('/orders/:id',authRequired, getOrder);
+router.delete('/orders/:id',authRequired, deleteOrder);
+router.put('/orders/:id', authRequired, updateOrder);
 
 // // RUTA PRA AGREGAR HORA DE PRODUCCION EN COCINA
-router.put('/orders/:orderId/items/:itemId', updateItemCooked);
+router.put('/orders/:orderId/items/:itemId',authRequired, updateItemCooked);
 // // RUTA PARA AGREGAR DATOS DEL PAGO DE LA ORDEN
-router.put('/orders/:id/cash', updateCashOrder);
+router.put('/orders/:id/cash',authRequired, updateCashOrder);
 // // RUTA PARA MANEJAR LA APERTURA/CIERRE DE LA ORDEN
 // router.put('/orders/update', updateOrderOpen);
 

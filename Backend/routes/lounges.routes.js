@@ -11,15 +11,15 @@ const {
 
 const router = express.Router();
 
-router.get('/lounges', getLounges);
-router.post('/lounges', createLounge);
-router.get('/lounges/:id', getLounge);
-router.delete('/lounges/:id', deleteLounge);
+router.get('/lounges',authRequired, getLounges);
+router.post('/lounges',authRequired, createLounge);
+router.get('/lounges/:id',authRequired, getLounge);
+router.delete('/lounges/:id',authRequired, deleteLounge);
 
 // Ruta  para actualizar el estado de mesas
-router.put('/lounges/:id/:index', updateTable);
+router.put('/lounges/:id/:index',authRequired, updateTable);
 
 // Ruta para actualizar el layout de un salón
-router.put('/lounges/:id', updateLayout);
+router.put('/lounges/:id',authRequired, updateLayout);
 
 module.exports = router;

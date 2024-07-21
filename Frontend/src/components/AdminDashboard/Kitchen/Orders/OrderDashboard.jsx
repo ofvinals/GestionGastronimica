@@ -98,7 +98,7 @@ export const OrderDashboard = () => {
 							.toLocaleString(DateTime.DATETIME_SHORT);
 						return closeAt;
 					} else {
-						return 'Sin datos de cierre';
+						return 'Orden abierta';
 					}
 				},
 			},
@@ -161,6 +161,7 @@ export const OrderDashboard = () => {
 								columns={columns}
 								data={state.orders}
 								actions={actions}
+								initialSortColumn='openAt'
 							/>
 						</ThemeProvider>
 					</div>

@@ -10,6 +10,13 @@ export const CategorySelection = ({ categorys, onCategorySelect }) => {
 	useEffect(() => {
 		dataCategorys();
 	}, []);
+	
+	// ORDENA LAS CATEGORIAS POR NOMBRE
+	const sortedCategories = categorys?.slice().sort((a, b) => {
+		if (a.name < b.name) return -1;
+		if (a.name > b.name) return 1;
+		return 0;
+	});
 
 	return (
 		<div className='border-1 border-slate-800 my-3 mx-3 bg-white'>
@@ -23,8 +30,8 @@ export const CategorySelection = ({ categorys, onCategorySelect }) => {
 					Todas
 				</button>
 				{/* MAPEA SOBRE TODAS LAS CATEGORIAS Y GENERA UN BOTON POR CADA UNA  */}
-				{categorys &&
-					categorys.map((category, id) => (
+				{sortedCategories &&
+					sortedCategories.map((category, id) => (
 						<button
 							className='flex items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'
 							key={id}

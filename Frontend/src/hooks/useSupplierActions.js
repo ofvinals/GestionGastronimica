@@ -220,7 +220,6 @@ export const useSupplierActions = () => {
 					type: 'DATA_SUPPLIERS_ERROR',
 					payload: error.message,
 				});
-				console.log(error);
 				showAlert({
 					icon: 'error',
 					title: 'Error al eliminar el proveedor. Intente nuevamente!',

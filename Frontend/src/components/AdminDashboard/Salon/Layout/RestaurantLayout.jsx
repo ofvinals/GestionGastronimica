@@ -11,6 +11,7 @@ import { useLoungeActions } from '../../../../hooks/useLoungeActions.js';
 const GRID_SIZE = 10;
 const CELL_SIZE = 50;
 
+// RECIBE PROPS DE MENULAYOUT
 const RestaurantLayout = ({ salonId, showLoungeForm, onCloseForm }) => {
 	const [selectedTable, setSelectedTable] = useState(null);
 	const [currentLayout, setCurrentLayout] = useState([]);
@@ -21,31 +22,33 @@ const RestaurantLayout = ({ salonId, showLoungeForm, onCloseForm }) => {
 	// const firstLoad = useRef(true);
 	const { loadLayoutAction, addTableAction } = useLayoutActions();
 
+	// FUNCION PARA CARGAR LOS DATOS DEL LAYOUT SELECCIONADO
 	const getLayout = async () => {
 		try {
 			const layout = await loadLayoutAction(salonId);
 			setCurrentLayout(layout?.layouts || []);
 		} catch (error) {
-			console.error('Error fetching layout:', error);
+			console.error('Error al buscar el layout:', error);
 		}
 	};
 
+	// EJECUTA LA FUNCION GETLAYOUT CADA VEZ QUE SALONID CAMBIA
 	useEffect(() => {
 		getLayout();
 	}, [salonId]);
 
-	// useEffect(() => {
 	// 	if (!firstLoad.current) {
 	// 		addTableAction(salonId, currentLayout);
 	// 	} else {
 	// 		firstLoad.current = false;
 	// 	}
 	// }, [currentLayout]);
+	// useEffect(() => {
 
+	// FUNCION PARA AGREGAR UNA MESA AL LAYOUT SELECCIONADO
 	const addTable = (x, y) => {
 		const gridX = Math.floor(x / CELL_SIZE) * CELL_SIZE;
 		const gridY = Math.floor(y / CELL_SIZE) * CELL_SIZE;
-
 		if (
 			gridX >= 0 &&
 			gridX < GRID_SIZE * CELL_SIZE &&
@@ -74,10 +77,10 @@ const RestaurantLayout = ({ salonId, showLoungeForm, onCloseForm }) => {
 		}
 	};
 
+	// FUNCION PARA MOVER LAS MESAS DENTRO DEL LAYOUT
 	const handleDragEnd = (e, id) => {
 		const gridX = Math.floor(e.target.x() / CELL_SIZE) * CELL_SIZE;
 		const gridY = Math.floor(e.target.y() / CELL_SIZE) * CELL_SIZE;
-
 		if (
 			gridX >= 0 &&
 			gridX < GRID_SIZE * CELL_SIZE &&
@@ -87,7 +90,6 @@ const RestaurantLayout = ({ salonId, showLoungeForm, onCloseForm }) => {
 			const values = currentLayout.map((table) =>
 				table.id === id ? { ...table, x: gridX, y: gridY } : table
 			);
-			console.log(values);
 			setCurrentLayout(values);
 			addTableAction(salonId, values);
 		}
@@ -100,12 +102,14 @@ const RestaurantLayout = ({ salonId, showLoungeForm, onCloseForm }) => {
 		);
 	};
 
+	// FUNCION PARA EDITAR DATOS DE  LA MESA. ABRE MODAL DE EDICION
 	const handleTableClick = (table) => {
 		setSelectedTable(table);
 		setShowEditTableDetails(true);
 		onCloseForm();
 	};
 
+	// FUNCION PARA CAMBIAR EL NUMERO DE LA MESA
 	const handleTableNumberChange = (e) => {
 		const newTableNumber = parseInt(e.target.value);
 		if (!isNaN(newTableNumber)) {
@@ -116,6 +120,7 @@ const RestaurantLayout = ({ salonId, showLoungeForm, onCloseForm }) => {
 		}
 	};
 
+	// FUNCION PARA AGREGAR UN MOZO A LA MESA SELECCIONADA
 	const handleWaiterChange = (e) => {
 		const newWaiter = e.target.value;
 		setSelectedTable((prevTable) => ({
@@ -124,6 +129,7 @@ const RestaurantLayout = ({ salonId, showLoungeForm, onCloseForm }) => {
 		}));
 	};
 
+	// FUNCION PARA AGREGAR MESAS AL SALON SELECCIONADO
 	const handleTableBlur = () => {
 		if (selectedTable) {
 			setCurrentLayout((prevLayout) =>
@@ -135,20 +141,21 @@ const RestaurantLayout = ({ salonId, showLoungeForm, onCloseForm }) => {
 		}
 	};
 
+	// FUNCION PARA AGREGAR SALON. ACTUALIZA STATE
 	const handleAddSalon = (newLoungeName) => {
-		console.log(newLoungeName);
 		addSalonAction(newLoungeName).then(() => {
 			dataSalons();
 		});
 	};
 
+	// CIERRA MODALES
 	const handleCloseForm = () => {
 		setShowEditTableDetails(false);
 		onCloseForm();
 	};
 
 	const toggleShape = () => {
-		setIsRound((prev) => !prev); // Alterna entre redondo y cuadrado
+		setIsRound((prev) => !prev);
 	};
 
 	return (
@@ -189,8 +196,8 @@ const RestaurantLayout = ({ salonId, showLoungeForm, onCloseForm }) => {
 						onWaiterChange={handleWaiterChange}
 						onTableBlur={handleTableBlur}
 						onClose={handleCloseForm}
-						isRound={isRound} // Pasar el estado actual de la forma
-						toggleShape={toggleShape} // P
+						isRound={isRound}
+						toggleShape={toggleShape}
 					/>
 				)}
 				{showLoungeForm && (

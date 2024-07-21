@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useState, useMemo } from 'react';
+import { useContext, useState, useMemo, useEffect } from 'react';
 import { FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -7,23 +7,25 @@ import { Table } from '../../../Table';
 import Modals from '../../../Modals';
 import { OrderContext } from '../../../../context/OrderContext';
 import { useOrderActions } from '../../../../hooks/useOrderActions.js';
-import { Button } from 'react-bootstrap';
 import Loader from '../../../../helpers/Loader';
 import SalesForm from './SalesForm';
 
 export const SalesDashboard = () => {
 	const { state, loading } = useContext(OrderContext);
-	const { deleteMenuAction } = useOrderActions();
+	const { dataOrders, deleteOrderAction } = useOrderActions();
 	const [openEditModal, setOpenEditModal] = useState(false);
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const [openViewModal, setOpenViewModal] = useState(false);
 	const [rowId, setRowId] = useState(null);
 
-	const filteredPayOrder = state.orders.filter((order) => order.orderOpen === false);
-	// ABRE MODAL P AGREGAR VENTA
-	const handleOpenAddModal = () => {
-		setOpenAddModal(true);
-	};
+	useEffect(() => {
+		dataOrders();
+	}, []);
+
+	// FILTRA SOLO LAS ORDENES QUE ESTEN CERRADAS
+	const filteredPayOrder = state.orders.filter(
+		(order) => order.orderOpen === false
+	);
 
 	// ABRE MODAL P EDITAR VENTA
 	const handleOpenEditModal = (rowId) => {
@@ -44,7 +46,7 @@ export const SalesDashboard = () => {
 		setOpenViewModal(false);
 	};
 
-	// Función para formatear elapsedDuration
+	// FUNCION PARA CALCULAR EL TIEMPO DE OCUPACION DE LA MESA
 	const formatElapsedDuration = (elapsedDuration) => {
 		if (!elapsedDuration || !Array.isArray(elapsedDuration)) return '';
 		return elapsedDuration
@@ -122,7 +124,7 @@ export const SalesDashboard = () => {
 			text: 'Eliminar',
 			icon: <FaTrashAlt />,
 			onClick: (row) => {
-				deleteMenuAction(row.original._id);
+				deleteOrderAction(row.original._id);
 			},
 		},
 	];
@@ -133,6 +135,7 @@ export const SalesDashboard = () => {
 		},
 	});
 
+	
 	return (
 		<>
 			{loading ? (
@@ -140,13 +143,8 @@ export const SalesDashboard = () => {
 			) : (
 				<section>
 					<div className='px-5 shadowIndex rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-around sm:justify-between drop-shadow-3xl'>
-						<h3 className=' text-white text-xl font-semibold'>Ventas</h3>{' '}
-						<Button
-							onClick={handleOpenAddModal}
-							className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
-							<i className='pe-2 fa-solid fa-plus hover:text-slate-600'></i>
-							Agregar Venta
-						</Button>
+						<h3 className=' text-white  text-xl my-3 font-semibold'>Ventas</h3>{' '}
+
 					</div>
 					<div className='table-responsive'>
 						<ThemeProvider theme={darkTheme}>
@@ -155,6 +153,7 @@ export const SalesDashboard = () => {
 								columns={columns}
 								data={filteredPayOrder}
 								actions={actions}
+								initialSortColumn='tableNum'
 							/>
 						</ThemeProvider>
 					</div>

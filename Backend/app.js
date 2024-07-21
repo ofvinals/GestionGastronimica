@@ -9,6 +9,7 @@ const suppliersRoutes = require('./routes/suppliers.routes.js');
 const loungesRoutes = require('./routes/lounges.routes.js');
 const menusRoutes = require('./routes/menus.routes.js');
 const ordersRoutes = require('./routes/orders.routes.js');
+const purchaseRoutes = require('./routes/purchase.routes.js');
 
 require('dotenv').config();
 
@@ -52,6 +53,7 @@ app.use('/api', suppliersRoutes);
 app.use('/api', loungesRoutes);
 app.use('/api', menusRoutes);
 app.use('/api', ordersRoutes);
+app.use('/api', purchaseRoutes);
 
 async function main() {
 	try {

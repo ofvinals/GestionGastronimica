@@ -10,10 +10,10 @@ const {
 
 const router = express.Router();
 
-router.get('/suppliers',  getSuppliers);
-router.get('/suppliers/:id',  getSupplier);
-router.post ('/suppliers',  createSupplier);
-router.delete('/suppliers/:id',  deleteSupplier);
-router.put('/suppliers/:id',  updateSupplier);
+router.get('/suppliers', authRequired, getSuppliers);
+router.get('/suppliers/:id',authRequired,  getSupplier);
+router.post ('/suppliers', authRequired, createSupplier);
+router.delete('/suppliers/:id', authRequired, deleteSupplier);
+router.put('/suppliers/:id', authRequired, updateSupplier);
 
 module.exports = router;

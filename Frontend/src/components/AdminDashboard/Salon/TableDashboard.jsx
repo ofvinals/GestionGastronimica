@@ -3,19 +3,21 @@
 /* eslint-disable react/prop-types */
 import { useContext, useEffect, useState } from 'react';
 import { LoungeContext } from '../../../context/LoungeContext';
-import { useLoungeActions } from '../../../hooks/useLoungeActions.js';
+import { useLayoutActions } from '../../../hooks/useLayoutActions.js';
 import Loader from '../../../helpers/Loader';
 import ServerLayout from '../../ServerDashboard/Layout/ServerLayout';
 
-export const TableDashboard = ({ reload, onReload }) => {
-	const { dataSalons } = useLoungeActions();
+export const TableDashboard = () => {
+	const { loadAllLayoutAction, loadLayoutAction } = useLayoutActions();
 	const { state: loungeState, loading } = useContext(LoungeContext);
 	const [activeSalonId, setActiveSalonId] = useState(null);
 
+// CARGA LOS LAYOUT AL STATE
 	useEffect(() => {
-		dataSalons();
+		loadAllLayoutAction();
 	}, []);
 
+	// ESTABLECE EL SALON ACTIVO CUANDO STATE CARGA
 	useEffect(() => {
 		if (
 			!activeSalonId &&
@@ -26,10 +28,14 @@ export const TableDashboard = ({ reload, onReload }) => {
 		}
 	}, [loungeState.lounges]);
 
-	const handleReload = () => {
-		window.location.reload();
-	};
+	// Carga el layout cuando el salón activo cambia
+	useEffect(() => {
+		if (activeSalonId) {
+			loadLayoutAction(activeSalonId);
+		}
+	}, [activeSalonId]);
 
+	// MANEJA EL CAMBIO DE SALON EN LA BARRA 
 	const handleSalonClick = (salonId) => {
 		setActiveSalonId(salonId);
 	};
@@ -58,11 +64,16 @@ export const TableDashboard = ({ reload, onReload }) => {
 								</button>
 							))}
 					</div>
-					<ServerLayout
-						onReload={handleReload}
-						salonId={activeSalonId}
-						salonName={loungeState.lounges.name}
-					/>
+					{activeSalonId && (
+						<ServerLayout
+							salonId={activeSalonId}
+							salonName={
+								loungeState.lounges.find(
+									(lounge) => lounge._id === activeSalonId
+								)?.name
+							}
+						/>
+					)}
 				</section>
 			)}
 		</div>

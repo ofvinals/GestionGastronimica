@@ -18,7 +18,8 @@ const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
 		setValue,
 		formState: { errors },
 	} = useForm();
-	// ESTADO PARA LOS INGREDIENTES
+
+	// ESTADO PARA MANEJAR LOS INGREDIENTES
 	const [ingredients, setIngredients] = useState([]);
 	const [newIngredient, setNewIngredient] = useState('');
 
@@ -35,7 +36,7 @@ const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
 		}
 	};
 
-	// RECARGA DATOS DEL MENU
+	// RECARGA DATOS DEL MENU SI EL MODE ES EDIT O VIEW
 	useEffect(() => {
 		if (mode === 'edit' || mode === 'view') {
 			loadMenu();
@@ -100,6 +101,7 @@ const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
 					<FormField
 						id='name'
 						label='Nombre*'
+						mode={mode}
 						register={register('name', {
 							required: 'El nombre es requerido',
 						})}
@@ -114,6 +116,7 @@ const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
 						id='category'
 						label='Categoría*'
 						as='select'
+						mode={mode}
 						register={register('category', {
 							required: 'La categoría es requerida',
 						})}
@@ -133,6 +136,7 @@ const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
 						id='description'
 						label='Descripción*'
 						as='textarea'
+						mode={mode}
 						register={register('description', {
 							required: 'La descripción es requerida',
 						})}
@@ -147,6 +151,7 @@ const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
 						id='price'
 						label='Precio*'
 						type='number'
+						mode={mode}
 						register={register('price', {
 							required: 'El precio es requerido',
 						})}
@@ -161,6 +166,7 @@ const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
 						id='status'
 						label='Menú Activo?'
 						type='checkbox'
+						mode={mode}
 						register={register('status')}
 						renderAs={'toggle'}
 					/>
@@ -175,6 +181,7 @@ const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
 									<input
 										type='text'
 										value={ingredient.name}
+										mode={mode}
 										onChange={(e) =>
 											handleIngredientChange(index, e.target.value)
 										}
@@ -191,6 +198,7 @@ const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
 						<div className='flex flex-row flex-wrap items-center '>
 							<FormField
 								type='text'
+								mode={mode}
 								value={newIngredient}
 								onChange={(e) => setNewIngredient(e.target.value)}
 								placeholder='Agregar ingrediente'
@@ -202,6 +210,7 @@ const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
 					</div>
 					<FormField
 						id='recipe'
+						mode={mode}
 						label='Receta'
 						type='textarea'
 						register={register('recipe')}

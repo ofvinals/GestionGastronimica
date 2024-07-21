@@ -24,7 +24,6 @@ const createSupplier = async (req, res) => {
 		const savedSupplier = await newSupplier.save();
 		res.json(savedSupplier);
 	} catch (error) {
-		console.error(error);
 		return res.status(500).json({ message: error.message });
 	}
 };

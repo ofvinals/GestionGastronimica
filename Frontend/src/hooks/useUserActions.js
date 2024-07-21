@@ -213,7 +213,6 @@ export const useUserActions = () => {
 					type: 'DELETE_USER_ERROR',
 					payload: error.message,
 				});
-				console.log(error);
 				showAlert({
 					icon: 'error',
 					title: 'Error al eliminar el usuario. Intente nuevamente!',

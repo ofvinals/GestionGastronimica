@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-
 import { useContext, useMemo, useState } from 'react';
 import { FaPause, FaPlay, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -44,7 +43,7 @@ export const CategoryProducts = () => {
 			{
 				header: 'Nombre',
 				accessorKey: 'name',
-				enableColumnOrdering: false,
+				enableColumnOrdering: true,
 				size: 50,
 			},
 			{
@@ -124,6 +123,7 @@ export const CategoryProducts = () => {
 								columns={columns}
 								data={state.categorys}
 								actions={actions}
+								initialSortColumn="name"
 							/>
 						</ThemeProvider>
 					</div>

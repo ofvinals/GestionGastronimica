@@ -3,7 +3,7 @@ import { useContext, useState } from 'react';
 import { OrderContext } from '../../../../context/OrderContext';
 import { useOrderActions } from '../../../../hooks/useOrderActions.js';
 import { MenuServer } from '../../MenuServer';
-import { useLoungeActions } from '../../../../hooks/useLoungeActions.js';
+import { useLayoutActions } from '../../../../hooks/useLayoutActions.js';
 
 // RECIBE PROPS DE ORDERFORM
 export const OrderResume = ({
@@ -15,7 +15,7 @@ export const OrderResume = ({
 	const { state: Order } = useContext(OrderContext);
 	const { addOrderAction, deleteOrderPrevAction, updateOrderAction } =
 		useOrderActions();
-	const { dataSalons } = useLoungeActions();
+	const { loadAllLayoutAction } = useLayoutActions();
 	const [orders, setOrders] = useState(Order.prevOrder);
 	const [confirmOrder, setConfirmOrder] = useState(false);
 
@@ -29,6 +29,7 @@ export const OrderResume = ({
 
 	// FUNCION PARA COMFIRMAR LA ORDEN Y ENVIAR A COCINA. BORRA LA PREVORDER DEL REDUCER Y VUELVE AL LAYOUT
 	const handleConfirm = async () => {
+		console.log(orders)
 		// SI NO HAY ORDEN ABIERTA. GENERA NUEVA ORDEN
 		if (!openedOrder || openedOrder.length === 0) {
 			try {
@@ -40,7 +41,7 @@ export const OrderResume = ({
 				await deleteOrderPrevAction(Order.prevOrder[0].tableId);
 				setOrderForm(false);
 				// RECARGA LAYOUT P ACTUALIZAR ESTADO DE LAS MESAS
-				dataSalons();
+				loadAllLayoutAction();
 				setOpenLayout(true);
 			} catch (error) {
 				console.error('Error al confirmar la orden:', error);
@@ -59,7 +60,7 @@ export const OrderResume = ({
 				await deleteOrderPrevAction(Order.prevOrder[0].tableId);
 				setOrderForm(false);
 				// Recarga el layout para actualizar el estado de las mesas
-				dataSalons();
+				loadAllLayoutAction();
 				setOpenLayout(true);
 			} catch (error) {
 				console.error('Error al actualizar la orden:', error);

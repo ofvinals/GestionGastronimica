@@ -54,7 +54,7 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 		}
 	}, [rowId, mode]);
 
-	// PREPARA LOS VALUES
+	// PREPARA LOS VALUES P ENVIAR
 	const onSubmit = handleSubmit(async (values) => {
 		try {
 			const orderData = {
@@ -78,6 +78,7 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 			console.error(error);
 		}
 	});
+
 	// CALCULA LA CANTIDAD DE ITEMS DE LA ORDEN Y EL PRECIO TOTAL
 	const items = order.items || [];
 	const { totalItems, totalPrice } = items.reduce(
@@ -90,15 +91,51 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 	);
 
 	// RENDERIZA CADA ITEMS Y MUESTRA SUS DATOS COMO TABLA
-	const renderItems = (items) => {
+	const renderItems = (items, mode) => {
 		return items.map((item, index) => (
 			<div
 				key={index}
 				className='flex flex-row flex-wrap items-center justify-around w-full mt-2'>
-				<p className='w-5/12 text-center'>{item.name}</p>
-				<p className='w-1/12 text-center'>{item.quantity}</p>
-				<p className='w-3/12 text-center'>$ {item.price}</p>
-				<p className='w-3/12 text-center'>$ {item.price * item.quantity}</p>
+				{mode === 'edit' ? (
+					<>
+						<input
+							type='text'
+							className='w-2/6 form-control'
+							defaultValue={item.name}
+							{...register(`items[${index}].name`, {
+								required: 'El nombre del item es requerido',
+							})}
+						/>
+						<input
+							type='number'
+							className='w-1/6  form-control'
+							defaultValue={item.quantity}
+							{...register(`items[${index}].quantity`, {
+								required: 'La cantidad es requerida',
+							})}
+						/>
+						<input
+							type='number'
+							className='w-1/6 form-control'
+							defaultValue={item.price}
+							{...register(`items[${index}].price`, {
+								required: 'El precio es requerido',
+							})}
+						/>
+						<p className='w-1/6 text-center'>
+							$ {item.price * item.quantity}
+						</p>
+					</>
+				) : (
+					<>
+						<p className='w-5/12 text-center'>{item.name}</p>
+						<p className='w-1/12 text-center'>{item.quantity}</p>
+						<p className='w-3/12 text-center'>$ {item.price}</p>
+						<p className='w-3/12 text-center'>
+							$ {item.price * item.quantity}
+						</p>
+					</>
+				)}
 			</div>
 		));
 	};
@@ -116,6 +153,11 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 							</Form.Label>
 							<Form.Control
 								type='text'
+								className={`${
+									mode === 'view' || mode === 'edit'
+										? 'border-none focus:border-none focus:outline-none bg-transparent'
+										: ''
+								}`}
 								{...register('salonName', {
 									required: 'El nombre del salon es requerido',
 								})}
@@ -133,6 +175,11 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 							</Form.Label>
 							<Form.Control
 								type='number'
+								className={`${
+									mode === 'view' || mode === 'edit'
+										? 'border-none focus:border-none focus:outline-none bg-transparent'
+										: ''
+								}`}
 								{...register('tableNum', {
 									required: 'El numero de mesa es requerido',
 								})}
@@ -152,6 +199,11 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 							</Form.Label>
 							<Form.Control
 								type='number'
+								className={`${
+									mode === 'view'
+										? 'border-none focus:border-none focus:outline-none bg-transparent'
+										: ''
+								}`}
 								{...register('diners', {
 									required: 'La cantidad de personas es requerida',
 								})}
@@ -168,6 +220,11 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 							</Form.Label>
 							<Form.Control
 								type='text'
+								className={`${
+									mode === 'view' || mode === 'edit'
+										? 'border-none focus:border-none focus:outline-none bg-transparent'
+										: ''
+								}`}
 								{...register('server', {
 									required: 'El nombre del server es requerido',
 								})}
@@ -187,16 +244,10 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 							</Form.Label>
 							<Form.Control
 								type='text'
-								{...register('openAt', {
-									required: 'El horario de apertura es requerido',
-								})}
-								readOnly={mode === 'view' || mode === 'edit'}
+								className='border-none focus:border-none focus:outline-none bg-transparent'
+								{...register('openAt')}
+								readOnly
 							/>
-							{errors.openAt && (
-								<span className='text-warning fs-6'>
-									{errors.openAt.message}
-								</span>
-							)}
 						</Form.Group>
 						<Form.Group controlId='closeAt'>
 							<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
@@ -204,29 +255,36 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 							</Form.Label>
 							<Form.Control
 								type='text'
-								{...register('closeAt', {
-									required: 'El horario de cierre es requerido',
-								})}
-								readOnly={
-									mode === 'view' || mode === 'edit'
-								}></Form.Control>
-							{errors.closeAt && (
-								<span className='text-warning fs-6'>
-									{errors.closeAt.message}
-								</span>
-							)}
+								className='border-none focus:border-none focus:outline-none bg-transparent'
+								{...register('closeAt')}
+								readOnly
+							/>
 						</Form.Group>
 					</div>
-					<Form.Group controlId='items'>
-						<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
-							Items
-						</Form.Label>
-						{renderItems(items)}
-						<div className=' font-semibold text-xl flex flex-col flex-wrap items-center justify-center mt-4'>
-							<p>Items: {totalItems}</p>
-							<p>Precio Total: $ {totalPrice}</p>
+					<div className='flex flex-col items-center justify-center w-full'>
+						<Form.Group controlId='items'>
+							<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
+								Items
+							</Form.Label>
+							<div className='flex flex-row flex-wrap items-center justify-around w-full'>
+								<p className='w-5/12 text-center'>Nombre</p>
+								<p className='w-1/12 text-center'>Cantidad</p>
+								<p className='w-3/12 text-center'>Precio</p>
+								<p className='w-3/12 text-center'>Subtotal</p>
+							</div>
+							{renderItems(items, mode)}
+						</Form.Group>
+					</div>
+					<div className='flex flex-row flex-wrap items-center justify-around w-full'>
+						<div className='flex flex-col items-center justify-center w-full'>
+							<p className='w-full text-center'>
+								Total de items: {totalItems}
+							</p>
+							<p className='w-full text-center'>
+								Precio total: $ {totalPrice}
+							</p>
 						</div>
-					</Form.Group>
+					</div>
 					<Form.Group className='flex flex-wrap items-center justify-around mt-3'>
 						{mode !== 'view' && (
 							<Button

@@ -216,7 +216,6 @@ export const useMenuActions = () => {
 				return deletedMenu.data;
 			} catch (error) {
 				dispatch({ type: 'DATA_MENUS_ERROR', payload: error.message });
-				console.log(error);
 				showAlert({
 					icon: 'error',
 					title: 'Error al eliminar el menu. Intente nuevamente!',

@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 
 export const ProductReducer = (state, action) => {
-	console.log(state, action)
 	switch (action.type) {
 		case 'DATA_PRODUCTS_PENDING':
 			return { ...state, loading: true, error: null };
@@ -120,6 +119,44 @@ export const ProductReducer = (state, action) => {
 			};
 		case 'DATA_SUPPLIERS_ERROR':
 			return { ...state, loading: false, error: action.payload };
+
+		case 'DATA_PURCHASES_PENDING':
+			return { ...state, loading: true, error: null };
+		case 'DATA_PURCHASE_SUCCESS':
+			return {
+				...state,
+				loading: false,
+				purchases: action.payload,
+				error: null,
+			};
+		case 'ADD_PURCHASE_SUCCESS':
+			return {
+				...state,
+				loading: false,
+				purchases: [...state.purchases, action.payload],
+				error: null,
+			};
+		case 'EDIT_PURCHASE_SUCCESS':
+			return {
+				...state,
+				loading: false,
+				purchases: state.purchases.map((purchase) =>
+					purchase._id === action.payload._id ? action.payload : purchase
+				),
+				error: null,
+			};
+		case 'DELETE_PURCHASE_SUCCESS':
+			return {
+				...state,
+				loading: false,
+				purchases: state.purchases.filter(
+					(purchase) => purchase._id !== action.payload
+				),
+				error: null,
+			};
+		case 'DATA_PURCHASES_ERROR':
+			return { ...state, loading: false, error: action.payload };
+
 		default:
 			return state;
 	}

@@ -1,5 +1,4 @@
 export const AuthReducer = (state, action) => {
-	console.log(state, action)
 	switch (action.type) {
 		case 'LOGIN_PENDING':
 			return { ...state, loading: true, error: null };

@@ -1,23 +1,29 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useReducer, useEffect } from 'react';
+/* eslint-disable react/prop-types */
+import { useReducer, useEffect, useState } from 'react';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { KitchenReducer, initialState } from '../../../reducer/KitchenReducer';
 import { useKitchenActions } from '../../../hooks/useKitchenActions.js';
 import { formatElapsedTime } from '../../../helpers/ElapsedTime';
 import Loader from '../../../helpers/Loader';
+import { Pagination } from '../../../helpers/Pagination.jsx';
+import Modals from '../../Modals.jsx';
+import { InfoMenu } from './InfoMenu.jsx';
 
 export const ExecutingItems = ({ executingItems }) => {
 	const [state, dispatch] = useReducer(KitchenReducer, initialState);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [info, setInfo] = useState(false);
+	const [selectedItem, setSelectedItem] = useState(null);
 	const { startTimer, stopTimer } = useKitchenActions(dispatch);
 
-	// FILTRA POR ITEMS QUE NO HAYAN SIDO ENVIADOS A KITCHEN
+	// Filtra por ítems que no hayan sido enviados a kitchen
 	const filteredItems = executingItems.filter(
 		(filteredItem) => filteredItem.item.cookedAt === undefined
 	);
 
-	// ASIGNA UN CRONOMETRO A CADA ITEM INDIVIDUALMENTE ITERANDO EN CADA UNO
+	// Asigna un cronómetro a cada ítem individualmente iterando en cada uno
 	useEffect(() => {
 		filteredItems.forEach(({ order, item }) => {
 			if (
@@ -33,7 +39,19 @@ export const ExecutingItems = ({ executingItems }) => {
 		};
 	}, [filteredItems]);
 
-	// MANEJA EL BACKGROUND DE CADA ITEM SEGUN EL TIEMPO TRANSCURRIDO. SI SUPERA 40 MINS CAMBIA A AMARILLO. SI SUPERA 50 MIN CAMBIA A ROJO
+	// ABRE MODAL DE INFO DEL MENU
+	const handleInfo = (item) => {
+		setSelectedItem(item);
+		setInfo(true);
+	};
+
+	// CIERRA MODAL DE INFO DEL MENU
+	const handleCloseModal = () => {
+		setInfo(false);
+		setSelectedItem(null);
+	};
+
+	// Maneja el background de cada ítem según el tiempo transcurrido. Si supera 40 mins cambia a amarillo. Si supera 50 min cambia a rojo
 	const getBackground = (milliseconds) => {
 		const minutes = Math.floor(milliseconds / (1000 * 60));
 		if (minutes > 50) {
@@ -44,6 +62,14 @@ export const ExecutingItems = ({ executingItems }) => {
 			return 'bg-white';
 		}
 	};
+
+	// CALCULA LA CANTIDAD DE ITEMS EN CADA PAGINA
+	const cardPerPage = 10;
+	const indexOfLastItem = currentPage * cardPerPage;
+	const indexOfFirstItem = indexOfLastItem - cardPerPage;
+	const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
+	const totalPages = Math.ceil(filteredItems.length / cardPerPage);
+	const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
 	return (
 		<>
@@ -58,8 +84,8 @@ export const ExecutingItems = ({ executingItems }) => {
 							</h2>
 						</div>
 						<div className='flex flex-row flex-wrap items-center justify-around'>
-							{filteredItems && filteredItems.length > 0 ? (
-								filteredItems.map(({ order, item }, index) => (
+							{currentItems && currentItems.length > 0 ? (
+								currentItems.map(({ order, item }, index) => (
 									<div key={index} className='m-2'>
 										<Card
 											className={`w-[200px] h-auto rounded-xl border-2 border-slate-700 flex flex-col justify-between ${getBackground(
@@ -81,18 +107,24 @@ export const ExecutingItems = ({ executingItems }) => {
 													</p>
 												</div>
 												<div className='flex my-3 flex-col flex-wrap text-2xl items-center justify-center'>
-													<p className=' font-bold'>
-														{item.quantity}
-													</p>
 													<p className='text-center'>
 														{item.name}
+
+														<Button
+															onClick={() => handleInfo(item)}
+															tooltip='Informacion del menu'>
+															<i className='ml-1 text-center text-xl mb-2 fa-solid fa-circle-info text-blue-800 hover:text-blue-500'></i>
+														</Button>
+													</p>{' '}
+													<p className=' font-bold'>
+														x {item.quantity}
 													</p>
 												</div>
 											</div>
 											<div className='flex flex-row flex-wrap items-center justify-center'>
 												<Button
 													className='text-green-800'
-													tooltip='Confirmar produccion'
+													tooltip='Confirmar producción'
 													tooltipOptions={{ position: 'top' }}
 													onClick={() =>
 														stopTimer(order._id, item._id, state)
@@ -122,6 +154,19 @@ export const ExecutingItems = ({ executingItems }) => {
 							)}
 						</div>
 					</div>
+					<Pagination
+						totalPages={totalPages}
+						currentPage={currentPage}
+						paginate={paginate}
+					/>
+					{info && selectedItem && (
+						<Modals
+							isOpen={true}
+							onClose={handleCloseModal}
+							title='Info del menu'>
+							<InfoMenu menu={selectedItem} />
+						</Modals>
+					)}
 				</div>
 			)}
 		</>

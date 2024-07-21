@@ -19,10 +19,10 @@ export const UserDashboard = () => {
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const [rowId, setRowId] = useState(null);
 
-		// CARGA DATOS DE USUARIOS
-		useEffect(() => {
-			dataUsers();
-		}, []);
+	// CARGA DATOS DE USUARIOS
+	useEffect(() => {
+		dataUsers();
+	}, []);
 
 	// ABRE MODAL P AGERGAR Y ENVIA PROP ROWID
 	const handleOpenAddModal = (rowId) => {
@@ -146,6 +146,7 @@ export const UserDashboard = () => {
 								columns={columns}
 								data={state.users}
 								actions={actions}
+								initialSortColumn='name'
 							/>
 						</ThemeProvider>
 					</div>

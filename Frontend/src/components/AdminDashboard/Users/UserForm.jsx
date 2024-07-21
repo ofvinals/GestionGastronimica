@@ -83,6 +83,7 @@ const UserForm = ({ rowId, onClose, mode = 'edit' }) => {
 					<FormField
 						id='name'
 						label='Nombre*'
+						mode={mode}
 						register={register('name', {
 							required: 'El nombre es requerido',
 						})}
@@ -97,6 +98,7 @@ const UserForm = ({ rowId, onClose, mode = 'edit' }) => {
 					<FormField
 						id='subname'
 						label='Apellido*'
+						mode={mode}
 						register={register('subname', {
 							required: 'El apellido es requerido',
 						})}
@@ -112,6 +114,7 @@ const UserForm = ({ rowId, onClose, mode = 'edit' }) => {
 						id='dni'
 						label='DNI/CUIL*'
 						type='number'
+						mode={mode}
 						register={register('dni', {
 							required: 'El DNI/CUIL es requerido',
 							minLength: {
@@ -136,6 +139,7 @@ const UserForm = ({ rowId, onClose, mode = 'edit' }) => {
 					<FormField
 						id='email'
 						label='Email*'
+						mode={mode}
 						type='email'
 						register={register('email', {
 							required: 'El email es requerido',
@@ -152,6 +156,7 @@ const UserForm = ({ rowId, onClose, mode = 'edit' }) => {
 					<FormField
 						id='tel'
 						label='Teléfono*'
+						mode={mode}
 						type='number'
 						register={register('tel', {
 							required: 'El teléfono es requerido',
@@ -175,6 +180,7 @@ const UserForm = ({ rowId, onClose, mode = 'edit' }) => {
 					<FormField
 						id='address'
 						label='Dirección*'
+						mode={mode}
 						register={register('address', {
 							required: 'La dirección es requerida',
 						})}
@@ -189,6 +195,7 @@ const UserForm = ({ rowId, onClose, mode = 'edit' }) => {
 					<FormField
 						id='rol'
 						label='Rol*'
+						mode={mode}
 						as='select'
 						register={register('rol', {
 							required: 'El rol es requerido',
@@ -212,6 +219,7 @@ const UserForm = ({ rowId, onClose, mode = 'edit' }) => {
 								id='password'
 								label={mode === 'edit' ? '' : 'Contraseña*'}
 								type={showPassword ? 'text' : 'password'}
+								mode={mode}
 								register={register('password', {
 									required: 'La contraseña es requerida',
 									minLength: {

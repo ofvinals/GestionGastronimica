@@ -18,7 +18,7 @@ const CategoryForm = ({ rowId, onClose, mode = 'edit' }) => {
 		formState: { errors },
 	} = useForm();
 
-	// CARGA DATOS DE LA CATEGORIA
+	// BUSCA EN STATE Y CARGA DATOS DE LA CATEGORIA SELECCIONADA
 	const loadCategory = () => {
 		const category = state.categorys.find(
 			(category) => category._id === rowId
@@ -35,7 +35,7 @@ const CategoryForm = ({ rowId, onClose, mode = 'edit' }) => {
 		}
 	}, [rowId, mode]);
 
-	// PREPARA LOS VALUES
+	// PREPARA LOS VALUES P ENVIAR 
 	const onSubmit = handleSubmit(async (values) => {
 		try {
 			const categoryData = {
@@ -68,6 +68,7 @@ const CategoryForm = ({ rowId, onClose, mode = 'edit' }) => {
 					<FormField
 						id='name'
 						label='Nombre*'
+						mode={mode}
 						register={register('name', {
 							required: 'El nombre es obligatorio',
 						})}
@@ -82,6 +83,7 @@ const CategoryForm = ({ rowId, onClose, mode = 'edit' }) => {
 						id='status'
 						label='Categoría Activa?'
 						type='checkbox'
+						mode={mode}
 						register={register('status')}
 						renderAs='toggle'
 					/>

@@ -4,13 +4,13 @@ import '../css/Custom.css';
 
 export const Modals = ({ isOpen, onClose, title, children }) => {
 	return (
-		<Modal centered show={isOpen} onHide={onClose}>
-			<Modal.Header closeButton>
-				<Modal.Title className='text-background font-bold'>
+		<Modal centered show={isOpen} onHide={onClose} className=''>
+			<Modal.Header closeButton className='bg-slate-700 text-white '>
+				<Modal.Title className='text-white font-bold  '>
 					{title}
 				</Modal.Title>
 			</Modal.Header>
-			<Modal.Body>{children}</Modal.Body>
+			<Modal.Body className='bg-slate-200'>{children}</Modal.Body>
 		</Modal>
 	);
 };

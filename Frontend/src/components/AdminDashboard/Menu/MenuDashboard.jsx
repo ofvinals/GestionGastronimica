@@ -167,6 +167,7 @@ export const MenuDashboard = () => {
 								columns={columns}
 								data={filteredMenus}
 								actions={actions}
+								initialSortColumn="category"
 							/>
 						</ThemeProvider>
 					</div>

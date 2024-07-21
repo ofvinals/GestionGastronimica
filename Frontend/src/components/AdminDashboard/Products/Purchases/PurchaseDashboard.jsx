@@ -1,37 +1,45 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useContext, useState, useMemo } from 'react';
-import { FaPause, FaPlay, FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Table } from '../../Table';
-import Modals from '../../Modals';
-import ProductForm from './ProductForm';
-import { ProductContext } from '../../../context/ProductContext';
-import { useProductActions } from '../../../hooks/useProductActions.js';
-import '../../../css/Custom.css';
-import Loader from '../../../helpers/Loader';
+import { Table } from '../../../Table.jsx';
+import Modals from '../../../Modals.jsx';
+import { ProductContext } from '../../../../context/ProductContext.jsx';
+import { Button } from 'react-bootstrap';
+import { usePurchaseActions } from '../../../../hooks/usePurchaseActions.js';
+import Loader from '../../../../helpers/Loader.jsx';
+import PurchaseForm from './PurchaseForm.jsx';
+import { DateTime } from 'luxon';
 
-export const ProductDashboard = () => {
+export const PurchaseDashboard = () => {
 	const { state, loading } = useContext(ProductContext);
-	const {
-		dataProducts,
-		disableProductAction,
-		enableProductAction,
-		deleteProductAction,
-	} = useProductActions();
+	const { dataPurchases, deletePurchaseAction } = usePurchaseActions();
 	const [openEditModal, setOpenEditModal] = useState(false);
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const [rowId, setRowId] = useState(null);
+	const [openViewModal, setOpenViewModal] = useState(false);
 
-	// ABRE MODAL PARA AGREGAR
+	// CARGA LOS DATOS DE PROVEEDORES
+	useEffect(() => {
+		dataPurchases();
+	}, []);
+
+	// ABRE MODAL P AGREGAR
 	const handleOpenAddModal = (rowId) => {
 		setOpenAddModal(true);
 		setRowId(rowId);
 	};
 
-	// ABRE MODAL PARA EDITAR
+	// ABRE MODAL P EDITAR
 	const handleOpenEditModal = (rowId) => {
 		setOpenEditModal(true);
+		setRowId(rowId);
+	};
+
+	// ABRE MODAL P VER ORDEN Y ENVIA PROPS ROWID
+	const handleOpenViewModal = (rowId) => {
+		setOpenViewModal(true);
 		setRowId(rowId);
 	};
 
@@ -39,56 +47,46 @@ export const ProductDashboard = () => {
 	const handleCloseModal = () => {
 		setOpenEditModal(false);
 		setOpenAddModal(false);
-		dataProducts();
+		setOpenViewModal(false);
+		dataPurchases();
 	};
-
-	// CARGA DATOS DE PRODUCTOS
-	useEffect(() => {
-		dataProducts();
-	}, []);
 
 	// CONFIGURA COLUMNS PARA LA TABLE
 	const columns = useMemo(
 		() => [
 			{
-				header: 'Nombre',
-				accessorKey: 'name',
-				enableColumnOrdering: false,
-				size: 50,
-			},
-			{
-				header: 'Cantidad',
-				accessorKey: 'cant',
-				enableColumnOrdering: false,
-				size: 50,
-			},
-			{
-				header: 'Unidad',
-				accessorKey: 'unit',
-				enableColumnOrdering: false,
-				size: 50,
-			},
-			{
-				header: 'Costo',
-				accessorKey: 'cost',
-				enableColumnOrdering: false,
-				size: 50,
-			},
-			{
 				header: 'Proveedor',
-				accessorKey: 'supplier',
-				enableColumnOrdering: false,
+				accessorKey: 'name',
+				enableColumnPurchaseing: false,
+				size: 50,
+			},
+			{
+				header: 'Fecha Pedido',
+				accessorKey: 'openAt',
+				enableColumnPurchaseing: false,
+				size: 50,
+				Cell: ({ row }) => {
+					const openAt = DateTime.fromISO(row.original.openAt, {
+						zone: 'utc',
+					})
+						.setZone('America/Argentina/Buenos_Aires')
+						.toLocaleString(DateTime.DATETIME_SHORT);
+					return openAt;
+				},
+			},
+			{
+				header: 'Monto del Pedido',
+				accessorKey: 'price',
+				enableColumnPurchaseing: false,
 				size: 50,
 			},
 			{
 				header: 'Estado',
 				accessorKey: 'status',
-				enableColumnOrdering: false,
+				enableColumnPurchaseing: false,
 				size: 50,
 				Cell: ({ row }) => {
-					return row.original.status === true
-						? 'Habilitado'
-						: 'Suspendido';
+					return row.original.status === true ? 'Entregado' : 'Pendiente';
 				},
 			},
 		],
@@ -98,17 +96,10 @@ export const ProductDashboard = () => {
 	// CONFIGURA ACTIONS PARA LA TABLE
 	const actions = [
 		{
-			text: 'Inhabilitar',
-			icon: <FaPause />,
+			text: 'Ver',
+			icon: <FaEye />,
 			onClick: (row) => {
-				disableProductAction(row.original._id);
-			},
-		},
-		{
-			text: 'Habilitar',
-			icon: <FaPlay />,
-			onClick: (row) => {
-				enableProductAction(row.original._id);
+				handleOpenViewModal(row.original._id);
 			},
 		},
 		{
@@ -122,7 +113,7 @@ export const ProductDashboard = () => {
 			text: 'Eliminar',
 			icon: <FaTrashAlt />,
 			onClick: (row) => {
-				deleteProductAction(row.original._id);
+				deletePurchaseAction(row.original._id);
 			},
 		},
 	];
@@ -139,23 +130,23 @@ export const ProductDashboard = () => {
 				<Loader />
 			) : (
 				<>
-					<div className='px-5 bg-slate-700 shadowIndex flex flex-wrap flex-row items-center justify-around sm:justify-between rounded-t-md'>
+					<div className='px-5 shadowIndex rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-around sm:justify-between'>
 						<h3 className=' text-white text-xl font-semibold'>
-							Productos
+							Pedidos a Proveedores
 						</h3>{' '}
-						<button
+						<Button
 							onClick={handleOpenAddModal}
 							className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
 							<i className='pe-2 fa-solid fa-plus hover:text-slate-600'></i>
-							Agregar Productos
-						</button>
+							Agregar Pedido
+						</Button>
 					</div>
 					<div className='table-responsive'>
 						<ThemeProvider theme={darkTheme}>
 							<CssBaseline />
 							<Table
 								columns={columns}
-								data={state.products}
+								data={state.purchases}
 								actions={actions}
 								initialSortColumn='name'
 							/>
@@ -164,8 +155,8 @@ export const ProductDashboard = () => {
 					<Modals
 						isOpen={openEditModal}
 						onClose={handleCloseModal}
-						title='Editar Producto'>
-						<ProductForm
+						title='Editar Pedido'>
+						<PurchaseForm
 							rowId={rowId}
 							onClose={handleCloseModal}
 							mode='edit'
@@ -174,8 +165,18 @@ export const ProductDashboard = () => {
 					<Modals
 						isOpen={openAddModal}
 						onClose={handleCloseModal}
-						title='Agregar Nuevo Producto'>
-						<ProductForm onClose={handleCloseModal} mode='create' />
+						title='Agregar Nuevo Pedido'>
+						<PurchaseForm onClose={handleCloseModal} mode='create' />
+					</Modals>
+					<Modals
+						isOpen={openViewModal}
+						onClose={handleCloseModal}
+						title='Ver Pedido'>
+						<PurchaseForm
+							onClose={handleCloseModal}
+							rowId={rowId}
+							mode='view'
+						/>
 					</Modals>
 				</>
 			)}

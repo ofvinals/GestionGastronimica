@@ -226,7 +226,6 @@ export const useCategoryActions = () => {
 					type: 'DATA_USERS_ERROR',
 					payload: error.message,
 				});
-				console.log(error);
 				showAlert({
 					icon: 'error',
 					title: 'Error al eliminar la categoria. Intente nuevamente!',

@@ -15,7 +15,6 @@ const loungeSchema = new mongoose.Schema(
 			},
 		],
 	},
-
 	{
 		timestamps: true,
 	}

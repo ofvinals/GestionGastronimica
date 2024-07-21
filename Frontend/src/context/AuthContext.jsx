@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 const initialState = {
 	user: null,
-	loading: false,
+	loading: true,
 	error: null,
 };
 
@@ -37,9 +37,11 @@ export const AuthProvider = ({ children }) => {
 				.catch((error) => {
 					console.error('Error al validar el token:', error);
 					localStorage.removeItem('token');
+					dispatch({ type: 'LOGOUT' });
 					navigate('/home');
 				});
 		} else {
+			dispatch({ type: 'LOGOUT' });
 			navigate('/home');
 		}
 	}, [navigate]);

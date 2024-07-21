@@ -27,7 +27,6 @@ export const OrderCheck = ({
 		handleDeleteItem,
 	} = useOrderManagement(tableId);
 	const { updateItemsPending } = useOrderActions();
-
 	const [cashOrder, setCashOrder] = useState(false);
 
 	// ACTUALIZA EL ESTADO PENDIENTE DEL ITEM SELECCIONADO
@@ -73,7 +72,7 @@ export const OrderCheck = ({
 
 	if (orders.length === 0) return null;
 	const { diners, server, openAt } = orders[0];
-	
+
 	return (
 		<div>
 			<TableDetails
@@ -110,7 +109,7 @@ export const OrderCheck = ({
 						diners={diners}
 						order={orders}
 						salonId={salonId}
-					/>
+						/>
 				</Modals>
 			)}
 		</div>

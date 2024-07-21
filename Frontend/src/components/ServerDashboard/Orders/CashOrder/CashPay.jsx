@@ -2,9 +2,9 @@
 import { useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { useOrderActions } from '../../../../hooks/useOrderActions.js';
-import { useLoungeActions } from '../../../../hooks/useLoungeActions.js';
 import { useLayoutActions } from '../../../../hooks/useLayoutActions.js';
 
+// RECIBE PROPS DE CASH ORDER
 export const CashPay = ({
 	onClose,
 	orderId,
@@ -19,21 +19,21 @@ export const CashPay = ({
 	openAt,
 }) => {
 	const { orderCashAction } = useOrderActions();
-	const { dataSalons } = useLoungeActions();
-	const { updateTableIsOpenAction } = useLayoutActions();
+	const { updateTableIsOpenAction, loadLayoutAction  } = useLayoutActions();
 	const [paymentAmount, setPaymentAmount] = useState(0);
 	const [change, setChange] = useState(0);
 	const orderOpen = false;
 
+	// MANEJA LA FUNCION PARA EL PAGO CON EFECTIVO Y FACTURA C (CONSUMIDOR FINAL)
 	const handleCons = () => {
 		const values = {
-			onClose,
 			cash,
 			additionalCharges,
 			validFinalPrice,
+			openAt,
 			closeTime,
 			orderOpen,
-			recipe: 'Comsumidor Final C',
+			receipt: 'Comsumidor Final C',
 		};
 		orderCashAction(orderId, values);
 		updateTableIsOpenAction(
@@ -44,19 +44,20 @@ export const CashPay = ({
 			index,
 			openAt
 		);
-		dataSalons();
+		loadLayoutAction(salonId)
 		onClose();
 	};
 
+	// MANEJA LA FUNCION PARA EL PAGO CON EFECTIVO Y FACTURA A
 	const handleFactA = () => {
 		const values = {
-			onClose,
 			cash,
 			additionalCharges,
 			validFinalPrice,
+			openAt,
 			closeTime,
 			orderOpen,
-			recipe: 'Comsumidor Final C',
+			receipt: 'Factura A',
 		};
 		orderCashAction(orderId, values);
 		updateTableIsOpenAction(
@@ -67,16 +68,18 @@ export const CashPay = ({
 			index,
 			openAt
 		);
+		loadLayoutAction(salonId)
 		onClose();
-		dataSalons();
 	};
 
+	// MANEJA EL MONTO DE DESCUENTO
 	const handlePaymentChange = (e) => {
 		const amount = parseFloat(e.target.value);
 		setPaymentAmount(amount);
 		calculateChange(amount);
 	};
 
+	// CALCULA EL DESCUENTO SOBRE EL PRECIO FINAL
 	const calculateChange = (amount) => {
 		const calculatedChange = amount - validFinalPrice;
 		setChange(calculatedChange);

@@ -6,20 +6,20 @@ const authRequired = (req, res, next) => {
 		if (!authHeader) {
 			return res
 				.status(401)
-				.json({ message: 'Authorization denied. No token provided.' });
+				.json({ message: 'Autorizacion rechazada. No tiene Token para ingresar.' });
 		}
 		const token = authHeader.split(' ')[1];
 		if (!token) {
 			return res
 				.status(401)
-				.json({ message: 'Authorization denied. Invalid token format.' });
+				.json({ message: 'Authorizacion rechazada. Token invalido.' });
 		}
 
 		jwt.verify(token, process.env.TOKEN_SECRET, (error, user) => {
 			if (error) {
 				return res
 					.status(401)
-					.json({ message: 'Invalid token. Please log in again.' });
+					.json({ message: 'Token Invalido. Por favor, logueate nuevamente.' });
 			}
 			req.user = user;
 			next();

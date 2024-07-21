@@ -13,7 +13,7 @@ export const OrderCard = ({ menu, updateOrder, resetCount }) => {
 	const [text, setText] = useState('');
 	const [info, setInfo] = useState(false);
 
-	// Reset count when resetCount changes
+	// RESETEA EL CONTADOR AL CAMBIAR DE CATEGORIA O PAGINA
 	useEffect(() => {
 		setCount(0);
 	}, [resetCount]);

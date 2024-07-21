@@ -76,6 +76,7 @@ const ProductForm = ({ rowId, onClose, mode = 'edit' }) => {
 					<FormField
 						id='name'
 						label='Nombre*'
+						mode={mode}
 						register={register('name', {
 							required: 'El nombre es requerido.',
 						})}
@@ -91,6 +92,7 @@ const ProductForm = ({ rowId, onClose, mode = 'edit' }) => {
 						id='cant'
 						label='Cantidad*'
 						type='number'
+						mode={mode}
 						register={register('cant', {
 							required: 'La cantidad es requerida.',
 						})}
@@ -106,6 +108,7 @@ const ProductForm = ({ rowId, onClose, mode = 'edit' }) => {
 						id='unit'
 						label='Unidad*'
 						as='select'
+						mode={mode}
 						register={register('unit', {
 							required: 'La unidad es requerida',
 						})}
@@ -125,6 +128,7 @@ const ProductForm = ({ rowId, onClose, mode = 'edit' }) => {
 						id='cost'
 						label='Costo*'
 						type='number'
+						mode={mode}
 						register={register('cost', {
 							required: 'El costo es requerido.',
 						})}
@@ -139,6 +143,7 @@ const ProductForm = ({ rowId, onClose, mode = 'edit' }) => {
 					<FormField
 						id='supplier'
 						label='Proveedor'
+						mode={mode}
 						register={register('supplier')}
 						readOnly={mode === 'view'}
 					/>
@@ -146,6 +151,7 @@ const ProductForm = ({ rowId, onClose, mode = 'edit' }) => {
 						id='status'
 						label='Producto Activo?'
 						type='checkbox'
+						mode={mode}
 						register={register('status')}
 						renderAs='toggle'
 						readOnly={mode === 'view'}

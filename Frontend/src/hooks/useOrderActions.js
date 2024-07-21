@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { OrderContext } from '../context/OrderContext';
 import { apiURL } from '/api/apiURL';
 import { showAlert, confirmAction } from '../helpers/showAlert';
+import moment from 'moment';
 
 export const useOrderActions = () => {
 	const { dispatch } = useContext(OrderContext);
@@ -85,7 +86,6 @@ export const useOrderActions = () => {
 	};
 
 	const updateOrderAction = async (orderId, values) => {
-		console.log(orderId, values);
 		dispatch({
 			type: 'DATA_ORDERS_PENDING',
 		});
@@ -236,43 +236,33 @@ export const useOrderActions = () => {
 		dispatch({
 			type: 'DATA_ORDERS_PENDING',
 		});
+
 		try {
-			const {
-				onClose,
-				cash,
-				additionalCharges,
-				validFinalPrice,
-				closeTime,
-				salonId,
-				tableId,
-				isOpen,
-				index,
-				openAt,
-				orderOpen,
-				recipe,
-			} = values;
 			const token = localStorage.getItem('token');
+			// CALCULA EL TIEMPO DE USO ENTRE CLOSE Y OPEN
+			const duration = moment.duration(
+				moment(values.closeTime).diff(moment(values.openAt))
+			);
+			// EXTRAE HORA Y MINUTO DE LA DURACION
+			const elapsedHours = Math.floor(duration.asHours());
+			const elapsedMinutes = duration.minutes();
+			const elapsedDuration = {
+				hours: elapsedHours,
+				minutes: elapsedMinutes,
+			};
+			// Calcular elapsedTime
 			const closedOrders = await apiURL.put(
 				`/api/orders/${orderId}/cash`,
 				{
-					closeTime,
-					orderOpen,
-					onClose,
-					cash,
-					additionalCharges,
-					validFinalPrice,
-					salonId,
-					tableId,
-					isOpen,
-					index,
-					openAt,
-					recipe,
+					...values,
+					elapsedDuration,
 				},
 				{
 					withCredentials: true,
 					headers: { authorization: `Bearer ${token}` },
 				}
 			);
+
 			dispatch({
 				type: 'CASH_ORDER_SUCCESS',
 				payload: closedOrders.data,
@@ -295,6 +285,43 @@ export const useOrderActions = () => {
 		}
 	};
 
+	const deleteOrderAction = async (id) => {
+		const isConfirmed = await confirmAction({
+			title: 'Confirmas la eliminacion definitiva de la venta?',
+			icon: 'warning',
+		});
+		if (isConfirmed) {
+			dispatch({
+				type: 'DATA_ORDERS_PENDING',
+			});
+			try {
+				const token = localStorage.getItem('token');
+				const deletedSale = await apiURL.delete(`/api/orders/${id}`, {
+					withCredentials: true,
+					headers: { authorization: `Bearer ${token}` },
+				});
+				dispatch({
+					type: 'DELETE_ORDER_SUCCESS',
+					payload: id,
+				});
+				showAlert({
+					icon: 'success',
+					title: 'Venta eliminada correctamente',
+				});
+				return deletedSale.data;
+			} catch (error) {
+				dispatch({
+					type: 'DATA_ORDERS_ERROR',
+					payload: error.message,
+				});
+				showAlert({
+					icon: 'error',
+					title: 'Error al eliminar la venta. Intente nuevamente!',
+				});
+			}
+		}
+	};
+
 	return {
 		dataOrders,
 		addOrderPrevAction,
@@ -305,5 +332,6 @@ export const useOrderActions = () => {
 		deleteItemOrder,
 		updateItemsPending,
 		orderCashAction,
+		deleteOrderAction
 	};
 };

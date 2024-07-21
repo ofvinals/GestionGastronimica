@@ -59,7 +59,7 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 		}
 	}, [rowId, mode]);
 
-	// PREPARA LOS VALUES
+	// PREPARA LOS VALUES P ENVIAR A BACKEND
 	const onSubmit = handleSubmit(async (values) => {
 		try {
 			const orderData = {
@@ -126,7 +126,7 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 							<Form.Control
 								className={`${
 									mode === 'view' || mode === 'edit'
-										? 'border-none focus:border-none focus:outline-none '
+										? 'border-none focus:border-none focus:outline-none bg-transparent'
 										: ''
 								}`}
 								type='text'
@@ -148,7 +148,7 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 							<Form.Control
 								className={`${
 									mode === 'view'
-										? 'border-none focus:border-none focus:outline-none '
+										? 'border-none focus:border-none focus:outline-none bg-transparent'
 										: ''
 								}`}
 								type='number'
@@ -172,7 +172,7 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 							<Form.Control
 								className={`${
 									mode === 'view'
-										? 'border-none focus:border-none focus:outline-none '
+										? 'border-none focus:border-none focus:outline-none bg-transparent'
 										: ''
 								}`}
 								type='number'
@@ -193,7 +193,7 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 							<Form.Control
 								className={`${
 									mode === 'view'
-										? 'border-none focus:border-none focus:outline-none '
+										? 'border-none focus:border-none focus:outline-none bg-transparent'
 										: ''
 								}`}
 								type='text'
@@ -217,7 +217,7 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 							<Form.Control
 								className={`${
 									mode === 'view'
-										? 'border-none focus:border-none focus:outline-none '
+										? 'border-none focus:border-none focus:outline-none bg-transparent'
 										: ''
 								}`}
 								type='text'
@@ -239,7 +239,7 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 							<Form.Control
 								className={`${
 									mode === 'view'
-										? 'border-none focus:border-none focus:outline-none '
+										? 'border-none focus:border-none focus:outline-none bg-transparent'
 										: ''
 								}`}
 								type='text'

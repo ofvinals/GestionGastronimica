@@ -3,17 +3,17 @@
 import { useState, useEffect, useContext } from 'react';
 import ServerLayout from './Layout/ServerLayout';
 import { LoungeContext } from '../../context/LoungeContext';
-import { useLoungeActions } from '../../hooks/useLoungeActions.js';
+import { useLayoutActions } from '../../hooks/useLayoutActions.js';
 
-export const MenuServer = ({ reload }) => {
+export const MenuServer = () => {
 	const { state: loungeState } = useContext(LoungeContext);
-	const { dataSalons } = useLoungeActions();
+	const { loadAllLayoutAction } = useLayoutActions();
 	const [activeSalonId, setActiveSalonId] = useState(null);
 	const [salonActive, setSalonActive] = useState({});
 
 	// CARGA TODOS LOS SALONES GUARDADOS
 	useEffect(() => {
-		dataSalons();
+		loadAllLayoutAction();
 	}, [loungeState.lounges]);
 
 	// SI NO HAY SALON ACTIVO. CARGA EL PRIMER SALON DEL ARRAY LOUNGES

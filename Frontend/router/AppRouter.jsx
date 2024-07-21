@@ -12,6 +12,7 @@ import { MenuProvider } from '../src/context/MenuContext';
 import { LoungeProvider } from '../src/context/LoungeContext';
 import { OrderProvider } from '../src/context/OrderContext';
 import { PrimeReactProvider } from 'primereact/api';
+import PrivateRoute from './PrivateRoute';
 
 export const AppRouter = () => {
 	return (
@@ -30,15 +31,17 @@ export const AppRouter = () => {
 												<Route
 													path='/home'
 													element={<Home />}></Route>
-												<Route
-													path='/admin'
-													element={<Admin />}></Route>
-												<Route
-													path='/server'
-													element={<Server />}></Route>
-												<Route
-													path='/kitchen'
-													element={<Kitcken />}></Route>
+												<Route element={<PrivateRoute />}>
+													<Route
+														path='/admin'
+														element={<Admin />}></Route>
+													<Route
+														path='/server'
+														element={<Server />}></Route>
+													<Route
+														path='/kitchen'
+														element={<Kitcken />}></Route>
+												</Route>
 											</Routes>
 											<Footer />
 										</div>

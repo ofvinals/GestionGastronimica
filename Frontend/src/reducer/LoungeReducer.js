@@ -1,7 +1,6 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable no-mixed-spaces-and-tabs */
 export const LoungeReducer = (state, action) => {
-	console.log(state, action);
 	switch (action.type) {
 		case 'DATA_TABLE_PENDING':
 		case 'DATA_SALON_PENDING':

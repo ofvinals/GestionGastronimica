@@ -12,16 +12,14 @@ import { TableOpenForm } from './TableOpenForm';
 import { OrderForm } from '../Orders/PreOrder/OrderForm';
 import { OrderCheck } from '../Orders/CheckOrder/OrderCheck';
 import moment from 'moment-timezone';
-import { useLoungeActions } from '../../../hooks/useLoungeActions.js';
+import { showAlert } from '../../../helpers/showAlert';
 
 const CELL_SIZE = 50;
 const GRID_SIZE = 10;
 
-// RECIBE PROPS DE MENUSERVER
 export const ServerLayout = ({ salonId, onReload }) => {
-	const { state, loading } = useContext(LoungeContext);
-	const { dataSalons } = useLoungeActions();
-	const { updateTableIsOpenAction } = useLayoutActions();
+	const { loading } = useContext(LoungeContext);
+	const { updateTableIsOpenAction, loadLayoutAction } = useLayoutActions();
 	const [currentLayout, setCurrentLayout] = useState([]);
 	const [confirmTable, setConfirmTable] = useState(null);
 	const [currentSalon, setCurrentSalon] = useState([]);
@@ -31,38 +29,49 @@ export const ServerLayout = ({ salonId, onReload }) => {
 	const [openOrderCheck, setOpenOrderCheck] = useState(false);
 	const [openedOrder, setOpenedOrder] = useState([]);
 
-	// CARGA TODAS LAS MESAS DEL SALON
-	useEffect(() => {
-		dataSalons(salonId);
-		if (state.lounges) {
-			const layout = state.lounges.find((layout) => layout._id === salonId);
-			if (layout && layout.layouts) {
-				setCurrentLayout(layout.layouts);
-				setCurrentSalon(layout);
-			} else {
-				setCurrentLayout([]);
-			}
+	const getLayout = async () => {
+		try {
+			const layout = await loadLayoutAction(salonId);
+			setCurrentLayout(layout?.layouts || []);
+			setCurrentSalon(layout);
+		} catch (error) {
+			console.error('Error al buscar el layout:', error);
 		}
-	}, [salonId]);
+	};
 
-	// ACCION AL HACER CLICK EN UNA MESA
+	useEffect(() => {
+		getLayout();
+	}, [salonId, openLayout]);
+
+	// VERIFICA SI LA MESA ESTA ABIERTA
 	const handleTableClick = (table) => {
 		setConfirmTable(table);
 		if (table.isOpen) {
-			// SI ESTA ABIERTA ABRE LA ORDEN (ORDERCHECK)
+			// SI ESTA ABIERTA. ABRE LA ORDER DE LA MESA
 			setOpenOrderCheck(true);
 		} else {
-			// SINO ABRE MODAL P CONFIRMAR
-			setOpenConfirm(true);
+			// SINO. VERIFICA SI LA MESA ESTA ASIGNADA A UN SERVER ESPECIFICO
+			if (table.waiter) {
+				showAlert({
+					icon: 'error',
+					title: 'No puedes abrir la mesa. Esta asignada a otro server',
+				});
+				return;
+			} else {
+				// SINO ABRE EL MODAL P CONFIRMAR LA APERTURA DE LA MESA
+				setOpenConfirm(true);
+			}
 		}
 	};
-	// AL CONFIRMAR ACTUALIZA LOS DATOS DE LA MESA Y ABRE LA ORDEN (ORDERFORM)
+	// EN CASO DE CONFIRMAR. VERIFICA SI EXISTE ORDEN DE LA MESA YA ABIERTA
 	const handleConfirm = (openedOrder) => {
+		// SI NO HAY ORDEN ABIERTA
 		if (!openedOrder) {
-			// CIERRA MODALES. Y PREPARA DATOS P ENVIAR A REDUCER Y BACKEND
+			// CIERRA MODALES
 			setOpenConfirm(false);
 			setOpenOrderCheck(false);
 			setOpenLayout(false);
+			// PREPARA DATOS P ENVIAR A UPDATETABLEISOPEN
 			const tableId = confirmTable._id;
 			const isOpen = true;
 			const closeTime = '';
@@ -71,9 +80,8 @@ export const ServerLayout = ({ salonId, onReload }) => {
 			const index = currentLayout.findIndex(
 				(table) => table._id === tableId
 			);
-			// ABRE EL MODAL DE LA ORDER P HACER EL PEDIDO
+			// ABRE LA ORDEN DE MEDIDO Y ACTUALIZA EL ESTADO DE LA MESA A ABIERTO CON LOS DATOS ANTERIORES
 			setOpenOrder(true);
-			// ACTUALIZA EL ESTADO DE LA MESA
 			updateTableIsOpenAction(
 				closeTime,
 				salon_Id,
@@ -83,6 +91,7 @@ export const ServerLayout = ({ salonId, onReload }) => {
 				openAt
 			);
 		} else {
+			// CIERRA MODALES. Y ABRE MENU P INGRESAR EL PEDIDO
 			setOpenedOrder(openedOrder);
 			setOpenOrderCheck(false);
 			setOpenLayout(false);
@@ -91,12 +100,12 @@ export const ServerLayout = ({ salonId, onReload }) => {
 		}
 	};
 
-	// CIERRA TODOS LOS MODALES
+	// CIERRA MODALES
 	const handleCloseModal = () => {
 		setConfirmTable(false);
 		setOpenOrderCheck(false);
 		setOpenConfirm(false);
-		dataSalons(salonId);
+		getLayout();
 	};
 
 	if (loading) {
@@ -163,9 +172,10 @@ export const ServerLayout = ({ salonId, onReload }) => {
 						tableId={confirmTable._id}
 						currentLayout={currentLayout}
 						salonId={salonId}
-					/>{' '}
+					/>
 				</Modals>
 			)}
+
 		</>
 	);
 };

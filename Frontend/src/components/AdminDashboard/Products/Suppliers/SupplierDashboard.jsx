@@ -163,6 +163,7 @@ export const SupplierDashboard = () => {
 								columns={columns}
 								data={state.suppliers}
 								actions={actions}
+								initialSortColumn='name'
 							/>
 						</ThemeProvider>
 					</div>

@@ -1,5 +1,5 @@
 const Order = require('../models/order.model.js');
-const { DateTime } = require('luxon'); // Importa DateTime desde Luxon
+const { DateTime } = require('luxon');
 
 const getOrders = async (req, res) => {
 	try {
@@ -11,10 +11,8 @@ const getOrders = async (req, res) => {
 };
 
 const createOrder = async (req, res) => {
-	console.log(req.body);
 	try {
 		const ahora = DateTime.now().setZone('America/Argentina/Buenos_Aires');
-
 		const {
 			salonName,
 			tableNum,
@@ -25,9 +23,9 @@ const createOrder = async (req, res) => {
 			items,
 			orderOpen,
 			elapsedDuration,
+			receipt,
 		} = req.body[0];
 		const openAt = ahora.toISO();
-		// Crea una nueva instancia de Order utilizando los datos obtenidos
 		const newOrder = new Order({
 			salonName,
 			tableNum,
@@ -39,15 +37,12 @@ const createOrder = async (req, res) => {
 			items,
 			orderOpen,
 			elapsedDuration,
+			receipt,
 		});
-
-		// Guarda la nueva orden en la base de datos
 		await newOrder.save();
-
-		res.json(newOrder); // Devuelve la orden creada como respuesta
+		res.json(newOrder);
 	} catch (error) {
-		console.error('Error al guardar la orden:', error);
-		res.status(500).json({ error: 'Error al guardar la orden' });
+		return res.status(500).json({ message: error.message });
 	}
 };
 
@@ -61,32 +56,22 @@ const getOrder = async (req, res) => {
 };
 
 const updateOrder = async (req, res) => {
-	console.log(req.body);
 	try {
 		const { items, ...updateFields } = req.body;
-
-		// Encuentra la orden por ID
+		// busca la orden por ID
 		const order = await Order.findById(req.params.id);
-		console.log('order', order);
-		if (!order) {
-			return res.status(404).json({ message: 'Orden no encontrada' });
-		}
-
-		// Si hay ítems en la solicitud, combínalos con los existentes
+		// Si hay ítems en la solicitud, agrega nuevos
 		if (items && Array.isArray(items)) {
 			order.items = [...order.items, ...items];
 		}
-
 		// Actualiza los campos de la orden sin reemplazar los ítems
 		Object.keys(updateFields).forEach((key) => {
 			order[key] = updateFields[key];
 		});
-
 		// Guarda la orden actualizada
 		const updatedOrder = await order.save();
 		res.json(updatedOrder);
 	} catch (error) {
-		console.error('Error al actualizar la orden:', error);
 		return res.status(500).json({ message: error.message });
 	}
 };
@@ -98,7 +83,7 @@ const updateOrderPending = async (req, res) => {
 		const orders = await Order.find();
 		// Iterar sobre todas las órdenes
 		orders.forEach(async (order) => {
-			// Iterar sobre los IDs de los ítems modificados y actualizar `pending` a false
+			// Iterar sobre los IDs de los ítems modificados y actualiza `pending` a false
 			itemIds.forEach((itemId) => {
 				const itemToUpdate = order.items.find(
 					(item) => item._id.toString() === itemId.toString()
@@ -107,44 +92,31 @@ const updateOrderPending = async (req, res) => {
 					itemToUpdate.pending = false;
 				}
 			});
-			// Guardar la orden actualizada con pending false
 			await order.save();
 		});
-		// Responder con un mensaje de éxito
-		res.status(200).json({ message: 'Item actualizado correctamente' });
+		res.json(orders);
 	} catch (error) {
-		console.error('Error al actualizar item:', error);
-		res.status(500).json({ message: 'Error al actualizar item' });
+		return res.status(500).json({ message: error.message });
 	}
 };
 
 const updateItemCooked = async (req, res) => {
-	console.log('itemcooked', req.body);
 	const { orderId, itemId } = req.params;
 	const { cookedAt } = req.body;
-	console.log(cookedAt);
 	try {
 		const order = await Order.findById(orderId);
-		if (!order) {
-			return res.status(404).send('Order not found');
-		}
 		const item = order.items.id(itemId);
-		if (!item) {
-			return res.status(404).send('Item not found');
-		}
-		item.cookedAt = cookedAt; // Asegura que se guarde en formato ISO
+		item.cookedAt = cookedAt;
 		await order.save();
 		res.send(order);
 	} catch (error) {
-		res.status(500).send('Server error');
+		return res.status(500).json({ message: error.message });
 	}
 };
 
 const updateOrderOpen = async (req, res) => {
-	console.log(req.body);
 	try {
 		const { closeTime, orderOpen, filteredOrder, elapsedDuration } = req.body;
-		console.log(closeTime, elapsedDuration);
 		// Iterar sobre cada orden en filteredOrder
 		for (const orderId of filteredOrder) {
 			const order = await Order.findById(orderId);
@@ -158,33 +130,36 @@ const updateOrderOpen = async (req, res) => {
 		res.status(200).send('Estado de las órdenes actualizado correctamente');
 	} catch (error) {
 		console.error('Error en el servidor:', error);
-		res.status(500).send('Error al actualizar el estado de las órdenes');
+		return res.status(500).json({ message: error.message });
 	}
 };
 
 const updateCashOrder = async (req, res) => {
-	console.log('updateCashOrder', req.body);
-console.log(req.params)
 	const { id } = req.params;
-	const { cash, additionalCharges, validFinalPrice, orderOpen, closeTime } =
-		req.body;
+	const {
+		cash,
+		additionalCharges,
+		validFinalPrice,
+		orderOpen,
+		closeTime,
+		elapsedDuration,
+		receipt,
+	} = req.body;
 
 	try {
 		const order = await Order.findById(id);
-		if (!order) {
-			return res.status(404).json({ message: 'Order not found' });
-		}
 		order.orderCash = cash;
 		order.additionalCharges = additionalCharges;
 		order.finalPrice = validFinalPrice;
 		order.orderOpen = orderOpen;
 		order.closeTime = closeTime;
+		order.elapsedDuration = elapsedDuration;
+		order.receipt = receipt;
 		await order.save();
-
-		res.status(200).json({ message: 'Order updated successfully', order });
+		res.status(200).json({ message: 'Pago de la orden actualizado', order });
 	} catch (error) {
-		console.error('Error updating order:', error);
-		res.status(500).json({ message: 'Error updating order' });
+		console.error('Error al actualizar el pago de la orden:', error);
+		return res.status(500).json({ message: error.message });
 	}
 };
 
@@ -208,7 +183,7 @@ const deleteItem = async (req, res) => {
 		await order.save();
 		res.json(initialLength);
 	} catch (error) {
-		res.status(500).json({ message: 'Error deleting item from order' });
+		return res.status(500).json({ message: error.message });
 	}
 };
 

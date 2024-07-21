@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 
 export const MenuReducer = (state, action) => {
-	console.log(state, action)
 	switch (action.type) {
 		case 'DATA_MENUS_PENDING':
 			return { ...state, loading: true, error: null };
