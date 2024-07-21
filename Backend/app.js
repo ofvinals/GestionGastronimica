@@ -23,8 +23,8 @@ app.use(
 		origin: [
 			'http://localhost:5173',
 			'http://localhost:5174',
-			// 'https://proyecto-estudio-mongo.vercel.app',
-			// 'https://proyecto-estudio-mongo.onrender.com',
+			'https://restoflow-gestion-gastronomica.onrender.com',
+			'https://resto-flow-gestion-gastronomica.vercel.app',
 		],
 		credentials: true,
 		optionsSuccessStatus: 200,
@@ -33,7 +33,6 @@ app.use(
 	})
 );
 
-// No necesitas configurar manualmente las cabeceras CORS aquí
 // app.use((req, res, next) => {
 //   res.setHeader(
 //     'Access-Control-Allow-Origin',

@@ -10,7 +10,7 @@ export const Home = () => {
 					className='min-h-[70vh] md:min-h-[78vh] opacity-50 w-full'
 				/>
 				<div className='absolute inset-0 items-center justify-center flex flex-col'>
-					<h1 className='text-[46px] font-bold text-center  text-black mt-2'>
+					<h1 className='text-[46px] font-bold text-center  text-black'>
 						Bienvenido a RestóFLOW
 					</h1>
 					<LoginForm />

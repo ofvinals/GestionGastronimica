@@ -53,7 +53,7 @@ export const LoginForm = () => {
 		<section className='flex flex-wrap items-center justify-center flex-col pb-10'>
 			<Form
 				id='loginForm'
-				className='mt-5 flex flex-col justify-center items-center w-[300px] border-2 border-white bg-slate-700 pb-6 rounded-xl'
+				className='mt-1 flex flex-col justify-center items-center w-[300px] border-2 border-white bg-slate-700 pb-6 rounded-xl'
 				onSubmit={handleSubmit}>
 				<h2 className='text-center textshadow text-3xl text-white font-bold m-7'>
 					Iniciar Sesion
