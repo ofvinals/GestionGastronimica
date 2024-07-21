@@ -16,23 +16,12 @@ require('dotenv').config();
 const app = express();
 
 app.use(cookieParser());
-app.use((req, res, next) => {
-	res.setHeader(
-		'Access-Control-Allow-Origin',
-		'https://resto-flow-gestion-gastronomica.vercel.app',
-	);
-	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-	res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-	next();
-});
-// Configurar CORS
+
 app.use(
 	cors({
 		origin: [
-			'http://localhost:5173',
-			'http://localhost:5174',
-			'https://restoflow-gestion-gastronomica.onrender.com',
-			'https://resto-flow-gestion-gastronomica.vercel.app',
+			'http://localhost:5173', 
+			'https://resto-flow-gestion-gastronomica.vercel.app', 
 		],
 		credentials: true,
 		methods: ['GET', 'POST', 'PUT', 'DELETE'],
