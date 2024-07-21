@@ -36,7 +36,8 @@ app.use(
 app.use((req, res, next) => {
 	res.setHeader(
 		'Access-Control-Allow-Origin',
-		'https://resto-flow-gestion-gastronomica.vercel.app'
+		'https://resto-flow-gestion-gastronomica.vercel.app',
+		'http://localhost:5173'
 	);
 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
 	res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
