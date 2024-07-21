@@ -115,22 +115,25 @@ export const ServerLayout = ({ salonId, onReload }) => {
 	return (
 		<>
 			{openLayout ? (
-				<div className='w-full'>
-					<Stage
-						width={GRID_SIZE * CELL_SIZE}
-						height={GRID_SIZE * CELL_SIZE}>
-						<Layer>
-							<GridLines />
-							{currentLayout.map((table) => (
-								<TableRect
-									key={table._id}
-									table={table}
-									isSelected={table.isOpen}
-									onClick={() => handleTableClick(table)}
-								/>
-							))}
-						</Layer>
-					</Stage>
+				<div className='scroll-container'>
+					<div className='stage-container'>
+						<Stage
+							width={GRID_SIZE * CELL_SIZE}
+							height={GRID_SIZE * CELL_SIZE}>
+							<Layer>
+								<GridLines />
+								{currentLayout.map((table) => (
+									<TableRect
+										key={table._id}
+										table={table}
+										isSelected={table.isOpen}
+										onClick={() => handleTableClick(table)}
+										onTouchStart={() => handleTableClick(table)}
+									/>
+								))}
+							</Layer>
+						</Stage>
+					</div>
 				</div>
 			) : null}
 			{openConfirm && (
@@ -175,7 +178,6 @@ export const ServerLayout = ({ salonId, onReload }) => {
 					/>
 				</Modals>
 			)}
-
 		</>
 	);
 };

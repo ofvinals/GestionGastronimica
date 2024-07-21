@@ -122,8 +122,8 @@ const PurchaseForm = ({ rowId, onClose, mode = 'edit' }) => {
 									{...register(`items.${index}.itemName`, {
 										required: 'El Articulo es requerido',
 									})}
-									className={`p-2 ${
-										mode === 'view' ? 'bg-transparent' : ''
+									className={`p-2 form-control ${
+										mode === 'view' ? 'bg-transparent' : 'form-control'
 									}`}
 									placeholder='Nombre del Articulo'
 									readOnly={mode === 'view'}
@@ -134,8 +134,8 @@ const PurchaseForm = ({ rowId, onClose, mode = 'edit' }) => {
 										required: 'La cantidad es requerida',
 										min: 1,
 									})}
-									className={`w-[80px] p-2 ${
-										mode === 'view' ? 'bg-transparent' : ''
+									className={`w-[80px] form-control p-2 ${
+										mode === 'view' ? 'bg-transparent' : 'form-control'
 									}`}
 									placeholder='Cantidad'
 									readOnly={mode === 'view'}
