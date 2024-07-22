@@ -1,6 +1,6 @@
 export const UnderConstruction = () => {
 	return (
-		<div className='relative w-full h-full '>
+		<section className='relative w-full h-full '>
 			<img
 				src='/LOGO RESTOFLOW.png'
 				alt='logo marca'
@@ -11,6 +11,6 @@ export const UnderConstruction = () => {
 					Modulo en construccion. Pronto estará disponible!
 				</p>
 			</div>
-		</div>
+		</section>
 	);
 };

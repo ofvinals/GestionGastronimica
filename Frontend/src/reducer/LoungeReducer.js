@@ -9,6 +9,8 @@ export const LoungeReducer = (state, action) => {
 			return {
 				...state,
 				loungeById: action.payload,
+				loading: false,
+				error: null,
 			};
 		case 'DATA_SALONS_SUCCESS':
 			return {
@@ -22,6 +24,8 @@ export const LoungeReducer = (state, action) => {
 			return {
 				...state,
 				lounges: [...state.lounges, action.payload],
+				loading: false,
+				error: null,
 			};
 		case 'DELETE_SALON_SUCCESS':
 			return {
@@ -40,6 +44,8 @@ export const LoungeReducer = (state, action) => {
 				lounges: state.lounges.map((salon) =>
 					salon._id === salonId ? { ...salon, layouts } : salon
 				),
+				loading: false,
+				error: null,
 			};
 
 		case 'ADD_TABLE_SUCCESS': {
@@ -51,6 +57,8 @@ export const LoungeReducer = (state, action) => {
 						? { ...salon, layouts: [...salon.layouts, table] }
 						: salon
 				),
+				loading: false,
+				error: null,
 			};
 		}
 		case 'UPDATE_TABLE_POSITION_SUCCESS': {
@@ -69,6 +77,8 @@ export const LoungeReducer = (state, action) => {
 						  }
 						: salon
 				),
+				loading: false,
+				error: null,
 			};
 		}
 		case 'REMOVE_TABLE_SUCCESS': {
@@ -85,6 +95,8 @@ export const LoungeReducer = (state, action) => {
 						  }
 						: salon
 				),
+				loading: false,
+				error: null,
 			};
 		}
 		case 'UPDATE_TABLE_DETAILS_SUCCESS': {
@@ -101,6 +113,8 @@ export const LoungeReducer = (state, action) => {
 						  }
 						: salon
 				),
+				loading: false,
+				error: null,
 			};
 		}
 		case 'OPEN_TABLE_SUCCESS':
@@ -119,6 +133,8 @@ export const LoungeReducer = (state, action) => {
 						  }
 						: salon
 				),
+				loading: false,
+				error: null,
 			};
 		case 'DATA_TABLE_ERROR':
 		case 'DATA_SALON_ERROR':

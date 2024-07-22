@@ -2,8 +2,13 @@ import { Link } from 'react-router-dom';
 
 export const Footer = () => {
 	return (
-		<div className='bg-slate-700  flex flex-col md:flex-row justify-around items-center flex-wrap rounded-t-3xl'>
-			<img src='/LOGO RESTOFLOW.png' alt='logomarca' width={150} className='rounded-xl mt-4 sm:mb-4' />
+		<footer className='bg-slate-700  flex flex-col md:flex-row justify-around items-center flex-wrap rounded-t-3xl'>
+			<img
+				src='/LOGO RESTOFLOW.png'
+				alt='logomarca'
+				width={150}
+				className='rounded-xl mt-4 sm:mb-4'
+			/>
 			<div className='flex flex-col '>
 				<Link
 					to='/'
@@ -24,6 +29,6 @@ export const Footer = () => {
 					<p className='text-white'>OFVDev</p>
 				</a>
 			</div>
-		</div>
+		</footer>
 	);
 };

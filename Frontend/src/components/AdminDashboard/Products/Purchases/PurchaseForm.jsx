@@ -10,7 +10,7 @@ import Loader from '../../../../helpers/Loader.jsx';
 import { useSupplierActions } from '../../../../hooks/useSupplierActions.js';
 
 const PurchaseForm = ({ rowId, onClose, mode = 'edit' }) => {
-	const { state, loading } = useContext(ProductContext);
+	const { state } = useContext(ProductContext);
 	const { editPurchaseAction, addPurchaseAction, dataPurchases } =
 		usePurchaseActions();
 	const { dataSuppliers } = useSupplierActions();
@@ -79,11 +79,11 @@ const PurchaseForm = ({ rowId, onClose, mode = 'edit' }) => {
 
 	return (
 		<>
-			{loading ? (
+			{state.loading ? (
 				<Loader />
 			) : (
 				<GenericForm
-					loading={loading}
+					loading={state.loading}
 					onSubmit={onSubmit}
 					onClose={onClose}
 					mode={mode}>
@@ -123,7 +123,9 @@ const PurchaseForm = ({ rowId, onClose, mode = 'edit' }) => {
 										required: 'El Articulo es requerido',
 									})}
 									className={`p-2 form-control ${
-										mode === 'view' ? 'bg-transparent' : 'form-control'
+										mode === 'view'
+											? 'bg-transparent'
+											: 'form-control'
 									}`}
 									placeholder='Nombre del Articulo'
 									readOnly={mode === 'view'}
@@ -135,7 +137,9 @@ const PurchaseForm = ({ rowId, onClose, mode = 'edit' }) => {
 										min: 1,
 									})}
 									className={`w-[80px] form-control p-2 ${
-										mode === 'view' ? 'bg-transparent' : 'form-control'
+										mode === 'view'
+											? 'bg-transparent'
+											: 'form-control'
 									}`}
 									placeholder='Cantidad'
 									readOnly={mode === 'view'}

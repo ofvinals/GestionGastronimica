@@ -12,7 +12,7 @@ import '../../../css/Custom.css';
 import Loader from '../../../helpers/Loader';
 
 export const ProductDashboard = () => {
-	const { state, loading } = useContext(ProductContext);
+	const { state } = useContext(ProductContext);
 	const {
 		dataProducts,
 		disableProductAction,
@@ -135,7 +135,7 @@ export const ProductDashboard = () => {
 
 	return (
 		<>
-			{loading ? (
+			{state.loading ? (
 				<Loader />
 			) : (
 				<>

@@ -4,7 +4,7 @@ import { Card } from 'primereact/card';
 // RECIBE PROPS DE MENUKITCHEN
 export const PendingItems = ({ pendingItems }) => {
 	return (
-		<div className='md:w-1/4'>
+		<section className='md:w-1/4'>
 			<h2 className='flex items-center justify-center text-xl h-[64px] font-semibold text-center p-2 bg-slate-700 text-white'>
 				Pendientes de envio
 			</h2>
@@ -34,6 +34,6 @@ export const PendingItems = ({ pendingItems }) => {
 					</div>
 				)}
 			</div>
-		</div>
+		</section>
 	);
 };

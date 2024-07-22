@@ -13,7 +13,7 @@ import { CategorySelection } from '../Categorys/CategorySelection';
 import Loader from '../../../helpers/Loader';
 
 export const MenuDashboard = () => {
-	const { state, loading } = useContext(MenuContext);
+	const { state } = useContext(MenuContext);
 	const { dataMenus, disableMenuAction, enableMenuAction, deleteMenuAction } =
 		useMenuActions();
 	const [openEditModal, setOpenEditModal] = useState(false);
@@ -139,7 +139,7 @@ export const MenuDashboard = () => {
 
 	return (
 		<>
-			{loading ? (
+			{state.loading ? (
 				<Loader />
 			) : (
 				<section>

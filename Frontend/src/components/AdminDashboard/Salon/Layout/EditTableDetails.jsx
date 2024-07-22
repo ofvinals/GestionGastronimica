@@ -27,11 +27,11 @@ const EditTableDetails = ({
 			<h3 className='text-center w-full h-[40px] font-semibold pt-2 bg-slate-700 text-white items-center'>
 				Editar Mesa {selectedTable.id}
 			</h3>
-			<p className='font-medium p-2'>
+			<p className='font-medium p-2 text-center'>
 				Salón: <span className='font-normal'>{salonName}</span>
 			</p>
-			<div className='flex flex-row'>
-				<label className='p-2 font-medium'>Número de Mesa:</label>
+			<div className='flex flex-row flex-wrap items-center justify-center'>
+				<label className='p-2 font-medium text-center'>Número de Mesa:</label>
 				<input
 					className='w-[40px] p-1 border-1 border-slate-400'
 					type='text'
@@ -40,7 +40,7 @@ const EditTableDetails = ({
 					onBlur={onTableBlur}
 				/>
 			</div>
-			<label className='p-2 font-medium'>Mozo asignado:</label>
+			<label className='p-2 font-medium text-center'>Mozo asignado:</label>
 			<select
 				className=' m-2 p-1 border-1 border-slate-400'
 				type='text'

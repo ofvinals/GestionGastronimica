@@ -4,7 +4,7 @@
 export const TableOpenForm = ({ table, onConfirm, onClose }) => {
 	// comprobar que la mesa este habilitada para el server usuario o para todos
 	return (
-		<div>
+		<section>
 			<p className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
 				¿Desea abrir la mesa {table && table.id}?
 			</p>
@@ -21,6 +21,6 @@ export const TableOpenForm = ({ table, onConfirm, onClose }) => {
 					<i className='fa-solid fa-circle-xmark text-[40px] text-red-800 hover:text-white'></i>
 				</button>
 			</div>
-		</div>
+		</section>
 	);
 };

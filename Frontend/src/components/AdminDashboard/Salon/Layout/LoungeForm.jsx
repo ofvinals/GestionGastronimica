@@ -12,7 +12,7 @@ const LoungeForm = ({ onAddSalon, onClose }) => {
 	};
 
 	return (
-		<div className='flex flex-col  items-center'>
+		<section className='flex flex-col  items-center'>
 			<h2 className='text-center text-xl my-3 font-semibold'>
 				Agregar Nuevo Salón
 			</h2>
@@ -35,7 +35,7 @@ const LoungeForm = ({ onAddSalon, onClose }) => {
 					<i className='fa-solid fa-circle-xmark text-[40px] text-red-800 hover:text-white'></i>{' '}
 				</button>
 			</div>
-		</div>
+		</section>
 	);
 };
 

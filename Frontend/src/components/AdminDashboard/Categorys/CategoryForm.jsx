@@ -57,7 +57,7 @@ const CategoryForm = ({ rowId, onClose, mode = 'edit' }) => {
 
 	return (
 		<>
-			{loading ? (
+			{state.loading ? (
 				<Loader />
 			) : (
 				<GenericForm

@@ -4,15 +4,14 @@
 import { useContext, useEffect, useState } from 'react';
 import { LoungeContext } from '../../../context/LoungeContext';
 import { useLayoutActions } from '../../../hooks/useLayoutActions.js';
-import Loader from '../../../helpers/Loader';
 import ServerLayout from '../../ServerDashboard/Layout/ServerLayout';
 
 export const TableDashboard = () => {
 	const { loadAllLayoutAction, loadLayoutAction } = useLayoutActions();
-	const { state: loungeState, loading } = useContext(LoungeContext);
+	const { state: loungeState } = useContext(LoungeContext);
 	const [activeSalonId, setActiveSalonId] = useState(null);
 
-// CARGA LOS LAYOUT AL STATE
+	// CARGA LOS LAYOUT AL STATE
 	useEffect(() => {
 		loadAllLayoutAction();
 	}, []);
@@ -35,47 +34,43 @@ export const TableDashboard = () => {
 		}
 	}, [activeSalonId]);
 
-	// MANEJA EL CAMBIO DE SALON EN LA BARRA 
+	// MANEJA EL CAMBIO DE SALON EN LA BARRA
 	const handleSalonClick = (salonId) => {
 		setActiveSalonId(salonId);
 	};
 
 	return (
 		<div>
-			{loading ? (
-				<Loader />
-			) : (
-				<section>
-					<div className='pt-3 shadowIndex rounded-t-md bg-slate-600 flex flex-wrap flex-row items-center justify-around'>
-						<h2 className='text-white text-2xl font-semibold mb-3'>
-							Salones
-						</h2>
-						{loungeState.lounges &&
-							loungeState.lounges.map((lounge) => (
-								<button
-									key={lounge._id}
-									onClick={() => handleSalonClick(lounge._id)}
-									className={`border-none text-white p-2 ${
-										activeSalonId === lounge._id
-											? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
-											: 'bg-transparent text-white hover:font-bold'
-									}`}>
-									{lounge.name}
-								</button>
-							))}
-					</div>
-					{activeSalonId && (
-						<ServerLayout
-							salonId={activeSalonId}
-							salonName={
-								loungeState.lounges.find(
-									(lounge) => lounge._id === activeSalonId
-								)?.name
-							}
-						/>
-					)}
-				</section>
-			)}
+			<section>
+				<div className='pt-3 shadowIndex rounded-t-md bg-slate-600 flex flex-wrap flex-row items-center justify-around'>
+					<h2 className='text-white text-2xl font-semibold mb-3'>
+						Salones
+					</h2>
+					{loungeState.lounges &&
+						loungeState.lounges.map((lounge) => (
+							<button
+								key={lounge._id}
+								onClick={() => handleSalonClick(lounge._id)}
+								className={`border-none text-white p-2 ${
+									activeSalonId === lounge._id
+										? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
+										: 'bg-transparent text-white hover:font-bold'
+								}`}>
+								{lounge.name}
+							</button>
+						))}
+				</div>
+				{activeSalonId && (
+					<ServerLayout
+						salonId={activeSalonId}
+						salonName={
+							loungeState.lounges.find(
+								(lounge) => lounge._id === activeSalonId
+							)?.name
+						}
+					/>
+				)}
+			</section>
 		</div>
 	);
 };

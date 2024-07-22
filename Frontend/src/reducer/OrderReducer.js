@@ -78,6 +78,8 @@ export const OrderReducer = (state, action) => {
 			return {
 				...state,
 				prevOrder: updatedPrevOrder,
+				loading: false,
+	error: null,
 			};
 		case 'DELETE_PREV_ORDERS_SUCCESS':
 			return {
@@ -108,12 +110,14 @@ export const OrderReducer = (state, action) => {
 				orders: state.orders.map((order) =>
 					order._id === action.payload._id ? action.payload : order
 				),
-				error: null,
+				loading: false,
+	error: null,
 			};
 		case 'UPDATE_ORDER_PENDING_SUCCESS':
 			return {
 				...state,
 				loading: false,
+	error: null,
 				orders: state.orders.map((order) => {
 					if (order._id === action.payload.orderId) {
 						return {
@@ -131,6 +135,8 @@ export const OrderReducer = (state, action) => {
 		case 'UPDATE_ITEM_COOKED':
 			return {
 				...state,
+				loading: false,
+	error: null,
 				orders: state.orders.map((order) =>
 					order._id === action.payload.orderId
 						? {
@@ -148,6 +154,7 @@ export const OrderReducer = (state, action) => {
 			return {
 				...state,
 				loading: false,
+	error: null,
 				orders: state.orders.map((order) => {
 					if (order._id === action.payload.orderId) {
 						return {

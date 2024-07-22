@@ -12,7 +12,7 @@ import '../../../css/Custom.css';
 import Loader from '../../../helpers/Loader';
 
 export const UserDashboard = () => {
-	const { state, loading } = useContext(UserContext);
+	const { state } = useContext(UserContext);
 	const { dataUsers, disableUserAction, enableUserAction, deleteUserAction } =
 		useUserActions();
 	const [openEditModal, setOpenEditModal] = useState(false);
@@ -124,7 +124,7 @@ export const UserDashboard = () => {
 
 	return (
 		<>
-			{loading ? (
+			{state.loading ? (
 				<Loader />
 			) : (
 				<>

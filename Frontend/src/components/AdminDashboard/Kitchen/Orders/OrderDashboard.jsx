@@ -14,7 +14,7 @@ import Loader from '../../../../helpers/Loader';
 import { DateTime } from 'luxon';
 
 export const OrderDashboard = () => {
-	const { state, loading } = useContext(OrderContext);
+	const { state } = useContext(OrderContext);
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const [rowId, setRowId] = useState(null);
 	const [openEditModal, setOpenEditModal] = useState(false);
@@ -139,7 +139,7 @@ export const OrderDashboard = () => {
 
 	return (
 		<>
-			{loading ? (
+			{state.loading ? (
 				<Loader />
 			) : (
 				<>

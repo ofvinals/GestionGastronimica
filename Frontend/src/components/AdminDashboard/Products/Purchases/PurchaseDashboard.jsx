@@ -13,7 +13,7 @@ import PurchaseForm from './PurchaseForm.jsx';
 import { DateTime } from 'luxon';
 
 export const PurchaseDashboard = () => {
-	const { state, loading } = useContext(ProductContext);
+	const { state } = useContext(ProductContext);
 	const { dataPurchases, deletePurchaseAction } = usePurchaseActions();
 	const [openEditModal, setOpenEditModal] = useState(false);
 	const [openAddModal, setOpenAddModal] = useState(false);
@@ -126,7 +126,7 @@ export const PurchaseDashboard = () => {
 
 	return (
 		<>
-			{loading ? (
+			{state.loading ? (
 				<Loader />
 			) : (
 				<>

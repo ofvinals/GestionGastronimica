@@ -10,7 +10,7 @@ import FormField from '../../helpers/FormField';
 import { Button } from 'primereact/button';
 
 const Profile = ({ onClose }) => {
-	const { state, loading } = useContext(AuthContext);
+	const { state } = useContext(AuthContext);
 	const { dataUsers, editUserAction } = useUserActions();
 	const [idUser, setIdUser] = useState(null);
 	const {
@@ -74,7 +74,7 @@ const Profile = ({ onClose }) => {
 
 	return (
 		<>
-			{loading ? (
+			{state.loading ? (
 				<Loader />
 			) : (
 				<Form onSubmit={onSubmit}>

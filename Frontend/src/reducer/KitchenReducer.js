@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 const initialState = {
 	timers: {},
 	intervals: {},
@@ -22,6 +23,8 @@ export const KitchenReducer = (state = initialState, action) => {
 					[`${action.payload.orderId}-${action.payload.itemId}`]:
 						action.payload.intervalId,
 				},
+				loading: false,
+	error: null,
 			};
 		case 'STOP_TIMER':
 			const newTimers = { ...state.timers };
@@ -39,6 +42,8 @@ export const KitchenReducer = (state = initialState, action) => {
 				...state,
 				timers: newTimers,
 				intervals: newIntervals,
+				loading: false,
+	error: null,
 			};
 		case 'UPDATE_TIMER':
 			return {
@@ -48,6 +53,8 @@ export const KitchenReducer = (state = initialState, action) => {
 					[`${action.payload.orderId}-${action.payload.itemId}`]:
 						action.payload.elapsed,
 				},
+				loading: false,
+	error: null,
 			};
 		case 'TIMER_ERROR':
 			return { ...state, loading: false, error: action.payload };

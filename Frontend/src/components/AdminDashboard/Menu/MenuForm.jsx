@@ -9,7 +9,7 @@ import { useMenuActions } from '../../../hooks/useMenuActions.js';
 import Loader from '../../../helpers/Loader';
 
 const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
-	const { state, loading } = useContext(MenuContext);
+	const { state } = useContext(MenuContext);
 	const categorys = state.categorys;
 	const { editMenuAction, addMenuAction } = useMenuActions();
 	const {
@@ -90,11 +90,11 @@ const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
 
 	return (
 		<>
-			{loading ? (
+			{state.loading ? (
 				<Loader />
 			) : (
 				<GenericForm
-					loading={loading}
+					loading={state.loading}
 					onSubmit={onSubmit}
 					onClose={onClose}
 					mode={mode}>

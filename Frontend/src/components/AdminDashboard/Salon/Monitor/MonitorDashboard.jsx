@@ -14,7 +14,7 @@ import { DateTime } from 'luxon';
 import { useLayoutActions } from '../../../../hooks/useLayoutActions.js';
 
 export const MonitorDashboard = () => {
-	const { state, loading } = useContext(OrderContext);
+	const { state } = useContext(OrderContext);
 	const { state: stateLayouts } = useContext(LoungeContext);
 	const { dataOrders } = useOrderActions();
 	const { loadAllLayoutAction } = useLayoutActions();
@@ -119,7 +119,7 @@ export const MonitorDashboard = () => {
 
 	return (
 		<>
-			{loading ? (
+			{state.loading ? (
 				<Loader />
 			) : (
 				<section>

@@ -11,7 +11,7 @@ import { Button } from 'primereact/button';
 
 const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 	const [order, setOrder] = useState({});
-	const { state, loading } = useContext(OrderContext);
+	const { state } = useContext(OrderContext);
 	const { editOrderAction, addOrderAction } = useOrderActions();
 	const {
 		register,
@@ -142,7 +142,7 @@ const OrderForm = ({ rowId, onClose, mode = 'edit' }) => {
 
 	return (
 		<>
-			{loading ? (
+			{state.loading ? (
 				<Loader />
 			) : (
 				<Form onSubmit={onSubmit}>

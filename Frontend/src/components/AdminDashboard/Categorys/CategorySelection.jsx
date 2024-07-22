@@ -10,7 +10,7 @@ export const CategorySelection = ({ categorys, onCategorySelect }) => {
 	useEffect(() => {
 		dataCategorys();
 	}, []);
-	
+
 	// ORDENA LAS CATEGORIAS POR NOMBRE
 	const sortedCategories = categorys?.slice().sort((a, b) => {
 		if (a.name < b.name) return -1;
@@ -19,7 +19,7 @@ export const CategorySelection = ({ categorys, onCategorySelect }) => {
 	});
 
 	return (
-		<div className='border-1 border-slate-800 my-3 mx-3 bg-white'>
+		<section className='border-1 border-slate-800 my-3 mx-3 bg-white'>
 			<h2 className='text-center text-2xl font-semibold my-2 text-slate-700'>
 				Categorias
 			</h2>
@@ -41,6 +41,6 @@ export const CategorySelection = ({ categorys, onCategorySelect }) => {
 						</button>
 					))}
 			</div>
-		</div>
+		</section>
 	);
 };

@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 const initialState = {
 	user: null,
-	loading: true,
+	loading: false,
 	error: null,
 };
 

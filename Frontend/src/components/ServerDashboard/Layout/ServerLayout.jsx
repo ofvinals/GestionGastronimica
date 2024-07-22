@@ -1,24 +1,20 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Stage, Layer } from 'react-konva';
 import TableRect from '../../AdminDashboard/Salon/Layout/TableRect';
 import GridLines from '../../AdminDashboard/Salon/Layout/GridLines';
 import { useLayoutActions } from '../../../hooks/useLayoutActions.js';
-import Loader from '../../../helpers/Loader';
-import { LoungeContext } from '../../../context/LoungeContext';
 import Modals from '../../Modals';
 import { TableOpenForm } from './TableOpenForm';
 import { OrderForm } from '../Orders/PreOrder/OrderForm';
 import { OrderCheck } from '../Orders/CheckOrder/OrderCheck';
 import moment from 'moment-timezone';
 import { showAlert } from '../../../helpers/showAlert';
-
-const CELL_SIZE = 50;
-const GRID_SIZE = 10;
+const GRID_SIZE = 9;
+const CELL_SIZE = 50.5;
 
 export const ServerLayout = ({ salonId, onReload }) => {
-	const { loading } = useContext(LoungeContext);
 	const { updateTableIsOpenAction, loadLayoutAction } = useLayoutActions();
 	const [currentLayout, setCurrentLayout] = useState([]);
 	const [confirmTable, setConfirmTable] = useState(null);
@@ -108,18 +104,15 @@ export const ServerLayout = ({ salonId, onReload }) => {
 		getLayout();
 	};
 
-	if (loading) {
-		return <Loader />;
-	}
-
 	return (
 		<>
 			{openLayout ? (
-				<div className='scroll-container'>
-					<div className='stage-container'>
+				<section>
+					<div className='flex flex-row flex-wrap items-center justify-center mb-2'>
 						<Stage
 							width={GRID_SIZE * CELL_SIZE}
-							height={GRID_SIZE * CELL_SIZE}>
+							height={GRID_SIZE * CELL_SIZE}
+							className='p-2 overflow-x-auto'>
 							<Layer>
 								<GridLines />
 								{currentLayout.map((table) => (
@@ -128,13 +121,14 @@ export const ServerLayout = ({ salonId, onReload }) => {
 										table={table}
 										isSelected={table.isOpen}
 										onClick={() => handleTableClick(table)}
-										onTouchStart={() => handleTableClick(table)}
+										onTap={() => handleTableClick(table)}
+										draggable={false}
 									/>
 								))}
 							</Layer>
 						</Stage>
 					</div>
-				</div>
+				</section>
 			) : null}
 			{openConfirm && (
 				<Modals

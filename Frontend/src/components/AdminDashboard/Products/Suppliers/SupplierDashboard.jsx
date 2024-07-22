@@ -12,7 +12,7 @@ import { useSupplierActions } from '../../../../hooks/useSupplierActions.js';
 import Loader from '../../../../helpers/Loader';
 
 export const SupplierDashboard = () => {
-	const { state, loading } = useContext(ProductContext);
+	const { state } = useContext(ProductContext);
 	const {
 		dataSuppliers,
 		disableSupplierAction,
@@ -141,7 +141,7 @@ export const SupplierDashboard = () => {
 
 	return (
 		<>
-			{loading ? (
+			{state.loading ? (
 				<Loader />
 			) : (
 				<>

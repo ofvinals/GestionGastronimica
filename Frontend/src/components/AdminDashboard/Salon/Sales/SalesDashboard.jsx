@@ -11,7 +11,7 @@ import Loader from '../../../../helpers/Loader';
 import SalesForm from './SalesForm';
 
 export const SalesDashboard = () => {
-	const { state, loading } = useContext(OrderContext);
+	const { state } = useContext(OrderContext);
 	const { dataOrders, deleteOrderAction } = useOrderActions();
 	const [openEditModal, setOpenEditModal] = useState(false);
 	const [openAddModal, setOpenAddModal] = useState(false);
@@ -135,16 +135,16 @@ export const SalesDashboard = () => {
 		},
 	});
 
-	
 	return (
 		<>
-			{loading ? (
+			{state.loading ? (
 				<Loader />
 			) : (
 				<section>
 					<div className='px-5 shadowIndex rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-around sm:justify-between drop-shadow-3xl'>
-						<h3 className=' text-white  text-xl my-3 font-semibold'>Ventas</h3>{' '}
-
+						<h3 className=' text-white  text-xl my-3 font-semibold'>
+							Ventas
+						</h3>{' '}
 					</div>
 					<div className='table-responsive'>
 						<ThemeProvider theme={darkTheme}>

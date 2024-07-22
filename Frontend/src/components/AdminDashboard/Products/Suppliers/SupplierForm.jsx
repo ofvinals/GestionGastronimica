@@ -9,7 +9,7 @@ import FormField from '../../../../helpers/FormField';
 import Loader from '../../../../helpers/Loader';
 
 const SupplierForm = ({ rowId, onClose, mode = 'edit' }) => {
-	const { state, loading } = useContext(ProductContext);
+	const { state } = useContext(ProductContext);
 	const { editSupplierAction, addSupplierAction } = useSupplierActions();
 	const {
 		register,
@@ -68,11 +68,11 @@ const SupplierForm = ({ rowId, onClose, mode = 'edit' }) => {
 
 	return (
 		<>
-			{loading ? (
+			{state.loading ? (
 				<Loader />
 			) : (
 				<GenericForm
-					loading={loading}
+					loading={state.loading}
 					onSubmit={onSubmit}
 					onClose={onClose}
 					mode={mode}>

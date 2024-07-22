@@ -11,7 +11,7 @@ import { Button } from 'primereact/button';
 
 const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 	const [order, setOrder] = useState({});
-	const { state, loading } = useContext(OrderContext);
+	const { state } = useContext(OrderContext);
 	const { editOrderAction, addOrderAction } = useOrderActions();
 	const {
 		register,
@@ -114,7 +114,7 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 
 	return (
 		<>
-			{loading ? (
+			{state.loading ? (
 				<Loader />
 			) : (
 				<Form onSubmit={onSubmit}>
@@ -265,7 +265,7 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 							<p>Items: {totalItems}</p>
 						</div>
 					</Form.Group>
-					
+
 					<Form.Group className='flex flex-wrap items-center justify-around mt-3'>
 						{mode !== 'view' && (
 							<Button

@@ -76,7 +76,7 @@ export const ExecutingItems = ({ executingItems }) => {
 			{state.loading ? (
 				<Loader />
 			) : (
-				<div className='md:w-3/4 border-l-2 border-slate-700'>
+				<section className='md:w-3/4 border-l-2 border-slate-700'>
 					<div className=''>
 						<div className='flex items-center justify-center h-[64px] bg-slate-700 text-white'>
 							<h2 className='font-bold text-3xl'>
@@ -167,7 +167,7 @@ export const ExecutingItems = ({ executingItems }) => {
 							<InfoMenu menu={selectedItem} />
 						</Modals>
 					)}
-				</div>
+				</section>
 			)}
 		</>
 	);

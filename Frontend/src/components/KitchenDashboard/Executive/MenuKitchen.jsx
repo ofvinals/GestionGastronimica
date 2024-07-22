@@ -7,7 +7,7 @@ import { ExecutingItems } from './ExecutingItems';
 import Loader from '../../../helpers/Loader';
 
 export const MenuKitchen = () => {
-	const { state, loading } = useContext(OrderContext);
+	const { state } = useContext(OrderContext);
 	const { dataOrders } = useOrderActions();
 
 	// CARGA TODAS LAS ORDENES
@@ -35,13 +35,13 @@ export const MenuKitchen = () => {
 
 	return (
 		<>
-			{loading ? (
+			{state.loading ? (
 				<Loader />
 			) : (
-				<div className='flex flex-col flex-wrap md:flex-row'>
-					<PendingItems pendingItems={pendingItems} />
+				<section className='flex flex-col flex-wrap md:flex-row'>
 					<ExecutingItems executingItems={executingItems} />
-				</div>
+					<PendingItems pendingItems={pendingItems} />
+				</section>
 			)}
 		</>
 	);

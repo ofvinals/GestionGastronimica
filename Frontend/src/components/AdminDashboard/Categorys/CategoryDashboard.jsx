@@ -12,7 +12,7 @@ import { MenuContext } from '../../../context/MenuContext';
 import Loader from '../../../helpers/Loader';
 
 export const CategoryProducts = () => {
-	const { state, loading } = useContext(MenuContext);
+	const { state } = useContext(MenuContext);
 	const [openAddModal, setOpenAddModal] = useState(false);
 	const [rowId, setRowId] = useState(null);
 	const [openEditModal, setOpenEditModal] = useState(false);
@@ -101,7 +101,7 @@ export const CategoryProducts = () => {
 
 	return (
 		<>
-			{loading ? (
+			{state.loading ? (
 				<Loader />
 			) : (
 				<>
