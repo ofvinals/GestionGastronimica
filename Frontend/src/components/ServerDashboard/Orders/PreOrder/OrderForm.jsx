@@ -80,11 +80,18 @@ export const OrderForm = ({
 		}
 	};
 
+	// FUNCION PARA MANEJAR QUE EL COUNTER NO SEA NEGATIVO
+	const handleDecrement = () => {
+		if (count > 0) {
+			decrement();
+		}
+	};
+
 	return (
 		<>
-			<div className='text-center w-full flex flex-wrap flex-col my-5 items-center justify-center gap-3'>
+			<section className='text-center w-full flex flex-wrap flex-col my-5 items-center justify-center gap-3'>
 				<h1 className='text-3xl font-semibold my-2'>
-					Comanda Mesa Nº {tableNum} - Salon: {salonName}
+					Orden Mesa Nº {tableNum} - Salon: {salonName}
 				</h1>
 				<div className='flex flex-row items-center justify-center w-full'>
 					<div className='card flex flex-col items-center justify-center my-2 mx-2 p-2 w-[250px] h-full rounded-xl border-slate-700'>
@@ -100,32 +107,31 @@ export const OrderForm = ({
 							<Button
 								icon='pi pi-minus text-red-700'
 								className='rounded-full p-2 border-2 border-red-700'
-								onClick={decrement}></Button>
-						</div>
-					</div>
-					<div className='w-full flex flex-row flex-wrap items-center justify-center'>
-						<div className='flex flex-col flex-wrap items-center border-1 mx-4 px-2 rounded-xl bg-white border-slate-800 w-full'>
-							<h2 className='text-xl font-semibold mt-2'>
-								Categorías del Menú
-							</h2>
-							<CategorySelection
-								onCategorySelect={handleCategorySelect}
-							/>
-						</div>
-						<div className='flex flex-row flex-wrap items-center justify-around'>
-							<button
-								onClick={handleComanda}
-								className='mx-1 my-3 w-[50%] text-xl border-2 font-semibold border-green-100 p-2 bg-green-700 hover:text-green-700 hover:border-green-700 text-slate-50 hover:bg-white rounded-md'>
-								VERIFICAR Y CONFIRMAR COMANDA
-							</button>
-							<button
-								onClick={handleDelete}
-								className='mx-1 my-3 w-1/3 text-xl border-2 font-semibold border-green-100 p-2 bg-red-700 hover:text-red-700 hover:border-red-700 text-slate-50 hover:bg-white rounded-md'>
-								CANCELAR COMANDA
-							</button>
+								onClick={handleDecrement}></Button>
 						</div>
 					</div>
 				</div>
+				<div className='w-full flex flex-row flex-wrap items-center justify-center'>
+					<div className='flex flex-col flex-wrap items-center border-1 mx-4 px-2 rounded-xl bg-white border-slate-800 w-full'>
+						<h2 className='text-xl font-semibold mt-2'>
+							Categorías del Menú
+						</h2>
+						<CategorySelection onCategorySelect={handleCategorySelect} />
+					</div>
+					<div className='flex flex-row flex-wrap items-center gap-4 justify-around'>
+						<button
+							onClick={handleComanda}
+							className=' my-3 h-[60px] text-xl border-2 font-semibold border-green-100 p-2 bg-green-700 hover:text-green-700 hover:border-green-700 text-slate-50 hover:bg-white rounded-md'>
+							VERIFICAR ORDEN
+						</button>
+						<button
+							onClick={handleDelete}
+							className='my-3 h-[60px] text-xl border-2 font-semibold border-green-100 p-2 bg-red-700 hover:text-red-700 hover:border-red-700 text-slate-50 hover:bg-white rounded-md'>
+							CANCELAR ORDEN
+						</button>
+					</div>
+				</div>
+
 				<div>
 					<h2 className='my-4 text-2xl font-semibold'>Menú</h2>
 					<OrderMenu
@@ -137,7 +143,7 @@ export const OrderForm = ({
 						server={server}
 					/>
 				</div>
-			</div>
+			</section>
 			{confirmComanda && (
 				<Modals
 					isOpen={true}

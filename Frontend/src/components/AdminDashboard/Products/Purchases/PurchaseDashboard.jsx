@@ -48,7 +48,6 @@ export const PurchaseDashboard = () => {
 		setOpenEditModal(false);
 		setOpenAddModal(false);
 		setOpenViewModal(false);
-		dataPurchases();
 	};
 
 	// CONFIGURA COLUMNS PARA LA TABLE

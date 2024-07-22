@@ -49,8 +49,7 @@ export const OrderDashboard = () => {
 		setOpenEditModal(false);
 		setOpenAddModal(false);
 		setOpenViewModal(false);
-		dataOrders();
-	};
+		};
 
 	// ENVIA DATOS Y CONFIG DE COLUMNAS A TABLES
 	const columns = useMemo(

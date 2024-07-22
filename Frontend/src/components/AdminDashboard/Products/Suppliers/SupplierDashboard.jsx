@@ -44,7 +44,6 @@ export const SupplierDashboard = () => {
 	const handleCloseModal = () => {
 		setOpenEditModal(false);
 		setOpenAddModal(false);
-		dataSuppliers();
 	};
 
 	// CONFIGURA COLUMNS PARA LA TABLE

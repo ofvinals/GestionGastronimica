@@ -24,7 +24,7 @@ export const CategorySelection = ({ onCategorySelect }) => {
 	});
 
 	return (
-		<div className='gap-3 flex flex-row flex-wrap w-full items-center justify-around my-5 '>
+		<div className='gap-3 flex flex-row flex-wrap w-full items-center justify-around my-5 h-[150px] overflow-y-scroll'>
 			<button
 				onClick={() => onCategorySelect(null)}
 				className='flex items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>

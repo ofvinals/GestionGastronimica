@@ -39,7 +39,6 @@ export const ProductDashboard = () => {
 	const handleCloseModal = () => {
 		setOpenEditModal(false);
 		setOpenAddModal(false);
-		dataProducts();
 	};
 
 	// CARGA DATOS DE PRODUCTOS
