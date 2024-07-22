@@ -6,7 +6,6 @@ import { ProductContext } from '../../../../context/ProductContext';
 import { useSupplierActions } from '../../../../hooks/useSupplierActions.js';
 import GenericForm from '../../../../helpers/GenericForm';
 import FormField from '../../../../helpers/FormField';
-import Loader from '../../../../helpers/Loader';
 
 const SupplierForm = ({ rowId, onClose, mode = 'edit' }) => {
 	const { state } = useContext(ProductContext);
@@ -68,9 +67,6 @@ const SupplierForm = ({ rowId, onClose, mode = 'edit' }) => {
 
 	return (
 		<>
-			{state.loading ? (
-				<Loader />
-			) : (
 				<GenericForm
 					loading={state.loading}
 					onSubmit={onSubmit}
@@ -172,7 +168,7 @@ const SupplierForm = ({ rowId, onClose, mode = 'edit' }) => {
 					/>{' '}
 					<p className='text-sm'>(*) Campos obligatorios</p>
 				</GenericForm>
-			)}
+		
 		</>
 	);
 };

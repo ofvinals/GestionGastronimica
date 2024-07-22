@@ -6,7 +6,6 @@ import { ProductContext } from '../../../context/ProductContext';
 import { useProductActions } from '../../../hooks/useProductActions.js';
 import GenericForm from '../../../helpers/GenericForm';
 import FormField from '../../../helpers/FormField';
-import Loader from '../../../helpers/Loader';
 
 const ProductForm = ({ rowId, onClose, mode = 'edit' }) => {
 	const { state } = useContext(ProductContext);
@@ -65,100 +64,88 @@ const ProductForm = ({ rowId, onClose, mode = 'edit' }) => {
 
 	return (
 		<>
-			{state.loading ? (
-				<Loader />
-			) : (
-				<GenericForm
-					loading={state.loading}
-					onSubmit={onSubmit}
-					onClose={onClose}
-					mode={mode}>
-					<FormField
-						id='name'
-						label='Nombre*'
-						mode={mode}
-						register={register('name', {
-							required: 'El nombre es requerido.',
-						})}
-						errors={errors.name}
-						readOnly={mode === 'view'}
-					/>
-					{errors.name && (
-						<span className='text-red-700 fs-6'>
-							{errors.name.message}
-						</span>
-					)}
-					<FormField
-						id='cant'
-						label='Cantidad*'
-						type='number'
-						mode={mode}
-						register={register('cant', {
-							required: 'La cantidad es requerida.',
-						})}
-						errors={errors.cant}
-						readOnly={mode === 'view'}
-					/>
-					{errors.cant && (
-						<span className='text-red-700 fs-6'>
-							{errors.cant.message}
-						</span>
-					)}
-					<FormField
-						id='unit'
-						label='Unidad*'
-						as='select'
-						mode={mode}
-						register={register('unit', {
-							required: 'La unidad es requerida',
-						})}
-						errors={errors.unit}
-						readOnly={mode === 'view'}>
-						<option value=''>Selecciona la unidad de medida</option>
-						<option value='Unidades'>Unidades</option>
-						<option value='Litros'>Litros</option>
-						<option value='Kilogramos'>Kilogramos</option>
-					</FormField>
-					{errors.unit && (
-						<span className='text-red-700 fs-6'>
-							{errors.unit.message}
-						</span>
-					)}
-					<FormField
-						id='cost'
-						label='Costo*'
-						type='number'
-						mode={mode}
-						register={register('cost', {
-							required: 'El costo es requerido.',
-						})}
-						errors={errors.cost}
-						readOnly={mode === 'view'}
-					/>
-					{errors.cost && (
-						<span className='text-red-700 fs-6'>
-							{errors.cost.message}
-						</span>
-					)}
-					<FormField
-						id='supplier'
-						label='Proveedor'
-						mode={mode}
-						register={register('supplier')}
-						readOnly={mode === 'view'}
-					/>
-					<FormField
-						id='status'
-						label='Producto Activo?'
-						type='checkbox'
-						mode={mode}
-						register={register('status')}
-						renderAs='toggle'
-						readOnly={mode === 'view'}
-					/>{' '}
-					<p className='text-sm'>(*) Campos obligatorios</p>
-				</GenericForm>
-			)}
+			<GenericForm
+				loading={state.loading}
+				onSubmit={onSubmit}
+				onClose={onClose}
+				mode={mode}>
+				<FormField
+					id='name'
+					label='Nombre*'
+					mode={mode}
+					register={register('name', {
+						required: 'El nombre es requerido.',
+					})}
+					errors={errors.name}
+					readOnly={mode === 'view'}
+				/>
+				{errors.name && (
+					<span className='text-red-700 fs-6'>{errors.name.message}</span>
+				)}
+				<FormField
+					id='cant'
+					label='Cantidad*'
+					type='number'
+					mode={mode}
+					register={register('cant', {
+						required: 'La cantidad es requerida.',
+					})}
+					errors={errors.cant}
+					readOnly={mode === 'view'}
+				/>
+				{errors.cant && (
+					<span className='text-red-700 fs-6'>{errors.cant.message}</span>
+				)}
+				<FormField
+					id='unit'
+					label='Unidad*'
+					as='select'
+					mode={mode}
+					register={register('unit', {
+						required: 'La unidad es requerida',
+					})}
+					errors={errors.unit}
+					readOnly={mode === 'view'}>
+					<option value=''>Selecciona la unidad de medida</option>
+					<option value='Unidades'>Unidades</option>
+					<option value='Litros'>Litros</option>
+					<option value='Kilogramos'>Kilogramos</option>
+				</FormField>
+				{errors.unit && (
+					<span className='text-red-700 fs-6'>{errors.unit.message}</span>
+				)}
+				<FormField
+					id='cost'
+					label='Costo*'
+					type='number'
+					mode={mode}
+					register={register('cost', {
+						required: 'El costo es requerido.',
+					})}
+					errors={errors.cost}
+					readOnly={mode === 'view'}
+				/>
+				{errors.cost && (
+					<span className='text-red-700 fs-6'>{errors.cost.message}</span>
+				)}
+				<FormField
+					id='supplier'
+					label='Proveedor'
+					mode={mode}
+					register={register('supplier')}
+					readOnly={mode === 'view'}
+				/>
+				<FormField
+					id='status'
+					label='Producto Activo?'
+					type='checkbox'
+					mode={mode}
+					register={register('status')}
+					renderAs='toggle'
+					readOnly={mode === 'view'}
+				/>{' '}
+				<p className='text-sm'>(*) Campos obligatorios</p>
+			</GenericForm>
 		</>
 	);
 };

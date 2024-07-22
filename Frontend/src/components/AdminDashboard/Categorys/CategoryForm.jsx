@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 import GenericForm from '../../../helpers/GenericForm';
 import FormField from '../../../helpers/FormField';
 import { useCategoryActions } from '../../../hooks/useCategoryActions.js';
-import Loader from '../../../helpers/Loader';
 
 const CategoryForm = ({ rowId, onClose, mode = 'edit' }) => {
 	const { state, loading } = useContext(MenuContext);
@@ -35,7 +34,7 @@ const CategoryForm = ({ rowId, onClose, mode = 'edit' }) => {
 		}
 	}, [rowId, mode]);
 
-	// PREPARA LOS VALUES P ENVIAR 
+	// PREPARA LOS VALUES P ENVIAR
 	const onSubmit = handleSubmit(async (values) => {
 		try {
 			const categoryData = {
@@ -57,39 +56,33 @@ const CategoryForm = ({ rowId, onClose, mode = 'edit' }) => {
 
 	return (
 		<>
-			{state.loading ? (
-				<Loader />
-			) : (
-				<GenericForm
-					loading={loading}
-					onSubmit={onSubmit}
-					onClose={onClose}
-					mode={mode}>
-					<FormField
-						id='name'
-						label='Nombre*'
-						mode={mode}
-						register={register('name', {
-							required: 'El nombre es obligatorio',
-						})}
-						errors={errors.name}
-					/>{' '}
-					{errors.name && (
-						<span className='text-red-700 fs-6'>
-							{errors.name.message}
-						</span>
-					)}
-					<FormField
-						id='status'
-						label='Categoría Activa?'
-						type='checkbox'
-						mode={mode}
-						register={register('status')}
-						renderAs='toggle'
-					/>
-					<p className='text-sm'>(*) Campos obligatorios</p>
-				</GenericForm>
-			)}
+			<GenericForm
+				loading={loading}
+				onSubmit={onSubmit}
+				onClose={onClose}
+				mode={mode}>
+				<FormField
+					id='name'
+					label='Nombre*'
+					mode={mode}
+					register={register('name', {
+						required: 'El nombre es obligatorio',
+					})}
+					errors={errors.name}
+				/>{' '}
+				{errors.name && (
+					<span className='text-red-700 fs-6'>{errors.name.message}</span>
+				)}
+				<FormField
+					id='status'
+					label='Categoría Activa?'
+					type='checkbox'
+					mode={mode}
+					register={register('status')}
+					renderAs='toggle'
+				/>
+				<p className='text-sm'>(*) Campos obligatorios</p>
+			</GenericForm>
 		</>
 	);
 };

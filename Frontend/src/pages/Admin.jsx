@@ -94,7 +94,6 @@ export const Admin = () => {
 	};
 
 	useEffect(() => {
-		if (authState.loading) return;
 		if (authState.user.rol !== 'admin') {
 			logout();
 			navigate('/login');

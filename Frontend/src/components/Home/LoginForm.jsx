@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState, useContext } from 'react';
-import { Form, Button, Spinner  } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../../helpers/Loader';
@@ -53,7 +53,7 @@ export const LoginForm = () => {
 
 	return (
 		<section className='flex flex-wrap items-center justify-center flex-col pb-10'>
-			{authState.loading ? (
+			{userState.loading ? (
 				<Loader />
 			) : (
 				<Form
@@ -139,15 +139,11 @@ export const LoginForm = () => {
 						<Button
 							className='m-3 w-[152px] bg-slate-100 border-2 shadow-3xl border-slate-700 text-slate-700 p-2 rounded-2xl font-semibold hover:text-slate-100 hover:bg-slate-700 hover:border-slate-100'
 							type='submit'
-							disabled={authState.loading}>
+							>
 							{authState.loading ? (
-								<Spinner
-									as='span'
-									animation='border'
-									size='sm'
-									role='status'
-									aria-hidden='true'
-								/>
+								<i
+									className='pi pi-spin pi-spinner bg-slate-700 text-slate-50'
+									style={{ fontSize: '2rem', backgroundColor: "#334155" }}></i>
 							) : (
 								<>
 									<i className='text-xl pe-2 fa-solid fa-right-to-bracket'></i>

@@ -4,7 +4,6 @@ import { useContext, useEffect, useState } from 'react';
 import { OrderContext } from '../../../../context/OrderContext';
 import { useForm } from 'react-hook-form';
 import { useOrderActions } from '../../../../hooks/useOrderActions.js';
-import Loader from '../../../../helpers/Loader';
 import { Form } from 'react-bootstrap';
 import { DateTime } from 'luxon';
 import { Button } from 'primereact/button';
@@ -114,9 +113,6 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 
 	return (
 		<>
-			{state.loading ? (
-				<Loader />
-			) : (
 				<Form onSubmit={onSubmit}>
 					<div className='flex flex-row flex-wrap items-center justify-around'>
 						<Form.Group controlId='salon'>
@@ -286,7 +282,7 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 						</Button>
 					</Form.Group>
 				</Form>
-			)}
+		
 		</>
 	);
 };

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -13,11 +13,9 @@ export const Header = () => {
 	const { logout } = useAuthActions();
 	const { displayName } = state.user ? state.user : 'No hay usuario logueado';
 
-	const handleLogOut = async () => {
-		await logout();
+	const handleLogOut = () => {
+		logout();
 	};
-
-	useEffect(() => {}, [state]);
 
 	const navbarClassName = scrolled
 		? 'w-full bg-white sticky-top navbar rounded-b-3xl'
@@ -25,37 +23,32 @@ export const Header = () => {
 
 	return (
 		<>
+			<Navbar data-bs-theme='dark' id='navbar' className={navbarClassName}>
+				<Container className='flex w-full flex-row justify-between bg-slate-700'>
+					<Navbar.Brand href='/'>
+						<img
+							className='ms-3 rounded-lg'
+							src='/LOGO RESTOFLOW.png'
+							width={100}
+							alt='logomarca'
+						/>
+					</Navbar.Brand>
 
-				<Navbar
-					data-bs-theme='dark'
-					id='navbar'
-					className={navbarClassName}>
-					<Container className='flex w-full flex-row justify-between bg-slate-700'>
-						<Navbar.Brand href='/'>
-							<img
-								className='ms-3 rounded-lg'
-								src='/LOGO RESTOFLOW.png'
-								width={100}
-								alt='logomarca'
-							/>
-						</Navbar.Brand>
-
-						<Nav className='flex w-full flex-row flex-wrap items-center justify-around'>
-							{displayName ? (
-								<>
-									<UserMenu
-										displayName={displayName}
-										handleLogOut={handleLogOut}
-									/>
-								</>
-							) : null}
-						</Nav>
-						<div className='flex felx-col text-center flex-wrap items-center'>
-							<DateTime />
-						</div>
-					</Container>
-				</Navbar>
-			
+					<Nav className='flex w-full flex-row flex-wrap items-center justify-around'>
+						{displayName ? (
+							<>
+								<UserMenu
+									displayName={displayName}
+									handleLogOut={handleLogOut}
+								/>
+							</>
+						) : null}
+					</Nav>
+					<div className='flex felx-col text-center flex-wrap items-center'>
+						<DateTime />
+					</div>
+				</Container>
+			</Navbar>
 		</>
 	);
 };
