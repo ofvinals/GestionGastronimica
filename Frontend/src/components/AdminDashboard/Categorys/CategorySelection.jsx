@@ -33,7 +33,7 @@ export const CategorySelection = ({ categorys, onCategorySelect }) => {
 				{sortedCategories &&
 					sortedCategories.map((category, id) => (
 						<button
-							className='flex items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'
+							className='noborder flex items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'
 							key={id}
 							onClick={() => onCategorySelect(category.name)}
 							value={category.name}>

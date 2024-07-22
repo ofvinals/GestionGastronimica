@@ -63,7 +63,7 @@ export const Table = ({ columns, data, actions, initialSortColumn  }) => {
 									key={index}
 									tooltip='Inhabilitar'
 									tooltipOptions={{ position: 'top' }}
-									className='flex  items-center justify-center border-none'
+									className='noborder flex  items-center justify-center border-none'
 									onClick={() => action.onClick(row)}
 									data-tip='Inhabilitar'>
 									<span className='bg-yellow-600  text-center text-white rounded-xl border-2 p-2 hover:opacity-50'>
@@ -79,7 +79,7 @@ export const Table = ({ columns, data, actions, initialSortColumn  }) => {
 									key={index}
 									tooltip='Habilitar'
 									tooltipOptions={{ position: 'top' }}
-									className='flex items-center justify-center'
+									className='noborder flex items-center justify-center'
 									onClick={() => action.onClick(row)}>
 									<span className='bg-green-700 text-center text-white rounded-xl border-2 p-2 hover:opacity-50'>
 										{action.icon}
@@ -94,7 +94,7 @@ export const Table = ({ columns, data, actions, initialSortColumn  }) => {
 								key={index}
 								tooltip='Editar'
 								tooltipOptions={{ position: 'top' }}
-								className='flex items-center justify-center focus:border-none'
+								className='noborder flex items-center justify-center focus:border-none'
 								onClick={() => action.onClick(row)}>
 								<span className='bg-blue-700  text-center text-white rounded-xl border-2 p-2 hover:opacity-50'>
 									{action.icon}
@@ -108,7 +108,7 @@ export const Table = ({ columns, data, actions, initialSortColumn  }) => {
 								key={index}
 								tooltip='Eliminar'
 								tooltipOptions={{ position: 'top' }}
-								className='flex items-center justify-center'
+								className='noborder flex items-center justify-center'
 								onClick={() => action.onClick(row)}>
 								<span className='bg-red-700  text-center text-white rounded-xl border-2 p-2 hover:opacity-50'>
 									{action.icon}
@@ -122,7 +122,7 @@ export const Table = ({ columns, data, actions, initialSortColumn  }) => {
 								key={index}
 								tooltip='Ver'
 								tooltipOptions={{ position: 'top' }}
-								className='flex items-center justify-center'
+								className='noborder flex items-center justify-center'
 								onClick={() => action.onClick(row)}>
 								<span className='bg-yellow-700  text-center text-white rounded-xl border-2 p-2 hover:opacity-50'>
 									{action.icon}

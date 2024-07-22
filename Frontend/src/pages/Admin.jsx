@@ -14,7 +14,7 @@ import { useAuthActions } from '../hooks/useAuthActions';
 
 export const Admin = () => {
 	const [showDataUsers, setShowDataUsers] = useState(false);
-	const { state: authState, loading } = useContext(AuthContext);
+	const { state: authState } = useContext(AuthContext);
 	const { logout } = useAuthActions();
 	const [showDataProducts, setShowDataProducts] = useState(false);
 	const [showDataTable, setShowDataTable] = useState(false);
@@ -94,44 +94,46 @@ export const Admin = () => {
 	};
 
 	useEffect(() => {
-		if (loading) return;
+		if (authState.loading) return;
 		if (authState.user.rol !== 'admin') {
 			logout();
 			navigate('/login');
 		}
 	}, [authState, navigate]);
 
-	if (loading) {
-		return <Loader />;
-	}
-
 	return (
-		<div className='min-h-[60vh] md:min-h-[77vh] bg-[#DBD7CF]'>
-			<h1 className='text-center text-wrap text-4xl font-bold py-10 text-slate-700'>
-				Administración
-			</h1>
-			<div className='flex w-full h-full flex-col flex-wrap'>
-				<div className='w-full bg-slate-500 rounded-t-3xl'>
-					<PanelDashboard
-						handleUser={handleUser}
-						handleProduct={handleProduct}
-						handleSalon={handleSalon}
-						handleMenu={handleMenu}
-						handleKitchen={handleKitchen}
-						handleReports={handleReports}
-						handleCash={handleCash}
-					/>
+		<>
+			{authState.loading ? (
+				<Loader />
+			) : (
+				<div className='min-h-[60vh] md:min-h-[77vh] bg-[#DBD7CF]'>
+					<h1 className='text-center text-wrap text-4xl font-bold py-10 text-slate-700'>
+						Administración
+					</h1>
+					<div className='flex w-full h-full flex-col flex-wrap'>
+						<div className='w-full bg-slate-500 rounded-t-3xl'>
+							<PanelDashboard
+								handleUser={handleUser}
+								handleProduct={handleProduct}
+								handleSalon={handleSalon}
+								handleMenu={handleMenu}
+								handleKitchen={handleKitchen}
+								handleReports={handleReports}
+								handleCash={handleCash}
+							/>
+						</div>
+						<div className='w-full'>
+							{showDataMenu && <Menu />}
+							{showDataUsers && <UserDashboard />}
+							{showDataProducts && <ProductsMenu />}
+							{showDataTable && <SalonMenu />}
+							{showDataKitchen && <OrdersMenu />}
+							{showDataReports && <UnderConstruction />}
+							{showDataCash && <UnderConstruction />}
+						</div>
+					</div>
 				</div>
-				<div className='w-full'>
-					{showDataMenu && <Menu />}
-					{showDataUsers && <UserDashboard />}
-					{showDataProducts && <ProductsMenu />}
-					{showDataTable && <SalonMenu />}
-					{showDataKitchen && <OrdersMenu />}
-					{showDataReports && <UnderConstruction />}
-					{showDataCash && <UnderConstruction />}
-				</div>
-			</div>
-		</div>
+			)}
+		</>
 	);
 };

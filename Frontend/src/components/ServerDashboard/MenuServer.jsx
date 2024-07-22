@@ -50,7 +50,7 @@ export const MenuServer = () => {
 							<button
 								key={salon._id}
 								onClick={() => handleSalonClick(salon._id)}
-								className={`border-none text-white p-2 ${
+								className={`noborder border-none text-white p-2 ${
 									activeSalonId === salon._id
 										? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
 										: 'bg-transparent text-white hover:font-bold'

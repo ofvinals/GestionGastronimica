@@ -69,7 +69,7 @@ export const AdditionalChargesForm = ({ onSubmit, totalAmount }) => {
 			<div className='flex flex-row items-center justify-center text-center'>
 				<button
 					type='submit'
-					className='w-1/2 flex my-2 items-center text-sm border justify-center border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
+					className='noborder w-1/2 flex my-2 items-center text-sm border justify-center border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
 					Aplicar
 				</button>
 			</div>

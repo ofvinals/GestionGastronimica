@@ -65,3 +65,11 @@
 	color: white !important;
 }
 
+.noborder {
+	outline: none;
+}
+.noborder:focus {
+	outline: none;
+	box-shadow: none;
+
+}

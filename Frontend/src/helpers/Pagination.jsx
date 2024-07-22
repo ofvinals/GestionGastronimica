@@ -8,7 +8,7 @@ export const Pagination = ({ totalPages, currentPage, paginate }) => {
 				<button
 					key={index}
 					onClick={() => paginate(index + 1)}
-					className={`bg-slate-700 mb-2 mt-2 text-slate-100 mx-1 py-2 px-4 border border-gray-300 ${
+					className={`noborder bg-slate-700 mb-2 mt-2 text-slate-100 mx-1 py-2 px-4 border border-gray-300 ${
 						currentPage === index + 1 ? 'bg-slate-100 text-slate-900' : ''
 					}`}>
 					{index + 1}

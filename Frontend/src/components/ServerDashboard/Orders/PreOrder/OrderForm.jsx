@@ -102,11 +102,11 @@ export const OrderForm = ({
 						<div className='flex flex-wrap flex-row items-center gap-4 justify-around my-3'>
 							<Button
 								icon='pi pi-plus text-green-700'
-								className='rounded-full border-2 p-2  border-green-700'
+								className='rounded-full border-2 p-2  border-green-700 noborder'
 								onClick={increment}></Button>
 							<Button
 								icon='pi pi-minus text-red-700'
-								className='rounded-full p-2 border-2 border-red-700'
+								className='rounded-full p-2 border-2 border-red-700 focus:outline-none noborder'
 								onClick={handleDecrement}></Button>
 						</div>
 					</div>
@@ -121,12 +121,12 @@ export const OrderForm = ({
 					<div className='flex flex-row flex-wrap items-center gap-4 justify-around'>
 						<button
 							onClick={handleComanda}
-							className=' my-3 h-[60px] text-xl border-2 font-semibold border-green-100 p-2 bg-green-700 hover:text-green-700 hover:border-green-700 text-slate-50 hover:bg-white rounded-md'>
+							className='noborder my-3 h-[60px] text-xl border-2 font-semibold border-green-100 p-2 bg-green-700 hover:text-green-700 hover:border-green-700 text-slate-50 hover:bg-white rounded-md'>
 							VERIFICAR ORDEN
 						</button>
 						<button
 							onClick={handleDelete}
-							className='my-3 h-[60px] text-xl border-2 font-semibold border-green-100 p-2 bg-red-700 hover:text-red-700 hover:border-red-700 text-slate-50 hover:bg-white rounded-md'>
+							className='noborder my-3 h-[60px] text-xl border-2 font-semibold border-green-100 p-2 bg-red-700 hover:text-red-700 hover:border-red-700 text-slate-50 hover:bg-white rounded-md'>
 							CANCELAR ORDEN
 						</button>
 					</div>

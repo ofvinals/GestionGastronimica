@@ -62,7 +62,7 @@ const EditTableDetails = ({
 			<div className='flex flex-row items-center justify-center'>
 				<button
 					onClick={onClose}
-					className=' text-white p-2 rounded-full hover:bg-red-800 hover:text-red-800 '>
+					className=' noborder text-white p-2 rounded-full hover:bg-red-800 hover:text-red-800 '>
 					<i className='fa-solid fa-circle-xmark text-[40px] text-red-800 hover:text-white'></i>{' '}
 				</button>
 			</div>

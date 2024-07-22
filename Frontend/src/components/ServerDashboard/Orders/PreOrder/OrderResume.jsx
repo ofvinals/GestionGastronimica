@@ -131,12 +131,12 @@ export const OrderResume = ({
 					<div className='flex flex-wrap items-center justify-around mt-3'>
 						<button
 							onClick={handleConfirm}
-							className='text-white p-2 rounded-full hover:bg-green-800 hover:text-green-800'>
+							className='noborder text-white p-2 rounded-full hover:bg-green-800 hover:text-green-800'>
 							<i className='fa-solid fa-circle-check text-[40px] text-green-800 hover:text-white'></i>
 						</button>
 						<button
 							type='button'
-							className='text-white p-2 rounded-full hover:bg-red-800 hover:text-red-800'
+							className='noborder text-white p-2 rounded-full hover:bg-red-800 hover:text-red-800'
 							onClick={onClose}>
 							<i className='fa-solid fa-circle-xmark text-[40px] text-red-800 hover:text-white'></i>
 						</button>

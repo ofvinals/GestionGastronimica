@@ -57,12 +57,12 @@ export const OrderCard = ({ menu, updateOrder, resetCount }) => {
 			<div className='flex flex-wrap gap-3 mt-4 flex-row justify-center'>
 				<Button
 					icon='pi pi-plus text-green-700'
-					className='rounded-full border-2 p-2 border-green-700'
+					className='noborder rounded-full border-2 p-2 border-green-700'
 					onClick={handleIncrement}></Button>
 				<span className='font-bold text-4xl '>{count}</span>
 				<Button
 					icon='pi pi-minus text-red-700'
-					className='rounded-full border-2 p-2 border-red-700'
+					className='noborder rounded-full border-2 p-2 border-red-700'
 					onClick={handleDecrement}></Button>
 			</div>
 		</>

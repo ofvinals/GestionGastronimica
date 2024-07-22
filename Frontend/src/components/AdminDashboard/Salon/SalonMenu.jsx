@@ -5,11 +5,11 @@ import { MonitorDashboard } from './Monitor/MonitorDashboard';
 import { TableDashboard } from './TableDashboard';
 
 export const SalonMenu = () => {
-	const [activeButton, setActiveButton] = useState('monitor');
-	const [showDataTable, setShowDataTable] = useState(false);
+	const [activeButton, setActiveButton] = useState('tables');
+	const [showDataTable, setShowDataTable] = useState(true);
 	const [showDataLayout, setShowDataLayout] = useState(false);
 	const [showDataSales, setShowDataSales] = useState(false);
-	const [showDataMonitor, setShowDataMonitor] = useState(true);
+	const [showDataMonitor, setShowDataMonitor] = useState(false);
 
 	const handleTable = () => {
 		setShowDataTable(true);

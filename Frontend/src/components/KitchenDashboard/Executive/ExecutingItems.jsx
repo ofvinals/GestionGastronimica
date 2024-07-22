@@ -112,7 +112,8 @@ export const ExecutingItems = ({ executingItems }) => {
 
 														<Button
 															onClick={() => handleInfo(item)}
-															tooltip='Informacion del menu'>
+															tooltip='Informacion del menu'
+															className='noborder'>
 															<i className='ml-1 text-center text-xl mb-2 fa-solid fa-circle-info text-blue-800 hover:text-blue-500'></i>
 														</Button>
 													</p>{' '}
@@ -123,7 +124,7 @@ export const ExecutingItems = ({ executingItems }) => {
 											</div>
 											<div className='flex flex-row flex-wrap items-center justify-center'>
 												<Button
-													className='text-green-800'
+													className='text-green-800 noborder'
 													tooltip='Confirmar producción'
 													tooltipOptions={{ position: 'top' }}
 													onClick={() =>

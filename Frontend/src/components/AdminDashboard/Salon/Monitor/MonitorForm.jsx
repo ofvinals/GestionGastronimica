@@ -272,7 +272,7 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 								type='submit'
 								tooltip='Confirmar'
 								tooltipOptions={{ position: 'top' }}
-								className='text-white p-2 rounded-full hover:bg-green-800 hover:text-green-800'>
+								className='noborder text-white p-2 rounded-full hover:bg-green-800 hover:text-green-800'>
 								<i className='fa-solid fa-circle-check text-[40px] text-green-800 hover:text-white'></i>
 							</Button>
 						)}
@@ -280,7 +280,7 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 							type='button'
 							tooltip='Cerrar'
 							tooltipOptions={{ position: 'top' }}
-							className='text-white p-2 rounded-full hover:bg-red-800 hover:text-red-800'
+							className='noborder text-white p-2 rounded-full hover:bg-red-800 hover:text-red-800'
 							onClick={onClose}>
 							<i className='fa-solid fa-circle-xmark text-[40px] text-red-800 hover:text-white'></i>
 						</Button>
