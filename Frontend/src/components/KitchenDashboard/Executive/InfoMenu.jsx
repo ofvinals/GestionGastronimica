@@ -11,7 +11,6 @@ export const InfoMenu = ({ itemName }) => {
 		if (state.menus) {
 			const foundItem = state.menus.find((menu) => menu.name === itemName);
 			setMenu(foundItem);
-			console.log(foundItem)
 		}
 	}, [itemName, state.menus]);
 

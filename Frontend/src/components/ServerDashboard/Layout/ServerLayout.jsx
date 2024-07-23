@@ -114,12 +114,12 @@ export const ServerLayout = ({ salonId, onReload }) => {
 	return (
 		<>
 			{openLayout ? (
-				<section>
-					<div className='flex flex-row flex-wrap items-center justify-center mb-2'>
+				<section className='overflow-x-auto'>
+					<div className='flex flex-row flex-wrap w-full items-center justify-start md:justify-center mb-2'>
 						<Stage
 							width={GRID_SIZE * CELL_SIZE}
 							height={GRID_SIZE * CELL_SIZE}
-							className='p-2 overflow-x-auto'>
+							className='p-2 '>
 							<Layer>
 								<GridLines />
 								{currentLayout.map((table) => (

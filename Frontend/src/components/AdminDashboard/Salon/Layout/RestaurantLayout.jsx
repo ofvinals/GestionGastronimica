@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Stage, Layer } from 'react-konva';
 import { useLayoutActions } from '../../../../hooks/useLayoutActions.js';
 import GridLines from './GridLines';
@@ -8,13 +8,10 @@ import TableRect from './TableRect';
 import EditTableDetails from './EditTableDetails';
 import LoungeForm from './LoungeForm';
 import { useLoungeActions } from '../../../../hooks/useLoungeActions.js';
-import Loader from '../../../../helpers/Loader';
-import { LoungeContext } from '../../../../context/LoungeContext';
 const GRID_SIZE = 9;
 const CELL_SIZE = 50.5;
 
 const RestaurantLayout = ({ salonId, showLoungeForm, onCloseForm }) => {
-	const { state } = useContext(LoungeContext);
 	const { addSalonAction, dataSalons } = useLoungeActions();
 	const { loadLayoutAction, addTableAction } = useLayoutActions();
 	const [showEditTableDetails, setShowEditTableDetails] = useState(false);
@@ -140,21 +137,14 @@ const RestaurantLayout = ({ salonId, showLoungeForm, onCloseForm }) => {
 		setIsRound((prev) => !prev);
 	};
 
-	const stageWidth = window.innerWidth * 0.6;
-	const stageHeight = window.innerHeight * 0.6;
-
-	if (state.loading) {
-		return <Loader />;
-	}
-
 	return (
 		<>
 			<div className='flex flex-row w-full '>
-				<div className='w-4/6 border-2 border-black flex flex-row justify-center'>
+				<div className='w-4/6 overflow-x-auto border-2 border-black flex flex-row justify-start md:justify-center'>
 					<Stage
-						width={stageWidth}
-						height={stageHeight}
-						className='p-2 overflow-x-auto'
+						width={GRID_SIZE * CELL_SIZE}
+						height={GRID_SIZE * CELL_SIZE}
+						className='p-2 '
 						onDblClick={(e) => {
 							const { x, y } = e.target.getStage().getPointerPosition();
 							addTable(x, y);
@@ -162,8 +152,7 @@ const RestaurantLayout = ({ salonId, showLoungeForm, onCloseForm }) => {
 						onContextMenu={(e) => e.evt.preventDefault()}>
 						<Layer>
 							<GridLines
-								stageWidth={stageWidth}
-								stageHeight={stageHeight}
+							
 							/>
 							{currentLayout &&
 								currentLayout.map((table) => (

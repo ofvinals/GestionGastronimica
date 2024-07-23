@@ -112,11 +112,6 @@ export const LoginForm = () => {
 									})}
 									placeholder='Contraseña'
 								/>
-								{errors.password && (
-									<span className='text-red-700 fs-6'>
-										{errors.password.message}
-									</span>
-								)}
 							</div>
 							<button
 								type='button'
@@ -130,7 +125,12 @@ export const LoginForm = () => {
 											: 'fa-solid fa-eye'
 									}`}></i>
 							</button>
-						</div>
+						</div>{' '}
+						{errors.password && (
+							<span className='text-red-500 fs-6  p-2'>
+								{errors.password.message}
+							</span>
+						)}
 					</Form.Group>
 
 					<Form.Group
@@ -138,12 +138,14 @@ export const LoginForm = () => {
 						controlId='submit'>
 						<Button
 							className='m-3 w-[152px] bg-slate-100 border-2 shadow-3xl border-slate-700 text-slate-700 p-2 rounded-2xl font-semibold hover:text-slate-100 hover:bg-slate-700 hover:border-slate-100'
-							type='submit'
-							>
+							type='submit'>
 							{authState.loading ? (
 								<i
 									className='pi pi-spin pi-spinner bg-slate-700 text-slate-50'
-									style={{ fontSize: '2rem', backgroundColor: "#334155" }}></i>
+									style={{
+										fontSize: '2rem',
+										backgroundColor: '#334155',
+									}}></i>
 							) : (
 								<>
 									<i className='text-xl pe-2 fa-solid fa-right-to-bracket'></i>
