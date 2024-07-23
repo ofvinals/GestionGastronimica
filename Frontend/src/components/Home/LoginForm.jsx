@@ -16,12 +16,14 @@ export const LoginForm = () => {
 	const { state: userState } = useContext(UserContext);
 	const { state: authState } = useContext(AuthContext);
 	const { dataUsers } = useUserActions();
+	console.log(userState)
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm();
 	const users = userState.users;
+	console.log(users)
 	const [showPassword, setShowPassword] = useState(false);
 
 	useEffect(() => {
@@ -50,6 +52,7 @@ export const LoginForm = () => {
 			console.error(error);
 		}
 	};
+	console.log(userState)
 
 	return (
 		<section className='flex flex-wrap items-center justify-center flex-col pb-10'>

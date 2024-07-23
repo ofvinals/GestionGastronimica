@@ -1,7 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect } from 'react';
 import { LoginForm } from '../components/Home/LoginForm';
+import { useUserActions } from '../hooks/useUserActions';
 
 export const Home = () => {
-	
+	const { dataUsers } = useUserActions();
+
+	useEffect(() => {
+		dataUsers();
+	}, []);
+
 	return (
 		<div className=''>
 			<div className='relative w-full '>

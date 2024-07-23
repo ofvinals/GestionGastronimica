@@ -11,16 +11,12 @@ export const useUserActions = () => {
 			type: 'DATA_USERS_PENDING',
 		});
 		try {
-			const token = localStorage.getItem('token');
-			const users = await apiURL.get('/api/users', {
-				withCredentials: true,
-				headers: { authorization: `Bearer ${token}` },
-			});
+			const users = await apiURL.get('/api/users');
 			dispatch({
 				type: 'DATA_USERS_SUCCESS',
 				payload: users.data,
 			});
-			console.log(users.data)
+			console.log(users.data);
 			return users.data;
 		} catch (error) {
 			dispatch({
