@@ -55,9 +55,9 @@ export const ExecutingItems = ({ executingItems }) => {
 	const getBackground = (milliseconds) => {
 		const minutes = Math.floor(milliseconds / (1000 * 60));
 		if (minutes > 50) {
-			return 'bg-red-200';
+			return 'bg-red-300';
 		} else if (minutes > 40) {
-			return 'bg-yellow-200';
+			return 'bg-yellow-300';
 		} else {
 			return 'bg-white';
 		}
@@ -76,7 +76,7 @@ export const ExecutingItems = ({ executingItems }) => {
 	}
 
 	return (
-		<section className='md:w-3/4 border-l-2 border-slate-700'>
+		<section className='md:w-3/4 border-r-2 border-slate-700'>
 			<div className=''>
 				<div className='flex items-center justify-center h-[64px] bg-slate-700 text-white'>
 					<h2 className='font-bold text-3xl'>Pedidos en Ejecución</h2>
@@ -158,8 +158,8 @@ export const ExecutingItems = ({ executingItems }) => {
 				<Modals
 					isOpen={true}
 					onClose={handleCloseModal}
-					title='Info del menu'>
-					<InfoMenu menu={selectedItem} />
+					title='Informacion del menu'>
+					<InfoMenu itemName={selectedItem.name} />
 				</Modals>
 			)}
 		</section>

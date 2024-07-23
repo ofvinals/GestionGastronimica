@@ -27,7 +27,8 @@ const TableRect = ({
 				onContextMenu={onContextMenu}
 				fill={isSelected ? 'red' : 'green'}
 				stroke={isSelected ? 'black' : 'grey'}
-				shadowBlur={isSelected ? 10 : 0}
+				shadowBlur={isSelected ? 7 : 0}
+				cornerRadius={8} 
 			/>
 			<Text
 				x={table.x + 4}

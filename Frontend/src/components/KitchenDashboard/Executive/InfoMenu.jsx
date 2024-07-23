@@ -1,5 +1,24 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useContext, useEffect, useState } from 'react';
+import { MenuContext } from '../../../context/MenuContext';
+
 /* eslint-disable react/prop-types */
-export const InfoMenu = ({ menu }) => {
+export const InfoMenu = ({ itemName }) => {
+	const [menu, setMenu] = useState(null);
+	const { state } = useContext(MenuContext);
+	
+	useEffect(() => {
+		if (state.menus) {
+			const foundItem = state.menus.find((menu) => menu.name === itemName);
+			setMenu(foundItem);
+			console.log(foundItem)
+		}
+	}, [itemName, state.menus]);
+
+	if (!menu) {
+		return <div>Loading...</div>;
+	}
+
 	const { name, category, description, recipe, ingredients } = menu;
 
 	return (

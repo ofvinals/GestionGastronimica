@@ -8,14 +8,16 @@ RestóFLOW is the ultimate solution for streamlining restaurant management, desi
 # Proyect summary
 
 ## BackEnd
+
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
-Development of a custom API REST app in express.js:
+- Development of a custom API REST app in express.js:
 - Implemented with: JSON Web Tokens and Bcrypt.
 - Implemented the creation and manipulation of Users, Stores, Categories, Products, Orders and Transactions resources.
 
 
 ## FrontEnd
-![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)![Redux](https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white)![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
 ### Description and Features
 
@@ -34,11 +36,13 @@ Development of a custom API REST app in express.js:
 -Attractive and animated PopUps using SweetAlert
 
 ## Clone
-URL proyect
-npm install
-npm run dev
+
+- URL proyect
+- npm install
+- npm run dev
 
 ### PASSWORD USERS
+
 For all test users, the password is 1234567.-
 
 
