@@ -21,10 +21,6 @@ export const useAuthActions = () => {
 				type: 'LOGIN_SUCCESS',
 				payload: user.data,
 			});
-			showAlert({
-				icon: 'success',
-				title: 'Inicio de sesión exitoso!',
-			});
 			return user.data;
 		} catch (error) {
 			console.error('Error al iniciar sesion:', error);
@@ -45,10 +41,6 @@ export const useAuthActions = () => {
 		});
 		localStorage.removeItem('token');
 		navigate('/home');
-		showAlert({
-			icon: 'success',
-			title: 'Su sesion ha sido cerrada!',
-		});
 	};
 
 	return { login, logout };

@@ -8,9 +8,6 @@ export const useCategoryActions = () => {
 
 	// RECUPERA CATEGORIAS DE MENU GUARDADAS EN BACKEND
 	const dataCategorys = async () => {
-		dispatch({
-			type: 'DATA_CATEGORYS_PENDING',
-		});
 		try {
 			const token = localStorage.getItem('token');
 			const categorys = await apiURL.get('/api/categorys', {
