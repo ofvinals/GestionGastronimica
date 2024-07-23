@@ -26,10 +26,10 @@ export const AdditionalChargesForm = ({ onSubmit, totalAmount }) => {
 
 	return (
 		<form onSubmit={handleSubmit}>
-			<div className='flex flex-row flex-wrap l-5 w-full'>
-				<div className='mb-2 w-1/2'>
+			<div className='flex flex-row flex-wrap w-full items-center justify-around'>
+				<div className='mb-2 w-1/3 mx-2 flex flex-col'>
 					<label
-						className='block text-gray-700 font-bold mb-2'
+						className='block text-gray-700 font-bold mb-2 text-center'
 						htmlFor='tableService'>
 						Servicio de mesa:
 					</label>
@@ -42,8 +42,8 @@ export const AdditionalChargesForm = ({ onSubmit, totalAmount }) => {
 						placeholder='$'
 					/>
 				</div>
-				<div className='mb-2 w-1/2'>
-					<label className='block text-gray-700 font-bold mb-2'>
+				<div className='mb-2 w-1/3 flex flex-col '>
+					<label className='block text-gray-700 font-bold mb-2 text-center'>
 						Descuento (%):
 					</label>
 					<input
@@ -69,7 +69,7 @@ export const AdditionalChargesForm = ({ onSubmit, totalAmount }) => {
 			<div className='flex flex-row items-center justify-center text-center'>
 				<button
 					type='submit'
-					className='noborder w-1/2 flex my-2 items-center text-sm border justify-center border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
+					className='noborder w-1/2 flex my-2 items-center text-sm border justify-center border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:bg-gradient-to-b hover:from-slate-800 hover:to-slate-500 text-white  font-bold py-2 px-4 rounded'>
 					Aplicar
 				</button>
 			</div>
