@@ -1,10 +1,12 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Stage, Layer } from 'react-konva';
 import TableRect from '../../AdminDashboard/Salon/Layout/TableRect';
 import GridLines from '../../AdminDashboard/Salon/Layout/GridLines';
 import { useLayoutActions } from '../../../hooks/useLayoutActions.js';
+import Loader from '../../../helpers/Loader';
+import { LoungeContext } from '../../../context/LoungeContext';
 import Modals from '../../Modals';
 import { TableOpenForm } from './TableOpenForm';
 import { OrderForm } from '../Orders/PreOrder/OrderForm';
@@ -15,6 +17,7 @@ const GRID_SIZE = 9;
 const CELL_SIZE = 50.5;
 
 export const ServerLayout = ({ salonId, onReload }) => {
+	const { state } = useContext(LoungeContext);
 	const { updateTableIsOpenAction, loadLayoutAction } = useLayoutActions();
 	const [currentLayout, setCurrentLayout] = useState([]);
 	const [confirmTable, setConfirmTable] = useState(null);
@@ -103,6 +106,10 @@ export const ServerLayout = ({ salonId, onReload }) => {
 		setOpenConfirm(false);
 		getLayout();
 	};
+
+	if (state.loading) {
+		return <Loader />;
+	}
 
 	return (
 		<>
