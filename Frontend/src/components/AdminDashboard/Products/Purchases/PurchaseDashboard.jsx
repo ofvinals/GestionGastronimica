@@ -123,62 +123,60 @@ export const PurchaseDashboard = () => {
 		},
 	});
 
+	if (state.loading) {
+		return <Loader />;
+	}
+
 	return (
 		<>
-			{state.loading ? (
-				<Loader />
-			) : (
-				<>
-					<div className='px-5 shadowIndex rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-around sm:justify-between'>
-						<h3 className=' text-white text-xl font-semibold'>
-							Pedidos a Proveedores
-						</h3>{' '}
-						<Button
-							onClick={handleOpenAddModal}
-							className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
-							<i className='pe-2 fa-solid fa-plus hover:text-slate-600'></i>
-							Agregar Pedido
-						</Button>
-					</div>
-					<div className='table-responsive'>
-						<ThemeProvider theme={darkTheme}>
-							<CssBaseline />
-							<Table
-								columns={columns}
-								data={state.purchases}
-								actions={actions}
-								initialSortColumn='name'
-							/>
-						</ThemeProvider>
-					</div>
-					<Modals
-						isOpen={openEditModal}
-						onClose={handleCloseModal}
-						title='Editar Pedido'>
-						<PurchaseForm
-							rowId={rowId}
-							onClose={handleCloseModal}
-							mode='edit'
-						/>
-					</Modals>
-					<Modals
-						isOpen={openAddModal}
-						onClose={handleCloseModal}
-						title='Agregar Nuevo Pedido'>
-						<PurchaseForm onClose={handleCloseModal} mode='create' />
-					</Modals>
-					<Modals
-						isOpen={openViewModal}
-						onClose={handleCloseModal}
-						title='Ver Pedido'>
-						<PurchaseForm
-							onClose={handleCloseModal}
-							rowId={rowId}
-							mode='view'
-						/>
-					</Modals>
-				</>
-			)}
+			<div className='px-5 shadowIndex rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-around sm:justify-between'>
+				<h3 className=' text-white text-xl font-semibold'>
+					Pedidos a Proveedores
+				</h3>{' '}
+				<Button
+					onClick={handleOpenAddModal}
+					className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
+					<i className='pe-2 fa-solid fa-plus hover:text-slate-600'></i>
+					Agregar Pedido
+				</Button>
+			</div>
+			<div className='table-responsive'>
+				<ThemeProvider theme={darkTheme}>
+					<CssBaseline />
+					<Table
+						columns={columns}
+						data={state.purchases}
+						actions={actions}
+						initialSortColumn='name'
+					/>
+				</ThemeProvider>
+			</div>
+			<Modals
+				isOpen={openEditModal}
+				onClose={handleCloseModal}
+				title='Editar Pedido'>
+				<PurchaseForm
+					rowId={rowId}
+					onClose={handleCloseModal}
+					mode='edit'
+				/>
+			</Modals>
+			<Modals
+				isOpen={openAddModal}
+				onClose={handleCloseModal}
+				title='Agregar Nuevo Pedido'>
+				<PurchaseForm onClose={handleCloseModal} mode='create' />
+			</Modals>
+			<Modals
+				isOpen={openViewModal}
+				onClose={handleCloseModal}
+				title='Ver Pedido'>
+				<PurchaseForm
+					onClose={handleCloseModal}
+					rowId={rowId}
+					mode='view'
+				/>
+			</Modals>
 		</>
 	);
 };

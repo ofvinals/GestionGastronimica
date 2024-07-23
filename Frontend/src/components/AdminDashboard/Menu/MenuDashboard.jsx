@@ -42,7 +42,7 @@ export const MenuDashboard = () => {
 		setOpenEditModal(false);
 		setOpenAddModal(false);
 	};
-	
+
 	// AGARRA LA SELECCION DE CATEGORIA DEL COMPONENTE CATEGORY SELECTION Y LA CARGA EN SETSELECTEDCATEGORY P USAR EL FILTRO
 	const handleCategorySelect = (category) => {
 		setSelectedCategory(category);
@@ -138,58 +138,50 @@ export const MenuDashboard = () => {
 		},
 	});
 
+	if (state.loading) {
+		return <Loader />;
+	}
+
 	return (
-		<>
-			{state.loading ? (
-				<Loader />
-			) : (
-				<section>
-					<div className='px-5 shadowIndex rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-around sm:justify-between drop-shadow-3xl'>
-						<h3 className=' text-white text-xl font-semibold'>
-							Carta Menu
-						</h3>{' '}
-						<Button
-							onClick={handleOpenAddModal}
-							className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
-							<i className='pe-2 fa-solid fa-plus hover:text-slate-600'></i>
-							Agregar Menu
-						</Button>
-					</div>
-					<div>
-						<CategorySelection
-							categorys={state.categorys}
-							onCategorySelect={handleCategorySelect}
-						/>
-					</div>
-					<div className='table-responsive'>
-						<ThemeProvider theme={darkTheme}>
-							<CssBaseline />
-							<Table
-								columns={columns}
-								data={filteredMenus}
-								actions={actions}
-								initialSortColumn="category"
-							/>
-						</ThemeProvider>
-					</div>
-					<Modals
-						isOpen={openEditModal}
-						onClose={handleCloseModal}
-						title='Editar Menú'>
-						<MenuForm
-							rowId={rowId}
-							onClose={handleCloseModal}
-							mode='edit'
-						/>
-					</Modals>
-					<Modals
-						isOpen={openAddModal}
-						onClose={handleCloseModal}
-						title='Agregar Nuevo Menú'>
-						<MenuForm onClose={handleCloseModal} mode='create' />
-					</Modals>
-				</section>
-			)}
-		</>
+		<section>
+			<div className='px-5 shadowIndex rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-around sm:justify-between drop-shadow-3xl'>
+				<h3 className=' text-white text-xl font-semibold'>Carta Menu</h3>{' '}
+				<Button
+					onClick={handleOpenAddModal}
+					className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
+					<i className='pe-2 fa-solid fa-plus hover:text-slate-600'></i>
+					Agregar Menu
+				</Button>
+			</div>
+			<div>
+				<CategorySelection
+					categorys={state.categorys}
+					onCategorySelect={handleCategorySelect}
+				/>
+			</div>
+			<div className='table-responsive'>
+				<ThemeProvider theme={darkTheme}>
+					<CssBaseline />
+					<Table
+						columns={columns}
+						data={filteredMenus}
+						actions={actions}
+						initialSortColumn='category'
+					/>
+				</ThemeProvider>
+			</div>
+			<Modals
+				isOpen={openEditModal}
+				onClose={handleCloseModal}
+				title='Editar Menú'>
+				<MenuForm rowId={rowId} onClose={handleCloseModal} mode='edit' />
+			</Modals>
+			<Modals
+				isOpen={openAddModal}
+				onClose={handleCloseModal}
+				title='Agregar Nuevo Menú'>
+				<MenuForm onClose={handleCloseModal} mode='create' />
+			</Modals>
+		</section>
 	);
 };

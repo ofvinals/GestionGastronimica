@@ -49,7 +49,7 @@ export const OrderDashboard = () => {
 		setOpenEditModal(false);
 		setOpenAddModal(false);
 		setOpenViewModal(false);
-		};
+	};
 
 	// ENVIA DATOS Y CONFIG DE COLUMNAS A TABLES
 	const columns = useMemo(
@@ -136,62 +136,52 @@ export const OrderDashboard = () => {
 		},
 	});
 
+	if (state.loading) {
+		return <Loader />;
+	}
+
 	return (
 		<>
-			{state.loading ? (
-				<Loader />
-			) : (
-				<>
-					<div className='py-2 px-5 shadowIndex rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-around md:justify-between'>
-						<h3 className=' text-white text-xl font-semibold '>
-							Ordenes de pedidos
-						</h3>
-						<button
-							onClick={handleOpenAddModal}
-							className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
-							<i className='pe-2 fa-solid fa-plus'></i>
-							Agregar Orden de Pedido
-						</button>
-					</div>
-					<div className='table-responsive'>
-						<ThemeProvider theme={darkTheme}>
-							<CssBaseline />
-							<Table
-								columns={columns}
-								data={state.orders}
-								actions={actions}
-								initialSortColumn='openAt'
-							/>
-						</ThemeProvider>
-					</div>
-					<Modals
-						isOpen={openEditModal}
-						onClose={handleCloseModal}
-						title='Editar Pedido'>
-						<OrderForm
-							rowId={rowId}
-							onClose={handleCloseModal}
-							mode='edit'
-						/>
-					</Modals>
-					<Modals
-						isOpen={openAddModal}
-						onClose={handleCloseModal}
-						title='Agregar Nuevo Pedido'>
-						<OrderForm onClose={handleCloseModal} mode='create' />
-					</Modals>
-					<Modals
-						isOpen={openViewModal}
-						onClose={handleCloseModal}
-						title='Ver Pedido'>
-						<OrderForm
-							onClose={handleCloseModal}
-							rowId={rowId}
-							mode='view'
-						/>
-					</Modals>
-				</>
-			)}
+			<div className='py-2 px-5 shadowIndex rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-around md:justify-between'>
+				<h3 className=' text-white text-xl font-semibold '>
+					Ordenes de pedidos
+				</h3>
+				<button
+					onClick={handleOpenAddModal}
+					className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
+					<i className='pe-2 fa-solid fa-plus'></i>
+					Agregar Orden de Pedido
+				</button>
+			</div>
+			<div className='table-responsive'>
+				<ThemeProvider theme={darkTheme}>
+					<CssBaseline />
+					<Table
+						columns={columns}
+						data={state.orders}
+						actions={actions}
+						initialSortColumn='openAt'
+					/>
+				</ThemeProvider>
+			</div>
+			<Modals
+				isOpen={openEditModal}
+				onClose={handleCloseModal}
+				title='Editar Pedido'>
+				<OrderForm rowId={rowId} onClose={handleCloseModal} mode='edit' />
+			</Modals>
+			<Modals
+				isOpen={openAddModal}
+				onClose={handleCloseModal}
+				title='Agregar Nuevo Pedido'>
+				<OrderForm onClose={handleCloseModal} mode='create' />
+			</Modals>
+			<Modals
+				isOpen={openViewModal}
+				onClose={handleCloseModal}
+				title='Ver Pedido'>
+				<OrderForm onClose={handleCloseModal} rowId={rowId} mode='view' />
+			</Modals>
 		</>
 	);
 };

@@ -72,146 +72,141 @@ const Profile = ({ onClose }) => {
 		}
 	});
 
+	if (state.loading) {
+		return <Loader />;
+	}
+
 	return (
-		<>
-			{state.loading ? (
-				<Loader />
-			) : (
-				<Form onSubmit={onSubmit}>
-					<FormField
-						id='name'
-						label='Nombre'
-						type='text'
-						register={register('name', {
-							required: {
-								value: true,
-								message: 'El nombre es requerido',
-							},
-						})}
-						errors={errors.name}
-					/>
-					<FormField
-						id='subname'
-						label='Apellido'
-						type='text'
-						register={register('subname', {
-							required: {
-								value: true,
-								message: 'El apellido es requerido',
-							},
-						})}
-						errors={errors.subname}
-					/>
-					<FormField
-						id='dni'
-						label='DNI/CUIL'
-						type='number'
-						register={register('dni', {
-							required: {
-								value: true,
-								message: 'El DNI/CUIL es requerido',
-							},
-							minLength: {
-								value: 8,
-								message:
-									'El DNI/CUIL debe contenter entre 8 y 10 dígitos.',
-							},
-							maxLength: {
-								value: 11,
-								message:
-									'El DNI/CUIL debe contenter entre 8 y 10 dígitos.',
-							},
-						})}
-						errors={errors.dni}
-					/>
-					<FormField
-						id='tel'
-						label='Teléfono'
-						type='number'
-						register={register('tel', {
-							required: {
-								value: true,
-								message: 'El teléfono es requerido',
-							},
-							minLength: {
-								value: 10,
-								message: 'El celular debe contenter 10 dígitos',
-							},
-							maxLength: {
-								value: 10,
-								message: 'El celular debe contenter 10 dígitos',
-							},
-						})}
-						errors={errors.tel}
-					/>
-					<Form.Control type='hidden' {...register('status')} />
-					<Form.Control type='hidden' {...register('rol')} />
-					<FormField
-						id='password'
-						label='Contraseña actual'
-						type={showPasswordCurrent ? 'text' : 'password'}
-						register={register('password')}
-						errors={errors.password}
-						extraProps={{
-							togglePasswordVisibility: () =>
-								setShowPasswordCurrent(!showPasswordCurrent),
-							showPassword: showPasswordCurrent,
-						}}
-					/>
-					<FormField
-						id='newPassword'
-						label='Nueva contraseña'
-						type={showPasswordNew ? 'text' : 'password'}
-						register={register('newPassword', {
-							minLength: {
-								value: 7,
-								message:
-									'La contraseña debe contener al menos 7 dígitos',
-							},
-						})}
-						errors={errors.newPassword}
-						extraProps={{
-							togglePasswordVisibility: () =>
-								setShowPasswordNew(!showPasswordNew),
-							showPassword: showPasswordNew,
-						}}
-					/>
-					<FormField
-						id='confirmPassword'
-						label='Confirmar nueva contraseña'
-						type={showPasswordConfirm ? 'text' : 'password'}
-						register={register('confirmPassword', {
-							validate: (value) =>
-								value === watch('newPassword') ||
-								'Las contraseñas no coinciden',
-						})}
-						errors={errors.confirmPassword}
-						extraProps={{
-							togglePasswordVisibility: () =>
-								setShowPasswordConfirm(!showPasswordConfirm),
-							showPassword: showPasswordConfirm,
-						}}
-					/>
-					<Form.Group className='flex flex-wrap items-center w-full justify-around mt-3'>
-						<Button
-							type='submit'
-							tooltip='Confirmar'
-							tooltipOptions={{ position: 'top' }}
-							className='text-white p-2 rounded-full hover:bg-green-800 hover:text-green-800'>
-							<i className='fa-solid fa-circle-check text-[40px] text-green-800 hover:text-white'></i>
-						</Button>
-						<Button
-							type='button'
-							tooltip='Cerrar'
-							tooltipOptions={{ position: 'top' }}
-							className='text-white p-2 rounded-full hover:bg-red-800 hover:text-red-800'
-							onClick={onClose}>
-							<i className='fa-solid fa-circle-xmark text-[40px] text-red-800 hover:text-white'></i>
-						</Button>
-					</Form.Group>
-				</Form>
-			)}
-		</>
+		<Form onSubmit={onSubmit}>
+			<FormField
+				id='name'
+				label='Nombre'
+				type='text'
+				register={register('name', {
+					required: {
+						value: true,
+						message: 'El nombre es requerido',
+					},
+				})}
+				errors={errors.name}
+			/>
+			<FormField
+				id='subname'
+				label='Apellido'
+				type='text'
+				register={register('subname', {
+					required: {
+						value: true,
+						message: 'El apellido es requerido',
+					},
+				})}
+				errors={errors.subname}
+			/>
+			<FormField
+				id='dni'
+				label='DNI/CUIL'
+				type='number'
+				register={register('dni', {
+					required: {
+						value: true,
+						message: 'El DNI/CUIL es requerido',
+					},
+					minLength: {
+						value: 8,
+						message: 'El DNI/CUIL debe contenter entre 8 y 10 dígitos.',
+					},
+					maxLength: {
+						value: 11,
+						message: 'El DNI/CUIL debe contenter entre 8 y 10 dígitos.',
+					},
+				})}
+				errors={errors.dni}
+			/>
+			<FormField
+				id='tel'
+				label='Teléfono'
+				type='number'
+				register={register('tel', {
+					required: {
+						value: true,
+						message: 'El teléfono es requerido',
+					},
+					minLength: {
+						value: 10,
+						message: 'El celular debe contenter 10 dígitos',
+					},
+					maxLength: {
+						value: 10,
+						message: 'El celular debe contenter 10 dígitos',
+					},
+				})}
+				errors={errors.tel}
+			/>
+			<Form.Control type='hidden' {...register('status')} />
+			<Form.Control type='hidden' {...register('rol')} />
+			<FormField
+				id='password'
+				label='Contraseña actual'
+				type={showPasswordCurrent ? 'text' : 'password'}
+				register={register('password')}
+				errors={errors.password}
+				extraProps={{
+					togglePasswordVisibility: () =>
+						setShowPasswordCurrent(!showPasswordCurrent),
+					showPassword: showPasswordCurrent,
+				}}
+			/>
+			<FormField
+				id='newPassword'
+				label='Nueva contraseña'
+				type={showPasswordNew ? 'text' : 'password'}
+				register={register('newPassword', {
+					minLength: {
+						value: 7,
+						message: 'La contraseña debe contener al menos 7 dígitos',
+					},
+				})}
+				errors={errors.newPassword}
+				extraProps={{
+					togglePasswordVisibility: () =>
+						setShowPasswordNew(!showPasswordNew),
+					showPassword: showPasswordNew,
+				}}
+			/>
+			<FormField
+				id='confirmPassword'
+				label='Confirmar nueva contraseña'
+				type={showPasswordConfirm ? 'text' : 'password'}
+				register={register('confirmPassword', {
+					validate: (value) =>
+						value === watch('newPassword') ||
+						'Las contraseñas no coinciden',
+				})}
+				errors={errors.confirmPassword}
+				extraProps={{
+					togglePasswordVisibility: () =>
+						setShowPasswordConfirm(!showPasswordConfirm),
+					showPassword: showPasswordConfirm,
+				}}
+			/>
+			<Form.Group className='flex flex-wrap items-center w-full justify-around mt-3'>
+				<Button
+					type='submit'
+					tooltip='Confirmar'
+					tooltipOptions={{ position: 'top' }}
+					className='text-white p-2 rounded-full hover:bg-green-800 hover:text-green-800'>
+					<i className='fa-solid fa-circle-check text-[40px] text-green-800 hover:text-white'></i>
+				</Button>
+				<Button
+					type='button'
+					tooltip='Cerrar'
+					tooltipOptions={{ position: 'top' }}
+					className='text-white p-2 rounded-full hover:bg-red-800 hover:text-red-800'
+					onClick={onClose}>
+					<i className='fa-solid fa-circle-xmark text-[40px] text-red-800 hover:text-white'></i>
+				</Button>
+			</Form.Group>
+		</Form>
 	);
 };
 

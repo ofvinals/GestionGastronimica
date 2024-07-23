@@ -40,67 +40,65 @@ export const SalonMenu = () => {
 	};
 
 	return (
-		<>
-			<section>
-				<div className='px-5 pt-3 shadowIndex rounded-t-md bg-slate-600 flex flex-wrap flex-row items-center justify-around'>
-					<button
-						onClick={() => {
-							handleMonitor();
-							setActiveButton('monitor');
-						}}
-						className={`mx-3 border-none text-white p-2 ${
-							activeButton === 'monitor'
-								? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
-								: 'bg-transparent text-white hover:font-bold'
-						}`}>
-						Estado de Mesas
-					</button>
-					<button
-						onClick={() => {
-							handleTable();
-							setActiveButton('tables');
-						}}
-						className={`mx-3 border-none text-white p-2 ${
-							activeButton === 'tables'
-								? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
-								: 'bg-transparent text-white hover:font-bold'
-						}`}>
-						Monitor de Salon
-					</button>
+		<section>
+			<div className='px-5 pt-3 shadowIndex rounded-t-md bg-slate-600 flex flex-wrap flex-row items-center justify-around'>
+				<button
+					onClick={() => {
+						handleMonitor();
+						setActiveButton('monitor');
+					}}
+					className={`mx-3 border-none text-white p-2 ${
+						activeButton === 'monitor'
+							? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
+							: 'bg-transparent text-white hover:font-bold'
+					}`}>
+					Estado de Mesas
+				</button>
+				<button
+					onClick={() => {
+						handleTable();
+						setActiveButton('tables');
+					}}
+					className={`mx-3 border-none text-white p-2 ${
+						activeButton === 'tables'
+							? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
+							: 'bg-transparent text-white hover:font-bold'
+					}`}>
+					Monitor de Salon
+				</button>
 
-					<button
-						onClick={() => {
-							handleSales();
-							setActiveButton('sales');
-						}}
-						className={`mx-3 border-none text-white p-2 ${
-							activeButton === 'sales'
-								? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
-								: 'bg-transparent text-white hover:font-bold'
-						}`}>
-						Ventas
-					</button>
-					<button
-						onClick={() => {
-							handleLayout();
-							setActiveButton('layout');
-						}}
-						className={`mx-3 border-none text-white p-2 ${
-							activeButton === 'layout'
-								? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
-								: 'bg-transparent text-white hover:font-bold'
-						}`}>
-						Layout de Salon
-					</button>
-				</div>
-				<div className='w-full'>
-					{showDataTable && <TableDashboard />}
-					{showDataLayout && <MenuLayout />}
-					{showDataSales && <SalesDashboard />}
-					{showDataMonitor && <MonitorDashboard />}
-				</div>
-			</section>
-		</>
+				<button
+					onClick={() => {
+						handleSales();
+						setActiveButton('sales');
+					}}
+					className={`mx-3 border-none text-white p-2 ${
+						activeButton === 'sales'
+							? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
+							: 'bg-transparent text-white hover:font-bold'
+					}`}>
+					Ventas
+				</button>
+				<button
+					onClick={() => {
+						handleLayout();
+						setActiveButton('layout');
+					}}
+					className={`mx-3 border-none text-white p-2 ${
+						activeButton === 'layout'
+							? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
+							: 'bg-transparent text-white hover:font-bold'
+					}`}>
+					Layout de Salon
+				</button>
+			</div>
+			<div className='w-full'>
+				{showDataTable && <TableDashboard />}
+				{showDataLayout && <MenuLayout />}
+				{showDataSales && <SalesDashboard />}
+				{showDataMonitor && <MonitorDashboard />}
+			</div>
+		</section>
 	);
 };
 

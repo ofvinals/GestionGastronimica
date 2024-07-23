@@ -22,33 +22,31 @@ export const Header = () => {
 		: 'w-full bg-slate-700 sticky-top navbar text-white rounded-b-3xl ';
 
 	return (
-		<>
-			<Navbar data-bs-theme='dark' id='navbar' className={navbarClassName}>
-				<Container className='flex w-full flex-row justify-between bg-slate-700'>
-					<Navbar.Brand href='/'>
-						<img
-							className='ms-3 rounded-lg'
-							src='/LOGO RESTOFLOW.png'
-							width={100}
-							alt='logomarca'
-						/>
-					</Navbar.Brand>
+		<Navbar data-bs-theme='dark' id='navbar' className={navbarClassName}>
+			<Container className='flex w-full flex-row justify-between bg-slate-700'>
+				<Navbar.Brand href='/'>
+					<img
+						className='ms-3 rounded-lg'
+						src='/LOGO RESTOFLOW.png'
+						width={100}
+						alt='logomarca'
+					/>
+				</Navbar.Brand>
 
-					<Nav className='flex w-full flex-row flex-wrap items-center justify-around'>
-						{displayName ? (
-							<>
-								<UserMenu
-									displayName={displayName}
-									handleLogOut={handleLogOut}
-								/>
-							</>
-						) : null}
-					</Nav>
-					<div className='flex felx-col text-center flex-wrap items-center'>
-						<DateTime />
-					</div>
-				</Container>
-			</Navbar>
-		</>
+				<Nav className='flex w-full flex-row flex-wrap items-center justify-around'>
+					{displayName ? (
+						<>
+							<UserMenu
+								displayName={displayName}
+								handleLogOut={handleLogOut}
+							/>
+						</>
+					) : null}
+				</Nav>
+				<div className='flex felx-col text-center flex-wrap items-center'>
+					<DateTime />
+				</div>
+			</Container>
+		</Navbar>
 	);
 };

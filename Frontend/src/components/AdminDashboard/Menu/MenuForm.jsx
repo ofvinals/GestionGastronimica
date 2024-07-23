@@ -88,7 +88,7 @@ const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
 	});
 
 	return (
-		<>
+	
 			<GenericForm
 				loading={state.loading}
 				onSubmit={onSubmit}
@@ -210,7 +210,7 @@ const MenuForm = ({ rowId, onClose, mode = 'edit' }) => {
 				/>
 				<p className='text-sm'>(*) Campos obligatorios</p>
 			</GenericForm>
-		</>
+		
 	);
 };
 

@@ -117,43 +117,37 @@ export const MonitorDashboard = () => {
 		},
 	});
 
+	if (state.loading) {
+		return <Loader />;
+	}
+
 	return (
-		<>
-			{state.loading ? (
-				<Loader />
-			) : (
-				<section>
-					<div className='px-5 shadowIndex rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-around sm:justify-between drop-shadow-3xl'>
-						<h3 className=' text-white text-xl mt-3 font-semibold h-[50px]'>
-							Estado de mesas
-						</h3>{' '}
-						<div className='text-white'>
-							Mesas ocupadas: {tableCounts.openTables} / Total Mesas:{' '}
-							{tableCounts.totalTables}
-						</div>
-					</div>
-					<div className='table-responsive'>
-						<ThemeProvider theme={darkTheme}>
-							<CssBaseline />
-							<Table
-								columns={columns}
-								data={filteredOrders}
-								actions={actions}
-							/>
-						</ThemeProvider>
-					</div>
-					<Modals
-						isOpen={openViewModal}
-						onClose={handleCloseModal}
-						title='Ver Venta'>
-						<MonitorForm
-							onClose={handleCloseModal}
-							rowId={rowId}
-							mode='view'
-						/>
-					</Modals>
-				</section>
-			)}
-		</>
+		<section>
+			<div className='px-5 shadowIndex rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-around sm:justify-between drop-shadow-3xl'>
+				<h3 className=' text-white text-xl mt-3 font-semibold h-[50px]'>
+					Estado de mesas
+				</h3>{' '}
+				<div className='text-white'>
+					Mesas ocupadas: {tableCounts.openTables} / Total Mesas:{' '}
+					{tableCounts.totalTables}
+				</div>
+			</div>
+			<div className='table-responsive'>
+				<ThemeProvider theme={darkTheme}>
+					<CssBaseline />
+					<Table
+						columns={columns}
+						data={filteredOrders}
+						actions={actions}
+					/>
+				</ThemeProvider>
+			</div>
+			<Modals
+				isOpen={openViewModal}
+				onClose={handleCloseModal}
+				title='Ver Venta'>
+				<MonitorForm onClose={handleCloseModal} rowId={rowId} mode='view' />
+			</Modals>
+		</section>
 	);
 };

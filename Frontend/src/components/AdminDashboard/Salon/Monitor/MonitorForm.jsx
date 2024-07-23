@@ -112,178 +112,173 @@ const SalesForm = ({ rowId, onClose, mode = 'edit' }) => {
 	};
 
 	return (
-		<>
-				<Form onSubmit={onSubmit}>
-					<div className='flex flex-row flex-wrap items-center justify-around'>
-						<Form.Group controlId='salon'>
-							<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
-								Salon
-							</Form.Label>
-							<Form.Control
-								className={`${
-									mode === 'view' || mode === 'edit'
-										? 'border-none focus:border-none focus:outline-none bg-transparent'
-										: ''
-								}`}
-								type='text'
-								{...register('salonName', {
-									required: 'El nombre del salon es requerido',
-								})}
-								readOnly={mode === 'view' || mode === 'edit'}
-							/>
-							{errors.salonName && (
-								<span className='text-warning fs-6'>
-									{errors.salonName.message}
-								</span>
-							)}
-						</Form.Group>
-						<Form.Group controlId='tableNum'>
-							<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
-								Mesa
-							</Form.Label>
-							<Form.Control
-								className={`${
-									mode === 'view'
-										? 'border-none focus:border-none focus:outline-none bg-transparent'
-										: ''
-								}`}
-								type='number'
-								{...register('tableNum', {
-									required: 'El numero de mesa es requerido',
-								})}
-								readOnly={mode === 'view' || mode === 'edit'}
-							/>
-							{errors.tableNum && (
-								<span className='text-warning fs-6'>
-									{errors.tableNum.message}
-								</span>
-							)}
-						</Form.Group>
-					</div>
-					<div className='flex flex-row flex-wrap items-center justify-around'>
-						<Form.Group controlId='diners'>
-							<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
-								Personas
-							</Form.Label>
-							<Form.Control
-								className={`${
-									mode === 'view'
-										? 'border-none focus:border-none focus:outline-none bg-transparent'
-										: ''
-								}`}
-								type='number'
-								{...register('diners', {
-									required: 'La cantidad de personas es requerida',
-								})}
-								readOnly={mode === 'view'}></Form.Control>
-							{errors.diners && (
-								<span className='text-warning fs-6'>
-									{errors.diners.message}
-								</span>
-							)}
-						</Form.Group>
-						<Form.Group controlId='server'>
-							<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
-								Server
-							</Form.Label>
-							<Form.Control
-								className={`${
-									mode === 'view'
-										? 'border-none focus:border-none focus:outline-none bg-transparent'
-										: ''
-								}`}
-								type='text'
-								{...register('server', {
-									required: 'El nombre del server es requerido',
-								})}
-								readOnly={mode === 'view' || mode === 'edit'}
-							/>
-							{errors.server && (
-								<span className='text-warning fs-6'>
-									{errors.server.message}
-								</span>
-							)}
-						</Form.Group>
-					</div>
-					<div className='flex flex-row flex-wrap items-center justify-around'>
-						<Form.Group controlId='openAt'>
-							<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
-								Horario Apertura{' '}
-							</Form.Label>
-							<Form.Control
-								className={`${
-									mode === 'view'
-										? 'border-none focus:border-none focus:outline-none bg-transparent'
-										: ''
-								}`}
-								type='text'
-								{...register('openAt', {
-									required: 'El horario de apertura es requerido',
-								})}
-								readOnly={mode === 'view' || mode === 'edit'}
-							/>
-							{errors.openAt && (
-								<span className='text-warning fs-6'>
-									{errors.openAt.message}
-								</span>
-							)}
-						</Form.Group>
-						<Form.Group controlId='closeAt'>
-							<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
-								Horario Cierre
-							</Form.Label>
-							<Form.Control
-								className={`${
-									mode === 'view'
-										? 'border-none focus:border-none focus:outline-none bg-transparent'
-										: ''
-								}`}
-								type='text'
-								{...register('closeAt', {
-									required: 'El horario de cierre es requerido',
-								})}
-								readOnly={
-									mode === 'view' || mode === 'edit'
-								}></Form.Control>
-							{errors.closeAt && (
-								<span className='text-warning fs-6'>
-									{errors.closeAt.message}
-								</span>
-							)}
-						</Form.Group>
-					</div>
-					<Form.Group controlId='items'>
-						<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
-							Items
-						</Form.Label>{' '}
-						{renderItems(items)}
-						<div className=' font-semibold text-xl flex flex-col flex-wrap items-center justify-center mt-4'>
-							<p>Items: {totalItems}</p>
-						</div>
-					</Form.Group>
+		<Form onSubmit={onSubmit}>
+			<div className='flex flex-row flex-wrap items-center justify-around'>
+				<Form.Group controlId='salon'>
+					<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
+						Salon
+					</Form.Label>
+					<Form.Control
+						className={`${
+							mode === 'view' || mode === 'edit'
+								? 'border-none focus:border-none focus:outline-none bg-transparent'
+								: ''
+						}`}
+						type='text'
+						{...register('salonName', {
+							required: 'El nombre del salon es requerido',
+						})}
+						readOnly={mode === 'view' || mode === 'edit'}
+					/>
+					{errors.salonName && (
+						<span className='text-warning fs-6'>
+							{errors.salonName.message}
+						</span>
+					)}
+				</Form.Group>
+				<Form.Group controlId='tableNum'>
+					<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
+						Mesa
+					</Form.Label>
+					<Form.Control
+						className={`${
+							mode === 'view'
+								? 'border-none focus:border-none focus:outline-none bg-transparent'
+								: ''
+						}`}
+						type='number'
+						{...register('tableNum', {
+							required: 'El numero de mesa es requerido',
+						})}
+						readOnly={mode === 'view' || mode === 'edit'}
+					/>
+					{errors.tableNum && (
+						<span className='text-warning fs-6'>
+							{errors.tableNum.message}
+						</span>
+					)}
+				</Form.Group>
+			</div>
+			<div className='flex flex-row flex-wrap items-center justify-around'>
+				<Form.Group controlId='diners'>
+					<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
+						Personas
+					</Form.Label>
+					<Form.Control
+						className={`${
+							mode === 'view'
+								? 'border-none focus:border-none focus:outline-none bg-transparent'
+								: ''
+						}`}
+						type='number'
+						{...register('diners', {
+							required: 'La cantidad de personas es requerida',
+						})}
+						readOnly={mode === 'view'}></Form.Control>
+					{errors.diners && (
+						<span className='text-warning fs-6'>
+							{errors.diners.message}
+						</span>
+					)}
+				</Form.Group>
+				<Form.Group controlId='server'>
+					<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
+						Server
+					</Form.Label>
+					<Form.Control
+						className={`${
+							mode === 'view'
+								? 'border-none focus:border-none focus:outline-none bg-transparent'
+								: ''
+						}`}
+						type='text'
+						{...register('server', {
+							required: 'El nombre del server es requerido',
+						})}
+						readOnly={mode === 'view' || mode === 'edit'}
+					/>
+					{errors.server && (
+						<span className='text-warning fs-6'>
+							{errors.server.message}
+						</span>
+					)}
+				</Form.Group>
+			</div>
+			<div className='flex flex-row flex-wrap items-center justify-around'>
+				<Form.Group controlId='openAt'>
+					<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
+						Horario Apertura{' '}
+					</Form.Label>
+					<Form.Control
+						className={`${
+							mode === 'view'
+								? 'border-none focus:border-none focus:outline-none bg-transparent'
+								: ''
+						}`}
+						type='text'
+						{...register('openAt', {
+							required: 'El horario de apertura es requerido',
+						})}
+						readOnly={mode === 'view' || mode === 'edit'}
+					/>
+					{errors.openAt && (
+						<span className='text-warning fs-6'>
+							{errors.openAt.message}
+						</span>
+					)}
+				</Form.Group>
+				<Form.Group controlId='closeAt'>
+					<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
+						Horario Cierre
+					</Form.Label>
+					<Form.Control
+						className={`${
+							mode === 'view'
+								? 'border-none focus:border-none focus:outline-none bg-transparent'
+								: ''
+						}`}
+						type='text'
+						{...register('closeAt', {
+							required: 'El horario de cierre es requerido',
+						})}
+						readOnly={mode === 'view' || mode === 'edit'}></Form.Control>
+					{errors.closeAt && (
+						<span className='text-warning fs-6'>
+							{errors.closeAt.message}
+						</span>
+					)}
+				</Form.Group>
+			</div>
+			<Form.Group controlId='items'>
+				<Form.Label className='text-start bg-transparent text-xl mb-0 mt-2 text-background w-full font-medium'>
+					Items
+				</Form.Label>{' '}
+				{renderItems(items)}
+				<div className=' font-semibold text-xl flex flex-col flex-wrap items-center justify-center mt-4'>
+					<p>Items: {totalItems}</p>
+				</div>
+			</Form.Group>
 
-					<Form.Group className='flex flex-wrap items-center justify-around mt-3'>
-						{mode !== 'view' && (
-							<Button
-								type='submit'
-								tooltip='Confirmar'
-								tooltipOptions={{ position: 'top' }}
-								className='noborder text-white p-2 rounded-full hover:bg-green-800 hover:text-green-800'>
-								<i className='fa-solid fa-circle-check text-[40px] text-green-800 hover:text-white'></i>
-							</Button>
-						)}
-						<Button
-							type='button'
-							tooltip='Cerrar'
-							tooltipOptions={{ position: 'top' }}
-							className='noborder text-white p-2 rounded-full hover:bg-red-800 hover:text-red-800'
-							onClick={onClose}>
-							<i className='fa-solid fa-circle-xmark text-[40px] text-red-800 hover:text-white'></i>
-						</Button>
-					</Form.Group>
-				</Form>
-		
-		</>
+			<Form.Group className='flex flex-wrap items-center justify-around mt-3'>
+				{mode !== 'view' && (
+					<Button
+						type='submit'
+						tooltip='Confirmar'
+						tooltipOptions={{ position: 'top' }}
+						className='noborder text-white p-2 rounded-full hover:bg-green-800 hover:text-green-800'>
+						<i className='fa-solid fa-circle-check text-[40px] text-green-800 hover:text-white'></i>
+					</Button>
+				)}
+				<Button
+					type='button'
+					tooltip='Cerrar'
+					tooltipOptions={{ position: 'top' }}
+					className='noborder text-white p-2 rounded-full hover:bg-red-800 hover:text-red-800'
+					onClick={onClose}>
+					<i className='fa-solid fa-circle-xmark text-[40px] text-red-800 hover:text-white'></i>
+				</Button>
+			</Form.Group>
+		</Form>
 	);
 };
 

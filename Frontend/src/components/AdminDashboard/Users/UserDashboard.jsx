@@ -122,52 +122,44 @@ export const UserDashboard = () => {
 		},
 	});
 
+	if (state.loading) {
+		return <Loader />;
+	}
+
 	return (
 		<>
-			{state.loading ? (
-				<Loader />
-			) : (
-				<>
-					<div className='px-5 bg-slate-600 shadowIndex flex flex-wrap flex-row items-center justify-around sm:justify-between rounded-t-md'>
-						<h3 className=' text-white text-xl font-semibold '>
-							Usuarios
-						</h3>
-						<button
-							onClick={handleOpenAddModal}
-							className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
-							<i className='pe-2 fa-solid fa-plus'></i>
-							Agregar Usuarios
-						</button>
-					</div>
-					<div className='table-responsive'>
-						<ThemeProvider theme={darkTheme}>
-							<CssBaseline />
-							<Table
-								columns={columns}
-								data={state.users}
-								actions={actions}
-								initialSortColumn='name'
-							/>
-						</ThemeProvider>
-					</div>
-					<Modals
-						isOpen={openEditModal}
-						onClose={handleCloseModal}
-						title='Editar Usuario'>
-						<UserForm
-							rowId={rowId}
-							onClose={handleCloseModal}
-							mode='edit'
-						/>
-					</Modals>
-					<Modals
-						isOpen={openAddModal}
-						onClose={handleCloseModal}
-						title='Agregar Nuevo Usuario'>
-						<UserForm onClose={handleCloseModal} mode='create' />
-					</Modals>
-				</>
-			)}
+			<div className='px-5 bg-slate-600 shadowIndex flex flex-wrap flex-row items-center justify-around sm:justify-between rounded-t-md'>
+				<h3 className=' text-white text-xl font-semibold '>Usuarios</h3>
+				<button
+					onClick={handleOpenAddModal}
+					className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
+					<i className='pe-2 fa-solid fa-plus'></i>
+					Agregar Usuarios
+				</button>
+			</div>
+			<div className='table-responsive'>
+				<ThemeProvider theme={darkTheme}>
+					<CssBaseline />
+					<Table
+						columns={columns}
+						data={state.users}
+						actions={actions}
+						initialSortColumn='name'
+					/>
+				</ThemeProvider>
+			</div>
+			<Modals
+				isOpen={openEditModal}
+				onClose={handleCloseModal}
+				title='Editar Usuario'>
+				<UserForm rowId={rowId} onClose={handleCloseModal} mode='edit' />
+			</Modals>
+			<Modals
+				isOpen={openAddModal}
+				onClose={handleCloseModal}
+				title='Agregar Nuevo Usuario'>
+				<UserForm onClose={handleCloseModal} mode='create' />
+			</Modals>
 		</>
 	);
 };
