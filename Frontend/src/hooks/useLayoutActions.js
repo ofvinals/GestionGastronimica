@@ -6,9 +6,7 @@ export const useLayoutActions = () => {
 	const { dispatch } = useContext(LoungeContext);
 
 	const loadAllLayoutAction = async () => {
-		dispatch({
-			type: 'DATA_TABLE_PENDING',
-		});
+
 		try {
 			const token = localStorage.getItem('token');
 			const response = await apiURL.get('/api/lounges/', {

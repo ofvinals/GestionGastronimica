@@ -44,6 +44,7 @@ export const MenuServer = () => {
 		<section>
 			<div className='pt-3 shadowIndex rounded-t-md bg-slate-600 flex flex-wrap flex-row justify-around'>
 				{/* RENDERIZA LOS SALONES POR BOTON */}
+				<h2 className='text-white text-2xl font-bold mb-3'>Salones</h2>
 				{loungeState.lounges && loungeState.lounges.length > 0 && (
 					<div className='w-full flex flex-row flex-wrap items-center justify-around'>
 						{loungeState.lounges.map((salon) => (
@@ -61,7 +62,7 @@ export const MenuServer = () => {
 					</div>
 				)}
 			</div>
-			<div className='flex w-full'>
+			<div className='flex w-full items-center mt-2 justify-center'>
 				{activeSalonId !== null && (
 					<ServerLayout
 						onReload={handleReload}

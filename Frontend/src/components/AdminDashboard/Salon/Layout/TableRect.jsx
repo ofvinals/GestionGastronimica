@@ -25,7 +25,7 @@ const TableRect = ({
 				onClick={onClick}
 				onTap={onClick}
 				onContextMenu={onContextMenu}
-				fill={isSelected ? 'green' : 'grey'}
+				fill={isSelected ? 'red' : 'green'}
 				stroke={isSelected ? 'black' : 'grey'}
 				shadowBlur={isSelected ? 10 : 0}
 			/>
