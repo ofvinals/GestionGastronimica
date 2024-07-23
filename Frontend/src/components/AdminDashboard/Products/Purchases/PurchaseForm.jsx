@@ -6,13 +6,11 @@ import { ProductContext } from '../../../../context/ProductContext.jsx';
 import { usePurchaseActions } from '../../../../hooks/usePurchaseActions.js';
 import GenericForm from '../../../../helpers/GenericForm.jsx';
 import FormField from '../../../../helpers/FormField.jsx';
-import { useSupplierActions } from '../../../../hooks/useSupplierActions.js';
 
 const PurchaseForm = ({ rowId, onClose, mode = 'edit' }) => {
 	const { state } = useContext(ProductContext);
-	const { editPurchaseAction, addPurchaseAction, dataPurchases } =
+	const { editPurchaseAction, addPurchaseAction } =
 		usePurchaseActions();
-	const { dataSuppliers } = useSupplierActions();
 	const {
 		register,
 		handleSubmit,
@@ -26,11 +24,6 @@ const PurchaseForm = ({ rowId, onClose, mode = 'edit' }) => {
 		control,
 		name: 'items',
 	});
-
-	useEffect(() => {
-		dataSuppliers();
-		dataPurchases();
-	}, []);
 
 	const loadPurchase = () => {
 		const purchase = state.purchases.find(

@@ -59,49 +59,47 @@ const MenuLayout = () => {
 	};
 
 	return (
-		<>
-			<section>
-				<div className='pt-3 shadowIndex rounded-t-md bg-slate-600 flex flex-wrap flex-row items-center justify-around'>
-					{loungeState.lounges &&
-						loungeState.lounges.map((lounge) => (
-							<button
-								key={lounge._id}
-								onClick={() => handleSalonClick(lounge._id)}
-								className={`border-none text-white p-2 ${
-									activeSalonId === lounge._id
-										? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
-										: 'bg-transparent text-white hover:font-bold'
-								}`}>
-								{lounge.name}
-							</button>
-						))}
+		<section>
+			<div className='pt-3 shadowIndex rounded-t-md bg-slate-600 flex flex-wrap flex-row items-center justify-around'>
+				{loungeState.lounges &&
+					loungeState.lounges.map((lounge) => (
+						<button
+							key={lounge._id}
+							onClick={() => handleSalonClick(lounge._id)}
+							className={`border-none text-white p-2 ${
+								activeSalonId === lounge._id
+									? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
+									: 'bg-transparent text-white hover:font-bold'
+							}`}>
+							{lounge.name}
+						</button>
+					))}
 
-					<div className='flex items-end justify-end'>
-						<button
-							onClick={() => handleOpenForm({})}
-							className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
-							<i className='pe-2 fa-solid fa-plus'></i>
-							Agregar Nuevo Salon
-						</button>
-						<button
-							onClick={() => handleDeleteSalon(activeSalonId)}
-							className='ml-2 flex mb-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
-							<i className=' text-xl fa-solid fa-trash'></i>
-						</button>
-					</div>
+				<div className='flex items-end justify-end'>
+					<button
+						onClick={() => handleOpenForm({})}
+						className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
+						<i className='pe-2 fa-solid fa-plus'></i>
+						Agregar Nuevo Salon
+					</button>
+					<button
+						onClick={() => handleDeleteSalon(activeSalonId)}
+						className='ml-2 flex mb-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:from-slate-to-slate-800 text-white hover:text-white font-bold py-2 px-4 rounded'>
+						<i className=' text-xl fa-solid fa-trash'></i>
+					</button>
 				</div>
-				<div className='flex w-full'>
-					{activeSalonId !== null && (
-						<RestaurantLayout
-							salonId={activeSalonId}
-							salonName={salonActive.name}
-							showLoungeForm={showLoungeForm}
-							onCloseForm={handleCloseForm}
-						/>
-					)}
-				</div>
-			</section>
-		</>
+			</div>
+			<div className='flex w-full'>
+				{activeSalonId !== null && (
+					<RestaurantLayout
+						salonId={activeSalonId}
+						salonName={salonActive.name}
+						showLoungeForm={showLoungeForm}
+						onCloseForm={handleCloseForm}
+					/>
+				)}
+			</div>
+		</section>
 	);
 };
 
