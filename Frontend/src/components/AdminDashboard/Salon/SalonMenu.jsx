@@ -3,6 +3,7 @@ import MenuLayout from '../Salon/Layout/MenuLayout';
 import { SalesDashboard } from './Sales/SalesDashboard';
 import { MonitorDashboard } from './Monitor/MonitorDashboard';
 import { TableDashboard } from './TableDashboard';
+import { UnderConstruction } from '../UnderConstruction';
 
 export const SalonMenu = () => {
 	const [activeButton, setActiveButton] = useState('tables');
@@ -10,12 +11,14 @@ export const SalonMenu = () => {
 	const [showDataLayout, setShowDataLayout] = useState(false);
 	const [showDataSales, setShowDataSales] = useState(false);
 	const [showDataMonitor, setShowDataMonitor] = useState(false);
+	const [showDataReserv, setShowDataReserv] = useState(false);
 
 	const handleTable = () => {
 		setShowDataTable(true);
 		setShowDataLayout(false);
 		setShowDataSales(false);
 		setShowDataMonitor(false);
+		setShowDataReserv(false);
 	};
 
 	const handleLayout = () => {
@@ -23,6 +26,7 @@ export const SalonMenu = () => {
 		setShowDataLayout(true);
 		setShowDataSales(false);
 		setShowDataMonitor(false);
+		setShowDataReserv(false);
 	};
 
 	const handleSales = () => {
@@ -30,6 +34,7 @@ export const SalonMenu = () => {
 		setShowDataLayout(false);
 		setShowDataSales(true);
 		setShowDataMonitor(false);
+		setShowDataReserv(false);
 	};
 
 	const handleMonitor = () => {
@@ -37,6 +42,15 @@ export const SalonMenu = () => {
 		setShowDataLayout(false);
 		setShowDataSales(false);
 		setShowDataMonitor(true);
+		setShowDataReserv(false);
+	};
+
+	const handleReserv = () => {
+		setShowDataTable(false);
+		setShowDataLayout(false);
+		setShowDataSales(false);
+		setShowDataMonitor(false);
+		setShowDataReserv(true);
 	};
 
 	return (
@@ -91,12 +105,25 @@ export const SalonMenu = () => {
 					}`}>
 					Layout de Salon
 				</button>
+				<button
+					onClick={() => {
+						handleReserv();
+						setActiveButton('reserv');
+					}}
+					className={`mx-3 border-none text-white p-2 ${
+						activeButton === 'reserv'
+							? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
+							: 'bg-transparent text-white hover:font-bold'
+					}`}>
+					Reserva de Mesas
+				</button>
 			</div>
 			<div className='w-full'>
 				{showDataTable && <TableDashboard />}
 				{showDataLayout && <MenuLayout />}
 				{showDataSales && <SalesDashboard />}
 				{showDataMonitor && <MonitorDashboard />}
+				{showDataReserv && <UnderConstruction />}
 			</div>
 		</section>
 	);
