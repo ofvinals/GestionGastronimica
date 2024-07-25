@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { ProductContext } from '../context/ProductContext';
 import { apiURL } from '/api/apiURL.js';
-import { showAlert, confirmAction } from '../helpers/showAlert';
+import { showAlert, confirmAction } from '../utils/showAlert';
 
 export const useProductActions = () => {
 	const { dispatch } = useContext(ProductContext);

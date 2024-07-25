@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { apiURL } from '/api/apiURL.js';
 import { useNavigate } from 'react-router-dom';
-import { showAlert } from '../helpers/showAlert';
+import { showAlert } from '../utils/showAlert';
 
 export const useAuthActions = () => {
 	const { dispatch } = useContext(AuthContext);

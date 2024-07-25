@@ -5,10 +5,10 @@ import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { KitchenReducer, initialState } from '../../../reducer/KitchenReducer';
 import { useKitchenActions } from '../../../hooks/useKitchenActions.js';
-import { formatElapsedTime } from '../../../helpers/ElapsedTime';
-import Loader from '../../../helpers/Loader';
-import { Pagination } from '../../../helpers/Pagination.jsx';
-import Modals from '../../Modals.jsx';
+import { formatElapsedTime } from '../../../utils/ElapsedTime';
+import Loader from '../../../utils/Loader';
+import { Pagination } from '../../../utils/Pagination.jsx';
+import Modals from '../../../utils/Modals.jsx';
 import { InfoMenu } from './InfoMenu.jsx';
 
 export const ExecutingItems = ({ executingItems }) => {

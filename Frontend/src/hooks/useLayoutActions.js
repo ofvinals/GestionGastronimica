@@ -183,7 +183,6 @@ export const useLayoutActions = () => {
 	return {
 		loadLayoutAction,
 		updateTableIsOpenAction,
-		// editLayoutAction,
 		addTableAction,
 		// editTablePositionAction,
 		editTableDetailsAction,

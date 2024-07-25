@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
-import TipButtons from '../../../../helpers/TipsButtons';
+import TipButtons from '../../../../utils/TipsButtons';
 
 export const AdditionalChargesForm = ({ onSubmit, totalAmount }) => {
 	const [tableService, setTableService] = useState('');

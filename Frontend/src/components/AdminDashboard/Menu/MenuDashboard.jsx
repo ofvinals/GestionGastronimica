@@ -3,14 +3,14 @@ import { useEffect, useContext, useState, useMemo } from 'react';
 import { FaPause, FaPlay, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Table } from '../../Table';
-import Modals from '../../Modals';
+import { Table } from '../../../utils/Table';
+import Modals from '../../../utils/Modals';
 import MenuForm from '../Menu/MenuForm';
 import { MenuContext } from '../../../context/MenuContext';
 import { useMenuActions } from '../../../hooks/useMenuActions.js';
 import { Button } from 'react-bootstrap';
 import { CategorySelection } from '../Categorys/CategorySelection';
-import Loader from '../../../helpers/Loader';
+import Loader from '../../../utils/Loader';
 
 export const MenuDashboard = () => {
 	const { state } = useContext(MenuContext);

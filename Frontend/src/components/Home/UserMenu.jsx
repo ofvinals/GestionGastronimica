@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import { useAuthActions } from '../../hooks/useAuthActions.js';
 import '../../css/Custom.css';
-import Modals from '../Modals';
+import Modals from '../../utils/Modals';
 import Profile from './Profile';
 
 const UserMenu = ({ displayName }) => {

@@ -4,13 +4,13 @@ import { Button } from 'primereact/button';
 import { useCounter } from 'primereact/hooks';
 import { CategorySelection } from './CategorySelection';
 import { OrderMenu } from './OrderMenu';
-import Modals from '../../../Modals';
+import Modals from '../../../../utils/Modals';
 import { OrderResume } from './OrderResume';
 import { useOrderActions } from '../../../../hooks/useOrderActions.js';
 import { useLayoutActions } from '../../../../hooks/useLayoutActions.js';
 import { OrderContext } from '../../../../context/OrderContext';
 import { AuthContext } from '../../../../context/AuthContext';
-import { showAlert } from '../../../../helpers/showAlert';
+import { showAlert } from '../../../../utils/showAlert';
 
 // RECIBE DATOS DE SERVERLAYOUT
 export const OrderForm = ({

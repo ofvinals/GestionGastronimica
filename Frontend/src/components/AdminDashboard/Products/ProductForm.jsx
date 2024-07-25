@@ -4,8 +4,8 @@ import { useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { ProductContext } from '../../../context/ProductContext';
 import { useProductActions } from '../../../hooks/useProductActions.js';
-import GenericForm from '../../../helpers/GenericForm';
-import FormField from '../../../helpers/FormField';
+import GenericForm from '../../../utils/GenericForm';
+import FormField from '../../../utils/FormField';
 
 const ProductForm = ({ rowId, onClose, mode = 'edit' }) => {
 	const { state } = useContext(ProductContext);

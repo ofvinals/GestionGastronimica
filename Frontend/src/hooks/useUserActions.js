@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
-import { showAlert, confirmAction } from '../helpers/showAlert';
+import { showAlert, confirmAction } from '../utils/showAlert';
 import { apiURL } from '/api/apiURL.js';
 
 export const useUserActions = () => {

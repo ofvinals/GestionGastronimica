@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { apiURL } from '/api/apiURL.js';
 import { MenuContext } from '../context/MenuContext';
-import { showAlert, confirmAction } from '../helpers/showAlert';
+import { showAlert, confirmAction } from '../utils/showAlert';
 
 export const useCategoryActions = () => {
 	const { dispatch } = useContext(MenuContext);

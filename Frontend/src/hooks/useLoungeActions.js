@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { LoungeContext } from '../context/LoungeContext';
 import { apiURL } from '/api/apiURL.js';
-import { confirmAction, showAlert } from '../helpers/showAlert';
+import { confirmAction, showAlert } from '../utils/showAlert';
 
 export const useLoungeActions = () => {
 	const { dispatch } = useContext(LoungeContext);

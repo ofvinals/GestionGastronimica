@@ -5,12 +5,12 @@ import { useContext, useEffect, useMemo, useState } from 'react';
 import { FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Table } from '../../../Table';
-import Modals from '../../../Modals';
+import { Table } from '../../../../utils/Table';
+import Modals from '../../../../utils/Modals';
 import { useOrderActions } from '../../../../hooks/useOrderActions.js';
 import OrderForm from './OrderForm';
 import { OrderContext } from '../../../../context/OrderContext';
-import Loader from '../../../../helpers/Loader';
+import Loader from '../../../../utils/Loader';
 import { DateTime } from 'luxon';
 
 export const OrderDashboard = () => {

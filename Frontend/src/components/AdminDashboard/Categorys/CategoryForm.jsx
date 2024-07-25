@@ -3,8 +3,8 @@
 import { useContext, useEffect } from 'react';
 import { MenuContext } from '../../../context/MenuContext';
 import { useForm } from 'react-hook-form';
-import GenericForm from '../../../helpers/GenericForm';
-import FormField from '../../../helpers/FormField';
+import GenericForm from '../../../utils/GenericForm';
+import FormField from '../../../utils/FormField';
 import { useCategoryActions } from '../../../hooks/useCategoryActions.js';
 
 const CategoryForm = ({ rowId, onClose, mode = 'edit' }) => {

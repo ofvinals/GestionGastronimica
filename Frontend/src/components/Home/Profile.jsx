@@ -3,10 +3,10 @@
 import { useEffect, useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { Form } from 'react-bootstrap';
-import Loader from '../../helpers/Loader';
+import Loader from '../../utils/Loader';
 import { AuthContext } from '../../context/AuthContext';
 import { useUserActions } from '../../hooks/useUserActions.js';
-import FormField from '../../helpers/FormField';
+import FormField from '../../utils/FormField';
 import { Button } from 'primereact/button';
 
 const Profile = ({ onClose }) => {

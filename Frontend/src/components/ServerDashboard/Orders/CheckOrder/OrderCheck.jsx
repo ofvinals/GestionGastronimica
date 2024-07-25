@@ -3,11 +3,11 @@ import { useOrderManagement } from './useOrderManagement';
 import { TableDetails } from './TableDetails';
 import { OrderItems } from './OrderItems';
 import { ActionButtons } from './ActionButtons';
-import Modals from '../../../Modals';
+import Modals from '../../../../utils/Modals';
 import { CashOrder } from '../CashOrder/CashOrder';
 import { useState } from 'react';
 import { useOrderActions } from '../../../../hooks/useOrderActions.js';
-import { showAlert, confirmAction } from '../../../../helpers/showAlert';
+import { showAlert, confirmAction } from '../../../../utils/showAlert';
 
 // RECIBE PROPS DE SERVERLAYOUT
 export const OrderCheck = ({

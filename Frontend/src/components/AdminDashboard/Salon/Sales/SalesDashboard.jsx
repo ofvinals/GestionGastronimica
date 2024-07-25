@@ -3,11 +3,11 @@ import { useContext, useState, useMemo, useEffect } from 'react';
 import { FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Table } from '../../../Table';
-import Modals from '../../../Modals';
+import { Table } from '../../../../utils/Table';
+import Modals from '../../../../utils/Modals';
 import { OrderContext } from '../../../../context/OrderContext';
 import { useOrderActions } from '../../../../hooks/useOrderActions.js';
-import Loader from '../../../../helpers/Loader';
+import Loader from '../../../../utils/Loader';
 import SalesForm from './SalesForm';
 
 export const SalesDashboard = () => {

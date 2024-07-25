@@ -9,7 +9,7 @@ import { ProductsMenu } from '../components/AdminDashboard/Products/ProductsMenu
 import { UnderConstruction } from '../components/AdminDashboard/UnderConstruction';
 import { OrdersMenu } from '../components/AdminDashboard/Kitchen/OrdersMenu';
 import { AuthContext } from '../context/AuthContext';
-import Loader from '../helpers/Loader';
+import Loader from '../utils/Loader';
 import { useAuthActions } from '../hooks/useAuthActions';
 
 export const Admin = () => {

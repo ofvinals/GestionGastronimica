@@ -5,14 +5,14 @@ import { Stage, Layer } from 'react-konva';
 import TableRect from '../../AdminDashboard/Salon/Layout/TableRect';
 import GridLines from '../../AdminDashboard/Salon/Layout/GridLines';
 import { useLayoutActions } from '../../../hooks/useLayoutActions.js';
-import Loader from '../../../helpers/Loader';
+import Loader from '../../../utils/Loader';
 import { LoungeContext } from '../../../context/LoungeContext';
-import Modals from '../../Modals';
+import Modals from '../../../utils/Modals';
 import { TableOpenForm } from './TableOpenForm';
 import { OrderForm } from '../Orders/PreOrder/OrderForm';
 import { OrderCheck } from '../Orders/CheckOrder/OrderCheck';
 import moment from 'moment-timezone';
-import { showAlert } from '../../../helpers/showAlert';
+import { showAlert } from '../../../utils/showAlert';
 const GRID_SIZE = 9;
 const CELL_SIZE = 50.5;
 

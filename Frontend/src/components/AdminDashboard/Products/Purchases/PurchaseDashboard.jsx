@@ -3,12 +3,12 @@ import { useEffect, useContext, useState, useMemo } from 'react';
 import { FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Table } from '../../../Table.jsx';
-import Modals from '../../../Modals.jsx';
+import { Table } from '../../../../utils/Table.jsx';
+import Modals from '../../../../utils/Modals.jsx';
 import { ProductContext } from '../../../../context/ProductContext.jsx';
 import { Button } from 'react-bootstrap';
 import { usePurchaseActions } from '../../../../hooks/usePurchaseActions.js';
-import Loader from '../../../../helpers/Loader.jsx';
+import Loader from '../../../../utils/Loader.jsx';
 import PurchaseForm from './PurchaseForm.jsx';
 import { DateTime } from 'luxon';
 

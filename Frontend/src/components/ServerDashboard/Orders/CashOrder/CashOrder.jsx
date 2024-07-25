@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { AdditionalChargesForm } from './AditionalChargesForm';
 import { useLayoutActions } from '../../../../hooks/useLayoutActions.js';
 import { useOrderActions } from '../../../../hooks/useOrderActions.js';
-import Modals from '../../../Modals';
+import Modals from '../../../../utils/Modals';
 import { CashPay } from './CashPay';
 import moment from 'moment';
 import PaymentQR from './CashModo.jsx';

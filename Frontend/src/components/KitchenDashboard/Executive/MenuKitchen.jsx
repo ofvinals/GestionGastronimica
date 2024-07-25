@@ -4,7 +4,7 @@ import { OrderContext } from '../../../context/OrderContext';
 import { useOrderActions } from '../../../hooks/useOrderActions.js';
 import { PendingItems } from './PendingItems';
 import { ExecutingItems } from './ExecutingItems';
-import Loader from '../../../helpers/Loader';
+import Loader from '../../../utils/Loader';
 import { useMenuActions } from '../../../hooks/useMenuActions.js';
 
 export const MenuKitchen = () => {

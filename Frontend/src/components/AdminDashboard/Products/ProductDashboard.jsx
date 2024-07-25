@@ -3,13 +3,13 @@ import { useEffect, useContext, useState, useMemo } from 'react';
 import { FaPause, FaPlay, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Table } from '../../Table';
-import Modals from '../../Modals';
+import { Table } from '../../../utils/Table';
+import Modals from '../../../utils/Modals';
 import ProductForm from './ProductForm';
 import { ProductContext } from '../../../context/ProductContext';
 import { useProductActions } from '../../../hooks/useProductActions.js';
 import '../../../css/Custom.css';
-import Loader from '../../../helpers/Loader';
+import Loader from '../../../utils/Loader';
 
 export const ProductDashboard = () => {
 	const { state } = useContext(ProductContext);

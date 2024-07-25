@@ -5,7 +5,7 @@ import { useMenuActions } from '../../../../hooks/useMenuActions';
 import { MenuContext } from '../../../../context/MenuContext';
 import { OrderCard } from './OrderCard.jsx';
 import { useOrderActions } from '../../../../hooks/useOrderActions.js';
-import { Pagination } from '../../../../helpers/Pagination.jsx';
+import { Pagination } from '../../../../utils/Pagination.jsx';
 
 // RECIBE PROPS DE ORDERFORM
 export const OrderMenu = ({

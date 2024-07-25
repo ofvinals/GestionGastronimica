@@ -4,8 +4,8 @@ import { useEffect, useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { UserContext } from '../../../context/UserContext';
 import { useUserActions } from '../../../hooks/useUserActions.js';
-import GenericForm from '../../../helpers/GenericForm';
-import FormField from '../../../helpers/FormField';
+import GenericForm from '../../../utils/GenericForm';
+import FormField from '../../../utils/FormField';
 
 const UserForm = ({ rowId, onClose, mode = 'edit' }) => {
 	const { state } = useContext(UserContext);

@@ -2,8 +2,8 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import GenericForm from '../../../helpers/GenericForm';
-import FormField from '../../../helpers/FormField';
+import GenericForm from '../../../utils/GenericForm';
+import FormField from '../../../utils/FormField';
 import { MenuContext } from '../../../context/MenuContext';
 import { useMenuActions } from '../../../hooks/useMenuActions.js';
 

@@ -127,15 +127,19 @@ export const LoginForm = () => {
 					className='flex flex-col items-center'
 					controlId='submit'>
 					<Button
-						className='m-3 w-[152px] bg-slate-100 border-2 shadow-3xl border-slate-700 text-slate-700 p-2 rounded-2xl font-semibold hover:text-slate-100 hover:bg-slate-700 hover:border-slate-100'
-						type='submit'>
+						className={`m-3 w-[152px] bg-slate-100 border-2 shadow-3xl border-slate-700 text-slate-700 rounded-2xl font-semibold ${
+							authState.loading
+								? 'bg-slate-700 text-slate-50 p-0 border-slate-50'
+								: 'hover:text-slate-100 hover:bg-slate-700 hover:border-slate-100 p-2'
+						}`}
+						type='submit'
+						disabled={authState.loading}>
 						{authState.loading ? (
-							<i
-								className='pi pi-spin pi-spinner bg-slate-700 text-slate-50'
-								style={{
-									fontSize: '2rem',
-									backgroundColor: '#334155',
-								}}></i>
+							<div className='bg-slate-700 w-full p-0 rounded-2xl '>
+								<i
+									className='pi pi-spin pi-spinner text-slate-50 py-2'
+									style={{ fontSize: '2rem' }}></i>
+							</div>
 						) : (
 							<>
 								<i className='text-xl pe-2 fa-solid fa-right-to-bracket'></i>

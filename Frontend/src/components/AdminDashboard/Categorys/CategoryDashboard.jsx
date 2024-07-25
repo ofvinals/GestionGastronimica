@@ -4,12 +4,12 @@ import { useContext, useMemo, useState } from 'react';
 import { FaPause, FaPlay, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Table } from '../../Table.jsx';
-import Modals from '../../Modals.jsx';
+import { Table } from '../../../utils/Table.jsx';
+import Modals from '../../../utils/Modals.jsx';
 import { useCategoryActions } from '../../../hooks/useCategoryActions.js';
 import CategoryForm from './CategoryForm';
 import { MenuContext } from '../../../context/MenuContext';
-import Loader from '../../../helpers/Loader';
+import Loader from '../../../utils/Loader';
 
 export const CategoryProducts = () => {
 	const { state } = useContext(MenuContext);

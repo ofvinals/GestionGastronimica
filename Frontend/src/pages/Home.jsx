@@ -2,7 +2,7 @@
 import { useContext, useEffect } from 'react';
 import { LoginForm } from '../components/Home/LoginForm';
 import { useUserActions } from '../hooks/useUserActions';
-import Loader from '../helpers/Loader';
+import Loader from '../utils/Loader';
 import { UserContext } from '../context/UserContext';
 
 export const Home = () => {
@@ -10,7 +10,9 @@ export const Home = () => {
 	const { state: userState } = useContext(UserContext);
 
 	useEffect(() => {
-		dataUsers();
+		if (!userState.users.length) {
+			dataUsers();
+		}
 	}, []);
 
 	if (userState.loading) {
