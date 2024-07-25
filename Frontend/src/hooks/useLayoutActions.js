@@ -50,7 +50,6 @@ export const useLayoutActions = () => {
 	};
 
 	const addTableAction = async (id, values) => {
-		console.log(id, values);
 		dispatch({ type: 'DATA_TABLE_PENDING' });
 		try {
 			const token = localStorage.getItem('token');
@@ -62,7 +61,6 @@ export const useLayoutActions = () => {
 					headers: { authorization: `Bearer ${token}` },
 				}
 			);
-			console.log(response.data);
 			dispatch({
 				type: 'ADD_TABLE_SUCCESS',
 				payload: response.data,
@@ -137,7 +135,6 @@ export const useLayoutActions = () => {
 		dispatch({
 			type: 'DATA_TABLE_PENDING',
 		});
-		console.log(closeTime, salon_Id, tableId, isOpen, index, openAt);
 		try {
 			const token = localStorage.getItem('token');
 			const updatedTable = await apiURL.put(

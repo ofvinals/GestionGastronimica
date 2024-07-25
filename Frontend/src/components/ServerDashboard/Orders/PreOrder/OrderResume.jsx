@@ -29,7 +29,6 @@ export const OrderResume = ({
 
 	// FUNCION PARA COMFIRMAR LA ORDEN Y ENVIAR A COCINA. BORRA LA PREVORDER DEL REDUCER Y VUELVE AL LAYOUT
 	const handleConfirm = async () => {
-		console.log(orders)
 		// SI NO HAY ORDEN ABIERTA. GENERA NUEVA ORDEN
 		if (!openedOrder || openedOrder.length === 0) {
 			try {

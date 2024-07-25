@@ -5,7 +5,6 @@ import { useContext } from 'react';
 
 const PrivateRoute = () => {
 	const { state } = useContext(AuthContext);
-	console.log(state.user)
 
 	if (state.loading) {
 		return (
@@ -14,7 +13,7 @@ const PrivateRoute = () => {
 			</div>
 		);
 	}
-	console.log(state.user)
+
 	if (!state.user) return <Navigate to='/home' />;
 
 	return <Outlet />;
