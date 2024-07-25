@@ -167,6 +167,15 @@ export const OrderReducer = (state, action) => {
 					return order;
 				}),
 			};
+			case 'DELETE_ORDER_SUCCESS':
+				return {
+					...state,
+					orders: state.orders.filter(
+						(order) => order._id !== action.payload
+					),
+					error: null,
+					loading: false,
+				};
 		// case 'CASH_ORDER_SUCCESS':
 		// 	return {
 		// 		...state,
