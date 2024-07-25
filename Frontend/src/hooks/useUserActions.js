@@ -16,7 +16,6 @@ export const useUserActions = () => {
 				type: 'DATA_USERS_SUCCESS',
 				payload: users.data,
 			});
-			console.log(users.data);
 			return users.data;
 		} catch (error) {
 			dispatch({

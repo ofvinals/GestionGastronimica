@@ -1,6 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-/* eslint-disable react-refresh/only-export-components */
+// AuthProvider.jsx
 import { useEffect, useReducer } from 'react';
 import { AuthReducer } from '../reducer/AuthReducer';
 import { createContext } from 'react';
@@ -9,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 const initialState = {
 	user: null,
-	loading: false,
+	loading: true, 
 	error: null,
 };
 
@@ -19,7 +18,6 @@ export const AuthProvider = ({ children }) => {
 	const [state, dispatch] = useReducer(AuthReducer, initialState);
 	const navigate = useNavigate();
 
-	// CON CADA REFRESCO DE PAGINA CARGA TOKEN DESDE LOCALSTORAGE Y VERIFICA AUTENTICIDAD Y VIGENCIA
 	useEffect(() => {
 		const token = localStorage.getItem('token');
 		if (token) {
@@ -52,3 +50,4 @@ export const AuthProvider = ({ children }) => {
 		</AuthContext.Provider>
 	);
 };
+
