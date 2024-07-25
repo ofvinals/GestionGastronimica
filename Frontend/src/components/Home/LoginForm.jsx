@@ -1,12 +1,10 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import Loader from '../../helpers/Loader';
 import { UserContext } from '../../context/UserContext';
-import { useUserActions } from '../../hooks/useUserActions.js';
 import { useAuthActions } from '../../hooks/useAuthActions.js';
 import { AuthContext } from '../../context/AuthContext.jsx';
 
@@ -15,7 +13,6 @@ export const LoginForm = () => {
 	const { login } = useAuthActions();
 	const { state: userState } = useContext(UserContext);
 	const { state: authState } = useContext(AuthContext);
-	const { dataUsers } = useUserActions();
 	const {
 		register,
 		handleSubmit,
@@ -23,10 +20,6 @@ export const LoginForm = () => {
 	} = useForm();
 	const users = userState.users;
 	const [showPassword, setShowPassword] = useState(false);
-
-	useEffect(() => {
-		dataUsers();
-	}, []);
 
 	const toggleShowPassword = () => {
 		setShowPassword(!showPassword);
@@ -50,10 +43,6 @@ export const LoginForm = () => {
 			console.error(error);
 		}
 	};
-
-	if (userState.loading) {
-		return <Loader />;
-	}
 
 	return (
 		<section className='flex flex-wrap items-center justify-center flex-col pb-10'>

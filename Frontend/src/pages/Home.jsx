@@ -1,14 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { LoginForm } from '../components/Home/LoginForm';
 import { useUserActions } from '../hooks/useUserActions';
+import Loader from '../helpers/Loader';
+import { UserContext } from '../context/UserContext';
 
 export const Home = () => {
 	const { dataUsers } = useUserActions();
+	const { state: userState } = useContext(UserContext);
 
 	useEffect(() => {
 		dataUsers();
 	}, []);
+
+	if (userState.loading) {
+		return <Loader />;
+	}
 
 	return (
 		<div className=''>
