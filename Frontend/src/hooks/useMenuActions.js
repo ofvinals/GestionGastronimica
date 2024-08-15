@@ -117,6 +117,7 @@ export const useMenuActions = () => {
 		const isConfirmed = await confirmAction({
 			title: 'Confirmas la habilitación del menu?',
 			icon: 'warning',
+			confirmButtonColor: '#085718',
 		});
 		if (isConfirmed) {
 			dispatch({

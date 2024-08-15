@@ -114,6 +114,7 @@ export const useCategoryActions = () => {
 		const isConfirmed = await confirmAction({
 			title: 'Confirmas la habilitación de la categoria?',
 			icon: 'warning',
+			confirmButtonColor: '#085718',
 		});
 		if (isConfirmed) {
 			dispatch({

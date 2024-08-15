@@ -160,6 +160,7 @@ export const useOrderActions = () => {
 		const isConfirmed = await confirmAction({
 			title: 'Confirmas la elaboracion del pedido?',
 			icon: 'warning',
+			confirmButtonColor: '#085718',
 		});
 		if (isConfirmed) {
 			dispatch({

@@ -183,7 +183,6 @@ export const useUserActions = () => {
 		const isConfirmed = await confirmAction({
 			title: 'Confirmas la eliminación del usuario?',
 			icon: 'warning',
-			confirmButtonColor: '#085718',
 		});
 		if (isConfirmed) {
 			dispatch({

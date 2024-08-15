@@ -113,6 +113,7 @@ export const useSupplierActions = () => {
 		const isConfirmed = await confirmAction({
 			title: 'Confirmas la habilitacion del proveedor?',
 			icon: 'warning',
+			confirmButtonColor: '#085718',
 		});
 		if (isConfirmed) {
 			dispatch({

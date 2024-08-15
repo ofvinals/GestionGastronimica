@@ -117,6 +117,7 @@ export const useProductActions = () => {
 		const isConfirmed = await confirmAction({
 			title: 'Confirmas la habilitación del producto?',
 			icon: 'warning',
+			confirmButtonColor: '#085718',
 		});
 		if (isConfirmed) {
 			dispatch({
