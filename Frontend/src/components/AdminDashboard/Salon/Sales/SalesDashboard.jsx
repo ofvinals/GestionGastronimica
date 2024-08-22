@@ -1,21 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useState, useMemo, useEffect } from 'react';
 import { FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 import { Table } from '../../../../utils/Table';
 import Modals from '../../../../utils/Modals';
 import { OrderContext } from '../../../../context/OrderContext';
 import { useOrderActions } from '../../../../hooks/useOrderActions.js';
 import Loader from '../../../../utils/Loader';
 import SalesForm from './SalesForm';
+import useModal from '../../../../hooks/useModal.js';
 
 export const SalesDashboard = () => {
 	const { state } = useContext(OrderContext);
 	const { dataOrders, deleteOrderAction } = useOrderActions();
-	const [openEditModal, setOpenEditModal] = useState(false);
-	const [openAddModal, setOpenAddModal] = useState(false);
-	const [openViewModal, setOpenViewModal] = useState(false);
+
 	const [rowId, setRowId] = useState(null);
 
 	useEffect(() => {
@@ -27,24 +24,24 @@ export const SalesDashboard = () => {
 		(order) => order.orderOpen === false
 	);
 
-	// ABRE MODAL P EDITAR VENTA
-	const handleOpenEditModal = (rowId) => {
-		setOpenEditModal(true);
-		setRowId(rowId);
-	};
+	// APERTURA Y CIERRE DE MODALES
+	const {
+		isOpen: isEditModalOpen,
+		openModal: openEditModal,
+		closeModal: closeEditModal,
+	} = useModal();
 
-	// ABRE MODAL P VER ORDEN Y ENVIA PROPS ROWID
-	const handleOpenViewModal = (rowId) => {
-		setOpenViewModal(true);
-		setRowId(rowId);
-	};
+	const {
+		isOpen: isAddModalOpen,
+		openModal: openAddModal,
+		closeModal: closeAddModal,
+	} = useModal();
 
-	// CIERRA TODOS LOS MODALES. RECARGA MENUS
-	const handleCloseModal = () => {
-		setOpenEditModal(false);
-		setOpenAddModal(false);
-		setOpenViewModal(false);
-	};
+	const {
+		isOpen: isViewModalOpen,
+		openModal: openViewModal,
+		closeModal: closeViewModal,
+	} = useModal();
 
 	// FUNCION PARA CALCULAR EL TIEMPO DE OCUPACION DE LA MESA
 	const formatElapsedDuration = (elapsedDuration) => {
@@ -110,14 +107,16 @@ export const SalesDashboard = () => {
 			text: 'Ver',
 			icon: <FaEye />,
 			onClick: (row) => {
-				handleOpenViewModal(row.original._id);
+				setRowId(row.original._id);
+				openViewModal();
 			},
 		},
 		{
 			text: 'Editar',
 			icon: <FaEdit />,
 			onClick: (row) => {
-				handleOpenEditModal(row.original._id);
+				setRowId(row.original._id);
+				openEditModal();
 			},
 		},
 		{
@@ -129,62 +128,45 @@ export const SalesDashboard = () => {
 		},
 	];
 
-	const darkTheme = createTheme({
-		palette: {
-			mode: 'light',
-		},
-	});
-
 	return (
 		<>
-			{state.loading ? (
-				<Loader />
-			) : (
-				<section>
-					<div className='px-5 shadowIndex rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-around sm:justify-between drop-shadow-3xl'>
-						<h3 className=' text-white  text-xl my-3 font-semibold'>
-							Ventas
-						</h3>{' '}
-					</div>
+			<section>
+				<div className='px-5 shadowIndex rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-around sm:justify-between drop-shadow-3xl'>
+					<h3 className=' text-white  text-xl my-3 font-semibold'>
+						Ventas
+					</h3>
+				</div>
+				{state.loading ? (
+					<Loader />
+				) : (
 					<div className='table-responsive'>
-						<ThemeProvider theme={darkTheme}>
-							<CssBaseline />
-							<Table
-								columns={columns}
-								data={filteredPayOrder}
-								actions={actions}
-								initialSortColumn='tableNum'
-							/>
-						</ThemeProvider>
+						<Table
+							columns={columns}
+							data={filteredPayOrder}
+							actions={actions}
+							initialSortColumn='tableNum'
+						/>
 					</div>
-					<Modals
-						isOpen={openEditModal}
-						onClose={handleCloseModal}
-						title='Editar Venta'>
-						<SalesForm
-							rowId={rowId}
-							onClose={handleCloseModal}
-							mode='edit'
-						/>
-					</Modals>
-					<Modals
-						isOpen={openAddModal}
-						onClose={handleCloseModal}
-						title='Agregar Nueva Venta'>
-						<SalesForm onClose={handleCloseModal} mode='create' />
-					</Modals>
-					<Modals
-						isOpen={openViewModal}
-						onClose={handleCloseModal}
-						title='Ver Venta'>
-						<SalesForm
-							onClose={handleCloseModal}
-							rowId={rowId}
-							mode='view'
-						/>
-					</Modals>
-				</section>
-			)}
+				)}
+				<Modals
+					isOpen={isEditModalOpen}
+					onClose={closeEditModal}
+					title='Editar Venta'>
+					<SalesForm rowId={rowId} onClose={closeEditModal} mode='edit' />
+				</Modals>
+				<Modals
+					isOpen={isAddModalOpen}
+					onClose={closeAddModal}
+					title='Agregar Nueva Venta'>
+					<SalesForm onClose={closeAddModal} mode='create' />
+				</Modals>
+				<Modals
+					isOpen={isViewModalOpen}
+					onClose={closeViewModal}
+					title='Ver Venta'>
+					<SalesForm onClose={closeViewModal} rowId={rowId} mode='view' />
+				</Modals>
+			</section>
 		</>
 	);
 };

@@ -6,125 +6,75 @@ import { TableDashboard } from './TableDashboard';
 import { UnderConstruction } from '../UnderConstruction';
 
 export const SalonMenu = () => {
-	const [activeButton, setActiveButton] = useState('tables');
-	const [showDataTable, setShowDataTable] = useState(true);
-	const [showDataLayout, setShowDataLayout] = useState(false);
-	const [showDataSales, setShowDataSales] = useState(false);
-	const [showDataMonitor, setShowDataMonitor] = useState(false);
-	const [showDataReserv, setShowDataReserv] = useState(false);
+	const [activeComponent, setActiveComponent] = useState('tables');
 
-	const handleTable = () => {
-		setShowDataTable(true);
-		setShowDataLayout(false);
-		setShowDataSales(false);
-		setShowDataMonitor(false);
-		setShowDataReserv(false);
-	};
-
-	const handleLayout = () => {
-		setShowDataTable(false);
-		setShowDataLayout(true);
-		setShowDataSales(false);
-		setShowDataMonitor(false);
-		setShowDataReserv(false);
-	};
-
-	const handleSales = () => {
-		setShowDataTable(false);
-		setShowDataLayout(false);
-		setShowDataSales(true);
-		setShowDataMonitor(false);
-		setShowDataReserv(false);
-	};
-
-	const handleMonitor = () => {
-		setShowDataTable(false);
-		setShowDataLayout(false);
-		setShowDataSales(false);
-		setShowDataMonitor(true);
-		setShowDataReserv(false);
-	};
-
-	const handleReserv = () => {
-		setShowDataTable(false);
-		setShowDataLayout(false);
-		setShowDataSales(false);
-		setShowDataMonitor(false);
-		setShowDataReserv(true);
+	const renderComponent = () => {
+		switch (activeComponent) {
+			case 'tables':
+				return <TableDashboard />;
+			case 'layout':
+				return <MenuLayout />;
+			case 'sales':
+				return <SalesDashboard />;
+			case 'monitor':
+				return <MonitorDashboard />;
+			case 'reserv':
+				return <UnderConstruction />;
+			default:
+				return null;
+		}
 	};
 
 	return (
 		<section>
 			<div className='px-5 pt-3 shadowIndex rounded-t-md bg-slate-600 flex flex-wrap flex-row items-center justify-around'>
 				<button
-					onClick={() => {
-						handleMonitor();
-						setActiveButton('monitor');
-					}}
+					onClick={() => setActiveComponent('monitor')}
 					className={`mx-3 border-none text-white p-2 ${
-						activeButton === 'monitor'
+						activeComponent === 'monitor'
 							? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
 							: 'bg-transparent text-white hover:font-bold'
 					}`}>
 					Estado de Mesas
 				</button>
 				<button
-					onClick={() => {
-						handleTable();
-						setActiveButton('tables');
-					}}
+					onClick={() => setActiveComponent('tables')}
 					className={`mx-3 border-none text-white p-2 ${
-						activeButton === 'tables'
+						activeComponent === 'tables'
 							? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
 							: 'bg-transparent text-white hover:font-bold'
 					}`}>
 					Monitor de Salon
 				</button>
-
 				<button
-					onClick={() => {
-						handleSales();
-						setActiveButton('sales');
-					}}
+					onClick={() => setActiveComponent('sales')}
 					className={`mx-3 border-none text-white p-2 ${
-						activeButton === 'sales'
+						activeComponent === 'sales'
 							? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
 							: 'bg-transparent text-white hover:font-bold'
 					}`}>
 					Ventas
 				</button>
 				<button
-					onClick={() => {
-						handleLayout();
-						setActiveButton('layout');
-					}}
+					onClick={() => setActiveComponent('layout')}
 					className={`mx-3 border-none text-white p-2 ${
-						activeButton === 'layout'
+						activeComponent === 'layout'
 							? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
 							: 'bg-transparent text-white hover:font-bold'
 					}`}>
 					Layout de Salon
 				</button>
 				<button
-					onClick={() => {
-						handleReserv();
-						setActiveButton('reserv');
-					}}
+					onClick={() => setActiveComponent('reserv')}
 					className={`mx-3 border-none text-white p-2 ${
-						activeButton === 'reserv'
+						activeComponent === 'reserv'
 							? 'bg-slate-700 text-white rounded-t-lg shadowIndex'
 							: 'bg-transparent text-white hover:font-bold'
 					}`}>
 					Reserva de Mesas
 				</button>
 			</div>
-			<div className='w-full'>
-				{showDataTable && <TableDashboard />}
-				{showDataLayout && <MenuLayout />}
-				{showDataSales && <SalesDashboard />}
-				{showDataMonitor && <MonitorDashboard />}
-				{showDataReserv && <UnderConstruction />}
-			</div>
+			<div className='w-full'>{renderComponent()}</div>
 		</section>
 	);
 };

@@ -2,40 +2,32 @@
 /* eslint-disable react/prop-types */
 import { useContext, useMemo, useState } from 'react';
 import { FaPause, FaPlay, FaEdit, FaTrashAlt } from 'react-icons/fa';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 import { Table } from '../../../utils/Table.jsx';
 import Modals from '../../../utils/Modals.jsx';
 import { useCategoryActions } from '../../../hooks/useCategoryActions.js';
 import CategoryForm from './CategoryForm';
 import { MenuContext } from '../../../context/MenuContext';
 import Loader from '../../../utils/Loader';
+import useModal from '../../../hooks/useModal.js';
 
 export const CategoryProducts = () => {
 	const { state } = useContext(MenuContext);
-	const [openAddModal, setOpenAddModal] = useState(false);
 	const [rowId, setRowId] = useState(null);
-	const [openEditModal, setOpenEditModal] = useState(false);
 	const { deleteCategoryAction, disableCategoryAction, enableCategoryAction } =
 		useCategoryActions();
 
-	// ABRE MODAL P AGREGAR USUARIO Y ENVIA PROPS ROWID
-	const handleOpenAddModal = (rowId) => {
-		setOpenAddModal(true);
-		setRowId(rowId);
-	};
+	// APERTURA Y CIERRE DE MODALES
+	const {
+		isOpen: isEditModalOpen,
+		openModal: openEditModal,
+		closeModal: closeEditModal,
+	} = useModal();
 
-	// ABRE MODAL P EDITARR USUARIO Y ENVIA PROPS ROWID
-	const handleOpenEditModal = (rowId) => {
-		setOpenEditModal(true);
-		setRowId(rowId);
-	};
-
-	// CIERRA TODOS LOS MODALES Y ACTUALIZA CATEGORIAS
-	const handleCloseModal = () => {
-		setOpenEditModal(false);
-		setOpenAddModal(false);
-	};
+	const {
+		isOpen: isAddModalOpen,
+		openModal: openAddModal,
+		closeModal: closeAddModal,
+	} = useModal();
 
 	// ENVIA DATOS Y CONFIG DE COLUMNAS A TABLES
 	const columns = useMemo(
@@ -81,7 +73,8 @@ export const CategoryProducts = () => {
 			text: 'Editar',
 			icon: <FaEdit />,
 			onClick: (row) => {
-				handleOpenEditModal(row.original._id);
+				setRowId(row.original._id);
+				openEditModal();
 			},
 		},
 		{
@@ -93,15 +86,6 @@ export const CategoryProducts = () => {
 		},
 	];
 
-	const darkTheme = createTheme({
-		palette: {
-			mode: 'light',
-		},
-	});
-
-	if (state.loading) {
-		return <Loader />;
-	}
 	return (
 		<>
 			<div className='px-5 shadowIndex rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-around sm:justify-between'>
@@ -109,38 +93,39 @@ export const CategoryProducts = () => {
 					Categorias
 				</h3>
 				<button
-					onClick={handleOpenAddModal}
+					onClick={openAddModal}
 					className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:bg-gradient-to-b hover:from-slate-800 hover:to-slate-500 text-white  font-bold py-2 px-4 rounded'>
 					<i className='pe-2 fa-solid fa-plus'></i>
 					Agregar Categorias
 				</button>
 			</div>
-			<div className='table-responsive'>
-				<ThemeProvider theme={darkTheme}>
-					<CssBaseline />
+			{state.loading ? (
+				<Loader />
+			) : (
+				<div className='table-responsive'>
 					<Table
 						columns={columns}
 						data={state.categorys}
 						actions={actions}
 						initialSortColumn='name'
 					/>
-				</ThemeProvider>
-			</div>
+				</div>
+			)}
 			<Modals
-				isOpen={openEditModal}
-				onClose={handleCloseModal}
+				isOpen={isEditModalOpen}
+				onClose={closeEditModal}
 				title='Editar Categoria'>
 				<CategoryForm
 					rowId={rowId}
-					onClose={handleCloseModal}
+					onClose={closeEditModal}
 					mode='edit'
 				/>
 			</Modals>
 			<Modals
-				isOpen={openAddModal}
-				onClose={handleCloseModal}
+				isOpen={isAddModalOpen}
+				onClose={closeAddModal}
 				title='Agregar Nueva Categoria'>
-				<CategoryForm onClose={handleCloseModal} mode='create' />
+				<CategoryForm onClose={closeAddModal} mode='create' />
 			</Modals>
 		</>
 	);

@@ -7,41 +7,21 @@ import { PurchaseDashboard } from './Purchases/PurchaseDashboard';
 
 export const ProductsMenu = () => {
 	const [activeButton, setActiveButton] = useState('productos');
-	const [showDataProducts, setShowDataProducts] = useState(true);
-	const [showDataSuppliers, setShowDataSuppliers] = useState(false);
-	const [showDataStocks, setShowDataStocks] = useState(false);
-	const [showDataOrders, setShowDataOrders] = useState(false);
+	const [activeComponent, setActiveComponent] = useState('productos');
 
-	// ABRE SECCION PRODUCTOS Y CIERRA OTROS MODALES
-	const handleProduct = () => {
-		setShowDataProducts(true);
-		setShowDataSuppliers(false);
-		setShowDataStocks(false);
-		setShowDataOrders(false);
-	};
-
-	// ABRE SECCION PROVEEDORES Y CIERRA OTROS MODALES
-	const handleSupplier = () => {
-		setShowDataProducts(false);
-		setShowDataSuppliers(true);
-		setShowDataStocks(false);
-		setShowDataOrders(false);
-	};
-
-	// ABRE SECCION STOCK Y CIERRA OTROS MODALES
-	const handleStock = () => {
-		setShowDataProducts(false);
-		setShowDataSuppliers(false);
-		setShowDataStocks(true);
-		setShowDataOrders(false);
-	};
-
-	// ABRE SECCION PEDIDOS Y CIERRA OTROS MODALES
-	const handleOrder = () => {
-		setShowDataProducts(false);
-		setShowDataSuppliers(false);
-		setShowDataStocks(false);
-		setShowDataOrders(true);
+	const renderComponent = () => {
+		switch (activeComponent) {
+			case 'proveedores':
+				return <SupplierDashboard />;
+			case 'controlStock':
+				return <UnderConstruction />;
+			case 'order':
+				return <PurchaseDashboard />;
+			case 'productos':
+				return <ProductDashboard />;
+			default:
+				return null;
+		}
 	};
 
 	return (
@@ -49,8 +29,7 @@ export const ProductsMenu = () => {
 			<div className='px-5 pt-3 shadowIndex bg-slate-600 flex flex-wrap flex-row items-center justify-around rounded-t-md'>
 				<button
 					onClick={() => {
-						handleProduct();
-						setActiveButton('productos');
+						setActiveComponent('productos'), setActiveButton('productos');
 					}}
 					className={`mx-3 border-none text-white p-2   ${
 						activeButton === 'productos'
@@ -61,8 +40,8 @@ export const ProductsMenu = () => {
 				</button>
 				<button
 					onClick={() => {
-						handleSupplier();
-						setActiveButton('proveedores');
+						setActiveComponent('proveedores'),
+							setActiveButton('proveedores');
 					}}
 					className={`mx-3 border-none text-white p-2   ${
 						activeButton === 'proveedores'
@@ -73,8 +52,7 @@ export const ProductsMenu = () => {
 				</button>
 				<button
 					onClick={() => {
-						handleOrder();
-						setActiveButton('pedidos');
+						setActiveComponent('pedidos'), setActiveButton('pedidos');
 					}}
 					className={`mx-3 border-none text-white p-2  ${
 						activeButton === 'pedidos'
@@ -85,8 +63,8 @@ export const ProductsMenu = () => {
 				</button>
 				<button
 					onClick={() => {
-						handleStock();
-						setActiveButton('controlStock');
+						setActiveComponent('controlStock'),
+							setActiveButton('controlStock');
 					}}
 					className={`mx-3 border-none text-white p-2  ${
 						activeButton === 'controlStock'
@@ -96,12 +74,7 @@ export const ProductsMenu = () => {
 					Control de Stock
 				</button>
 			</div>
-			<div className='w-full'>
-				{showDataProducts && <ProductDashboard />}
-				{showDataSuppliers && <SupplierDashboard />}
-				{showDataOrders && <PurchaseDashboard />}
-				{showDataStocks && <UnderConstruction />}
-			</div>
+			<div className='w-full'>{renderComponent()}</div>
 		</section>
 	);
 };

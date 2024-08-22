@@ -11,87 +11,13 @@ import { OrdersMenu } from '../components/AdminDashboard/Kitchen/OrdersMenu';
 import { AuthContext } from '../context/AuthContext';
 import Loader from '../utils/Loader';
 import { useAuthActions } from '../hooks/useAuthActions';
+import { CashMenu } from '../components/AdminDashboard/cash/CashMenu';
 
 export const Admin = () => {
-	const [showDataUsers, setShowDataUsers] = useState(false);
 	const { state: authState } = useContext(AuthContext);
 	const { logout } = useAuthActions();
-	const [showDataProducts, setShowDataProducts] = useState(false);
-	const [showDataTable, setShowDataTable] = useState(false);
-	const [showDataReports, setShowDataReports] = useState(false);
-	const [showDataCash, setShowDataCash] = useState(false);
-	const [showDataMenu, setShowDataMenu] = useState(false);
-	const [showDataKitchen, setShowKitchen] = useState(false);
 	const navigate = useNavigate();
-
-	const handleUser = () => {
-		setShowDataUsers(true);
-		setShowDataProducts(false);
-		setShowDataTable(false);
-		setShowDataMenu(false);
-		setShowDataReports(false);
-		setShowKitchen(false);
-	};
-
-	const handleProduct = () => {
-		setShowDataUsers(false);
-		setShowDataProducts(true);
-		setShowDataTable(false);
-		setShowDataMenu(false);
-		setShowDataReports(false);
-		setShowDataCash(false);
-		setShowKitchen(false);
-	};
-
-	const handleSalon = () => {
-		setShowDataUsers(false);
-		setShowDataProducts(false);
-		setShowDataTable(true);
-		setShowDataMenu(false);
-		setShowDataReports(false);
-		setShowDataCash(false);
-		setShowKitchen(false);
-	};
-
-	const handleMenu = () => {
-		setShowDataUsers(false);
-		setShowDataProducts(false);
-		setShowDataTable(false);
-		setShowDataMenu(true);
-		setShowDataReports(false);
-		setShowDataCash(false);
-		setShowKitchen(false);
-	};
-
-	const handleReports = () => {
-		setShowDataUsers(false);
-		setShowDataProducts(false);
-		setShowDataTable(false);
-		setShowDataMenu(false);
-		setShowDataReports(true);
-		setShowDataCash(false);
-		setShowKitchen(false);
-	};
-
-	const handleCash = () => {
-		setShowDataUsers(false);
-		setShowDataProducts(false);
-		setShowDataTable(false);
-		setShowDataMenu(false);
-		setShowDataReports(false);
-		setShowDataCash(true);
-		setShowKitchen(false);
-	};
-
-	const handleKitchen = () => {
-		setShowDataUsers(false);
-		setShowDataProducts(false);
-		setShowDataTable(false);
-		setShowDataMenu(false);
-		setShowDataReports(false);
-		setShowDataCash(false);
-		setShowKitchen(true);
-	};
+	const [activeComponent, setActiveComponent] = useState('tables');
 
 	useEffect(() => {
 		if (authState.user.rol !== 'admin') {
@@ -99,6 +25,35 @@ export const Admin = () => {
 			navigate('/login');
 		}
 	}, [authState, navigate]);
+
+	const handleUser = () => setActiveComponent('usuarios');
+	const handleProduct = () => setActiveComponent('productos');
+	const handleMenu = () => setActiveComponent('cartaMenu');
+	const handleSalon = () => setActiveComponent('salon');
+	const handleKitchen = () => setActiveComponent('monitorCocina');
+	const handleCash = () => setActiveComponent('caja');
+	const handleReports = () => setActiveComponent('reportes');
+
+	const renderComponent = () => {
+		switch (activeComponent) {
+			case 'usuarios':
+				return <UserDashboard />;
+			case 'productos':
+				return <ProductsMenu />;
+			case 'cartaMenu':
+				return <Menu />;
+			case 'salon':
+				return <SalonMenu />;
+			case 'monitorCocina':
+				return <OrdersMenu />;
+			case 'caja':
+				return <CashMenu />;
+			case 'reportes':
+				return <UnderConstruction />;
+			default:
+				return null;
+		}
+	};
 
 	return (
 		<>
@@ -114,22 +69,14 @@ export const Admin = () => {
 							<PanelDashboard
 								handleUser={handleUser}
 								handleProduct={handleProduct}
-								handleSalon={handleSalon}
 								handleMenu={handleMenu}
+								handleSalon={handleSalon}
 								handleKitchen={handleKitchen}
 								handleReports={handleReports}
 								handleCash={handleCash}
 							/>
 						</div>
-						<div className='w-full'>
-							{showDataMenu && <Menu />}
-							{showDataUsers && <UserDashboard />}
-							{showDataProducts && <ProductsMenu />}
-							{showDataTable && <SalonMenu />}
-							{showDataKitchen && <OrdersMenu />}
-							{showDataReports && <UnderConstruction />}
-							{showDataCash && <UnderConstruction />}
-						</div>
+						<div className='w-full'>{renderComponent()}</div>
 					</div>
 				</div>
 			)}

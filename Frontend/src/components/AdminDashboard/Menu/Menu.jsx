@@ -4,20 +4,18 @@ import { CategoryProducts } from '../Categorys/CategoryDashboard';
 import '../../../css/Custom.css';
 
 export const Menu = () => {
+	const [activeComponent, setActiveComponent] = useState('menu');
 	const [activeButton, setActiveButton] = useState('menu');
-	const [showDataCategpry, setShowDataCategpry] = useState(false);
-	const [showDataMenu, setShowDataMenu] = useState(true);
 
-	// ABRE SUBMENU CATEGORIAS Y CIERRA MENU
-	const handleCategory = () => {
-		setShowDataCategpry(true);
-		setShowDataMenu(false);
-	};
-
-	// ABRE SUBMENU MENU Y CIERRA CATEGORUAS
-	const handleMenu = () => {
-		setShowDataCategpry(false);
-		setShowDataMenu(true);
+	const renderComponent = () => {
+		switch (activeComponent) {
+			case 'menu':
+				return <MenuDashboard />;
+			case 'category':
+				return <CategoryProducts />;
+			default:
+				return null;
+		}
 	};
 
 	return (
@@ -25,8 +23,7 @@ export const Menu = () => {
 			<div className='px-5 pt-3 shadowIndex rounded-t-md bg-slate-600 flex flex-wrap flex-row items-end justify-around'>
 				<button
 					onClick={() => {
-						handleMenu();
-						setActiveButton('menu');
+						setActiveComponent('menu'), setActiveButton('menu');
 					}}
 					className={`mx-3 border-none text-white p-2   ${
 						activeButton === 'menu'
@@ -37,8 +34,8 @@ export const Menu = () => {
 				</button>
 				<button
 					onClick={() => {
-						handleCategory();
-						setActiveButton('categorias');
+						setActiveComponent('categorias'),
+							setActiveButton('categorias');
 					}}
 					className={`mx-3  border-none text-white p-2  ${
 						activeButton === 'categorias'
@@ -48,10 +45,7 @@ export const Menu = () => {
 					Categorias
 				</button>
 			</div>
-			<div className='w-full'>
-				{showDataMenu && <MenuDashboard />}
-				{showDataCategpry && <CategoryProducts />}
-			</div>
+			<div className='w-full'>{renderComponent()}</div>
 		</section>
 	);
 };

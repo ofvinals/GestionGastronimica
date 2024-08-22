@@ -5,19 +5,17 @@ import { MenuKitchen } from '../../KitchenDashboard/Executive/MenuKitchen';
 
 export const OrdersMenu = () => {
 	const [activeButton, setActiveButton] = useState('ejecucion');
-	const [showDataExecutive, setShowDataExecutive] = useState(true);
-	const [showDataOrders, setShowDataOrders] = useState(false);
+	const [activeComponent, setActiveComponent] = useState('ejecucion');
 
-	// ABRE SECCION EJECUCION COCINA Y CIERRA OTROS MODALES
-	const handleExecutive = () => {
-		setShowDataExecutive(true);
-		setShowDataOrders(false);
-	};
-
-	// ABRE SECCION ORDENES Y CIERRA OTROS MODALES
-	const handleOrder = () => {
-		setShowDataExecutive(false);
-		setShowDataOrders(true);
+	const renderComponent = () => {
+		switch (activeComponent) {
+			case 'ordenes':
+				return <OrderDashboard />;
+			case 'ejecucion':
+				return <MenuKitchen />;
+			default:
+				return null;
+		}
 	};
 
 	return (
@@ -26,8 +24,8 @@ export const OrdersMenu = () => {
 				<div className='px-5 pt-3 shadowIndex bg-slate-600 flex flex-wrap flex-row items-center justify-around rounded-t-md'>
 					<button
 						onClick={() => {
-							handleExecutive();
-							setActiveButton('ejecucion');
+							setActiveComponent('ejecucion'),
+								setActiveButton('ejecucion');
 						}}
 						className={`mx-3 border-none text-white p-2   ${
 							activeButton === 'ejecucion'
@@ -38,8 +36,7 @@ export const OrdersMenu = () => {
 					</button>
 					<button
 						onClick={() => {
-							handleOrder();
-							setActiveButton('ordenes');
+							setActiveComponent('ordenes'), setActiveButton('ordenes');
 						}}
 						className={`mx-3 border-none text-white p-2   ${
 							activeButton === 'ordenes'
@@ -49,10 +46,7 @@ export const OrdersMenu = () => {
 						Ordenes de Pedidos
 					</button>
 				</div>
-				<div className='w-full'>
-					{showDataExecutive && <MenuKitchen />}
-					{showDataOrders && <OrderDashboard />}
-				</div>
+				<div className='w-full'>{renderComponent()}</div>
 			</section>
 		</>
 	);

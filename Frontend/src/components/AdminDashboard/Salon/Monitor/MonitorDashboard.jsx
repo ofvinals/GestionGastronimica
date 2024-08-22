@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useContext, useState, useMemo } from 'react';
 import { FaEye } from 'react-icons/fa';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 import { Table } from '../../../../utils/Table';
 import Modals from '../../../../utils/Modals';
 import { OrderContext } from '../../../../context/OrderContext';
@@ -12,13 +10,13 @@ import Loader from '../../../../utils/Loader';
 import MonitorForm from './MonitorForm';
 import { DateTime } from 'luxon';
 import { useLayoutActions } from '../../../../hooks/useLayoutActions.js';
+import useModal from '../../../../hooks/useModal.js';
 
 export const MonitorDashboard = () => {
 	const { state } = useContext(OrderContext);
 	const { state: stateLayouts } = useContext(LoungeContext);
 	const { dataOrders } = useOrderActions();
 	const { loadAllLayoutAction } = useLayoutActions();
-	const [openViewModal, setOpenViewModal] = useState(false);
 	const [rowId, setRowId] = useState(null);
 
 	// CARGA LOS DATOS DE LA ORDEN y LAYOUTS EN EL STATE
@@ -51,15 +49,11 @@ export const MonitorDashboard = () => {
 	const tableCounts = countAllLayouts(stateLayouts.lounges);
 
 	// ABRE MODAL P VER ORDEN Y ENVIA PROPS ROWID
-	const handleOpenViewModal = (rowId) => {
-		setOpenViewModal(true);
-		setRowId(rowId);
-	};
-
-	// CIERRA TODOS LOS MODALES. RECARGA MENUS
-	const handleCloseModal = () => {
-		setOpenViewModal(false);
-	};
+	const {
+		isOpen: isViewModalOpen,
+		openModal: openViewModal,
+		closeModal: closeViewModal,
+	} = useModal();
 
 	// CONFIGURA COLUMNAS PARA LA TABLE
 	const columns = useMemo(
@@ -106,20 +100,11 @@ export const MonitorDashboard = () => {
 			text: 'Ver',
 			icon: <FaEye />,
 			onClick: (row) => {
-				handleOpenViewModal(row.original._id);
+				setRowId(row.original._id);
+				openViewModal();
 			},
 		},
 	];
-
-	const darkTheme = createTheme({
-		palette: {
-			mode: 'light',
-		},
-	});
-
-	if (state.loading) {
-		return <Loader />;
-	}
 
 	return (
 		<section>
@@ -132,21 +117,22 @@ export const MonitorDashboard = () => {
 					{tableCounts.totalTables}
 				</div>
 			</div>
-			<div className='table-responsive'>
-				<ThemeProvider theme={darkTheme}>
-					<CssBaseline />
+			{state.loading ? (
+				<Loader />
+			) : (
+				<div className='table-responsive'>
 					<Table
 						columns={columns}
 						data={filteredOrders}
 						actions={actions}
 					/>
-				</ThemeProvider>
-			</div>
+				</div>
+			)}
 			<Modals
-				isOpen={openViewModal}
-				onClose={handleCloseModal}
+				isOpen={isViewModalOpen}
+				onClose={closeViewModal}
 				title='Ver Venta'>
-				<MonitorForm onClose={handleCloseModal} rowId={rowId} mode='view' />
+				<MonitorForm onClose={closeViewModal} rowId={rowId} mode='view' />
 			</Modals>
 		</section>
 	);

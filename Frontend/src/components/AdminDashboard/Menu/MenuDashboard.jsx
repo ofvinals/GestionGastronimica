@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useContext, useState, useMemo } from 'react';
 import { FaPause, FaPlay, FaEdit, FaTrashAlt } from 'react-icons/fa';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 import { Table } from '../../../utils/Table';
 import Modals from '../../../utils/Modals';
 import MenuForm from '../Menu/MenuForm';
@@ -11,13 +9,12 @@ import { useMenuActions } from '../../../hooks/useMenuActions.js';
 import { Button } from 'react-bootstrap';
 import { CategorySelection } from '../Categorys/CategorySelection';
 import Loader from '../../../utils/Loader';
+import useModal from '../../../hooks/useModal.js';
 
 export const MenuDashboard = () => {
 	const { state } = useContext(MenuContext);
 	const { dataMenus, disableMenuAction, enableMenuAction, deleteMenuAction } =
 		useMenuActions();
-	const [openEditModal, setOpenEditModal] = useState(false);
-	const [openAddModal, setOpenAddModal] = useState(false);
 	const [rowId, setRowId] = useState(null);
 	const [selectedCategory, setSelectedCategory] = useState(null);
 
@@ -26,22 +23,18 @@ export const MenuDashboard = () => {
 		dataMenus();
 	}, []);
 
-	// ABRE MODAL P AGREGAR MENU
-	const handleOpenAddModal = () => {
-		setOpenAddModal(true);
-	};
+	// APERTURA Y CIERRE DE MODALES
+	const {
+		isOpen: isEditModalOpen,
+		openModal: openEditModal,
+		closeModal: closeEditModal,
+	} = useModal();
 
-	// ABRE MODAL P EDITAR MENU
-	const handleOpenEditModal = (rowId) => {
-		setOpenEditModal(true);
-		setRowId(rowId);
-	};
-
-	// CIERRA TODOS LOS MODALES. RECARGA MENUS
-	const handleCloseModal = () => {
-		setOpenEditModal(false);
-		setOpenAddModal(false);
-	};
+	const {
+		isOpen: isAddModalOpen,
+		openModal: openAddModal,
+		closeModal: closeAddModal,
+	} = useModal();
 
 	// AGARRA LA SELECCION DE CATEGORIA DEL COMPONENTE CATEGORY SELECTION Y LA CARGA EN SETSELECTEDCATEGORY P USAR EL FILTRO
 	const handleCategorySelect = (category) => {
@@ -120,7 +113,8 @@ export const MenuDashboard = () => {
 			text: 'Editar',
 			icon: <FaEdit />,
 			onClick: (row) => {
-				handleOpenEditModal(row.original._id);
+				setRowId(row.original._id);
+				openEditModal();
 			},
 		},
 		{
@@ -132,22 +126,12 @@ export const MenuDashboard = () => {
 		},
 	];
 
-	const darkTheme = createTheme({
-		palette: {
-			mode: 'light',
-		},
-	});
-
-	if (state.loading) {
-		return <Loader />;
-	}
-
 	return (
 		<section>
 			<div className='px-5 shadowIndex rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-around sm:justify-between drop-shadow-3xl'>
 				<h3 className=' text-white text-xl font-semibold'>Carta Menu</h3>{' '}
 				<Button
-					onClick={handleOpenAddModal}
+					onClick={openAddModal}
 					className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:bg-gradient-to-b hover:from-slate-800 hover:to-slate-500 text-white  font-bold py-2 px-4 rounded'>
 					<i className='pe-2 fa-solid fa-plus hover:text-slate-600'></i>
 					Agregar Menu
@@ -159,28 +143,29 @@ export const MenuDashboard = () => {
 					onCategorySelect={handleCategorySelect}
 				/>
 			</div>
-			<div className='table-responsive'>
-				<ThemeProvider theme={darkTheme}>
-					<CssBaseline />
+			{state.loading ? (
+				<Loader />
+			) : (
+				<div className='table-responsive'>
 					<Table
 						columns={columns}
 						data={filteredMenus}
 						actions={actions}
 						initialSortColumn='category'
 					/>
-				</ThemeProvider>
-			</div>
+				</div>
+			)}
 			<Modals
-				isOpen={openEditModal}
-				onClose={handleCloseModal}
+				isOpen={isEditModalOpen}
+				onClose={closeEditModal}
 				title='Editar Menú'>
-				<MenuForm rowId={rowId} onClose={handleCloseModal} mode='edit' />
+				<MenuForm rowId={rowId} onClose={closeEditModal} mode='edit' />
 			</Modals>
 			<Modals
-				isOpen={openAddModal}
-				onClose={handleCloseModal}
+				isOpen={isAddModalOpen}
+				onClose={closeAddModal}
 				title='Agregar Nuevo Menú'>
-				<MenuForm onClose={handleCloseModal} mode='create' />
+				<MenuForm onClose={closeAddModal} mode='create' />
 			</Modals>
 		</section>
 	);

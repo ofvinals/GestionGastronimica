@@ -14,7 +14,6 @@ export const PanelDashboard = ({
 }) => {
 	const [activeButton, setActiveButton] = useState('usuarios');
 
-	// ABRE LA SECCION DE USUARIOS EN CADA RECARGA DE LA PAGINA
 	useEffect(() => {
 		handleUser();
 	}, []);
@@ -68,7 +67,7 @@ export const PanelDashboard = ({
 							? 'bg-slate-600 text-white rounded-t-lg shadowIndex font-bold'
 							: 'bg-transparent text-white hover:text-black hover:font-bold'
 					}`}>
-					Salon
+					Salón
 				</button>
 				<button
 					onClick={() => {
@@ -87,7 +86,7 @@ export const PanelDashboard = ({
 						handleCash();
 						setActiveButton('caja');
 					}}
-					className={`mx-3 border-none  py-3 px-2 ${
+					className={`mx-3 border-none  py-3 px-2  ${
 						activeButton === 'caja'
 							? 'bg-slate-600 text-white rounded-t-lg shadowIndex font-bold'
 							: 'bg-transparent text-white hover:text-black hover:font-bold'

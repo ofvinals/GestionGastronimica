@@ -9,7 +9,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { Button } from 'primereact/button';
 
-// RECIBE COLUMNS, DATA Y ACTIONS DE CADA COMPONENTE
+// RECIBE COLUMNS, DATA Y ACTIONS DE CADA COMPONENTE GESTION
 export const Table = ({ columns, data, actions, initialSortColumn  }) => {
 	const table = useMaterialReactTable({
 		columns,
@@ -18,7 +18,7 @@ export const Table = ({ columns, data, actions, initialSortColumn  }) => {
 			showGlobalFilter: true,
 			sorting: initialSortColumn
 				? [{ id: initialSortColumn, desc: false }]
-				: [], // Ordenar por la columna especificada
+				: [], // Ordena por la columna especificada
 		},
 		positionGlobalFilter: 'left',
 		enableColumnFilterModes: true,
@@ -40,15 +40,7 @@ export const Table = ({ columns, data, actions, initialSortColumn  }) => {
 			shape: 'rounded',
 			variant: 'outlined',
 		},
-		// Agregar estilos personalizados a las filas
-		muiTableBodyRowProps: ({ row }) => ({
-			sx: {
-				backgroundColor: row.index % 2 === 0 ? 'white' : '#cbd5e1',
-				'&:hover': {
-					backgroundColor: row.index % 2 === 0 ? 'lightgrey' : 'grey',
-				},
-			},
-		}),
+
 		// RENDERIZA LOS BOTONES DE ACCIONES
 		renderRowActions: ({ row }) => (
 			<Box sx={{ display: 'flex', gap: '5px' }}>

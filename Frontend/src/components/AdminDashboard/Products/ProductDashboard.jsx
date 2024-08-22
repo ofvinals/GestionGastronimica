@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useContext, useState, useMemo } from 'react';
 import { FaPause, FaPlay, FaEdit, FaTrashAlt } from 'react-icons/fa';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 import { Table } from '../../../utils/Table';
 import Modals from '../../../utils/Modals';
 import ProductForm from './ProductForm';
@@ -10,6 +8,7 @@ import { ProductContext } from '../../../context/ProductContext';
 import { useProductActions } from '../../../hooks/useProductActions.js';
 import '../../../css/Custom.css';
 import Loader from '../../../utils/Loader';
+import useModal from '../../../hooks/useModal.js';
 
 export const ProductDashboard = () => {
 	const { state } = useContext(ProductContext);
@@ -19,27 +18,20 @@ export const ProductDashboard = () => {
 		enableProductAction,
 		deleteProductAction,
 	} = useProductActions();
-	const [openEditModal, setOpenEditModal] = useState(false);
-	const [openAddModal, setOpenAddModal] = useState(false);
 	const [rowId, setRowId] = useState(null);
 
-	// ABRE MODAL PARA AGREGAR
-	const handleOpenAddModal = (rowId) => {
-		setOpenAddModal(true);
-		setRowId(rowId);
-	};
+	// APERTURA Y CIERRE DE MODALES
+	const {
+		isOpen: isEditModalOpen,
+		openModal: openEditModal,
+		closeModal: closeEditModal,
+	} = useModal();
 
-	// ABRE MODAL PARA EDITAR
-	const handleOpenEditModal = (rowId) => {
-		setOpenEditModal(true);
-		setRowId(rowId);
-	};
-
-	// CIERRA MODALES
-	const handleCloseModal = () => {
-		setOpenEditModal(false);
-		setOpenAddModal(false);
-	};
+	const {
+		isOpen: isAddModalOpen,
+		openModal: openAddModal,
+		closeModal: closeAddModal,
+	} = useModal();
 
 	// CARGA DATOS DE PRODUCTOS
 	useEffect(() => {
@@ -114,7 +106,8 @@ export const ProductDashboard = () => {
 			text: 'Editar',
 			icon: <FaEdit />,
 			onClick: (row) => {
-				handleOpenEditModal(row.original._id);
+				setRowId(row.original._id);
+				openEditModal();
 			},
 		},
 		{
@@ -126,49 +119,40 @@ export const ProductDashboard = () => {
 		},
 	];
 
-	const darkTheme = createTheme({
-		palette: {
-			mode: 'light',
-		},
-	});
-
-	if (state.loading) {
-		return <Loader />;
-	}
-
 	return (
 		<>
 			<div className='px-5 bg-slate-700 shadowIndex flex flex-wrap flex-row items-center justify-around sm:justify-between rounded-t-md'>
 				<h3 className=' text-white text-xl font-semibold'>Productos</h3>{' '}
 				<button
-					onClick={handleOpenAddModal}
+					onClick={openAddModal}
 					className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:bg-gradient-to-b hover:from-slate-800 hover:to-slate-500 text-white  font-bold py-2 px-4 rounded'>
 					<i className='pe-2 fa-solid fa-plus hover:text-slate-600'></i>
 					Agregar Productos
 				</button>
 			</div>
-			<div className='table-responsive'>
-				<ThemeProvider theme={darkTheme}>
-					<CssBaseline />
+			{state.loading ? (
+				<Loader />
+			) : (
+				<div className='table-responsive'>
 					<Table
 						columns={columns}
 						data={state.products}
 						actions={actions}
 						initialSortColumn='name'
 					/>
-				</ThemeProvider>
-			</div>
+				</div>
+			)}
 			<Modals
-				isOpen={openEditModal}
-				onClose={handleCloseModal}
+				isOpen={isEditModalOpen}
+				onClose={closeEditModal}
 				title='Editar Producto'>
-				<ProductForm rowId={rowId} onClose={handleCloseModal} mode='edit' />
+				<ProductForm rowId={rowId} onClose={closeEditModal} mode='edit' />
 			</Modals>
 			<Modals
-				isOpen={openAddModal}
-				onClose={handleCloseModal}
+				isOpen={isAddModalOpen}
+				onClose={closeAddModal}
 				title='Agregar Nuevo Producto'>
-				<ProductForm onClose={handleCloseModal} mode='create' />
+				<ProductForm onClose={closeAddModal} mode='create' />
 			</Modals>
 		</>
 	);

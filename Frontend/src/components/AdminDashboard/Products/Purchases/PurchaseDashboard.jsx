@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useContext, useState, useMemo } from 'react';
 import { FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+
 import { Table } from '../../../../utils/Table.jsx';
 import Modals from '../../../../utils/Modals.jsx';
 import { ProductContext } from '../../../../context/ProductContext.jsx';
@@ -11,44 +10,36 @@ import { usePurchaseActions } from '../../../../hooks/usePurchaseActions.js';
 import Loader from '../../../../utils/Loader.jsx';
 import PurchaseForm from './PurchaseForm.jsx';
 import { DateTime } from 'luxon';
+import useModal from '../../../../hooks/useModal.js';
 
 export const PurchaseDashboard = () => {
 	const { state } = useContext(ProductContext);
 	const { dataPurchases, deletePurchaseAction } = usePurchaseActions();
-	const [openEditModal, setOpenEditModal] = useState(false);
-	const [openAddModal, setOpenAddModal] = useState(false);
 	const [rowId, setRowId] = useState(null);
-	const [openViewModal, setOpenViewModal] = useState(false);
 
 	// CARGA LOS DATOS DE PROVEEDORES
 	useEffect(() => {
 		dataPurchases();
 	}, []);
 
-	// ABRE MODAL P AGREGAR
-	const handleOpenAddModal = (rowId) => {
-		setOpenAddModal(true);
-		setRowId(rowId);
-	};
+	// APERTURA Y CIERRE DE MODALES
+	const {
+		isOpen: isEditModalOpen,
+		openModal: openEditModal,
+		closeModal: closeEditModal,
+	} = useModal();
 
-	// ABRE MODAL P EDITAR
-	const handleOpenEditModal = (rowId) => {
-		setOpenEditModal(true);
-		setRowId(rowId);
-	};
+	const {
+		isOpen: isAddModalOpen,
+		openModal: openAddModal,
+		closeModal: closeAddModal,
+	} = useModal();
 
-	// ABRE MODAL P VER ORDEN Y ENVIA PROPS ROWID
-	const handleOpenViewModal = (rowId) => {
-		setOpenViewModal(true);
-		setRowId(rowId);
-	};
-
-	// CIERRA MODALES
-	const handleCloseModal = () => {
-		setOpenEditModal(false);
-		setOpenAddModal(false);
-		setOpenViewModal(false);
-	};
+	const {
+		isOpen: isViewModalOpen,
+		openModal: openViewModal,
+		closeModal: closeViewModal,
+	} = useModal();
 
 	// CONFIGURA COLUMNS PARA LA TABLE
 	const columns = useMemo(
@@ -98,14 +89,16 @@ export const PurchaseDashboard = () => {
 			text: 'Ver',
 			icon: <FaEye />,
 			onClick: (row) => {
-				handleOpenViewModal(row.original._id);
+				setRowId(row.original._id);
+				openViewModal();
 			},
 		},
 		{
 			text: 'Editar',
 			icon: <FaEdit />,
 			onClick: (row) => {
-				handleOpenEditModal(row.original._id);
+				setRowId(row.original._id);
+				openEditModal();
 			},
 		},
 		{
@@ -117,16 +110,6 @@ export const PurchaseDashboard = () => {
 		},
 	];
 
-	const darkTheme = createTheme({
-		palette: {
-			mode: 'light',
-		},
-	});
-
-	if (state.loading) {
-		return <Loader />;
-	}
-
 	return (
 		<>
 			<div className='px-5 shadowIndex rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-around sm:justify-between'>
@@ -134,48 +117,41 @@ export const PurchaseDashboard = () => {
 					Pedidos a Proveedores
 				</h3>{' '}
 				<Button
-					onClick={handleOpenAddModal}
+					onClick={openAddModal}
 					className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:bg-gradient-to-b hover:from-slate-800 hover:to-slate-500 text-white  font-bold py-2 px-4 rounded'>
 					<i className='pe-2 fa-solid fa-plus hover:text-slate-600'></i>
 					Agregar Pedido
 				</Button>
 			</div>
-			<div className='table-responsive'>
-				<ThemeProvider theme={darkTheme}>
-					<CssBaseline />
+			{state.loading ? (
+				<Loader />
+			) : (
+				<div className='table-responsive'>
 					<Table
 						columns={columns}
 						data={state.purchases}
 						actions={actions}
 						initialSortColumn='name'
 					/>
-				</ThemeProvider>
-			</div>
+				</div>
+			)}
 			<Modals
-				isOpen={openEditModal}
-				onClose={handleCloseModal}
+				isOpen={isEditModalOpen}
+				onClose={closeEditModal}
 				title='Editar Pedido'>
-				<PurchaseForm
-					rowId={rowId}
-					onClose={handleCloseModal}
-					mode='edit'
-				/>
+				<PurchaseForm rowId={rowId} onClose={closeEditModal} mode='edit' />
 			</Modals>
 			<Modals
-				isOpen={openAddModal}
-				onClose={handleCloseModal}
+				isOpen={isAddModalOpen}
+				onClose={closeAddModal}
 				title='Agregar Nuevo Pedido'>
-				<PurchaseForm onClose={handleCloseModal} mode='create' />
+				<PurchaseForm onClose={closeAddModal} mode='create' />
 			</Modals>
 			<Modals
-				isOpen={openViewModal}
-				onClose={handleCloseModal}
+				isOpen={isViewModalOpen}
+				onClose={closeViewModal}
 				title='Ver Pedido'>
-				<PurchaseForm
-					onClose={handleCloseModal}
-					rowId={rowId}
-					mode='view'
-				/>
+				<PurchaseForm onClose={closeViewModal} rowId={rowId} mode='view' />
 			</Modals>
 		</>
 	);

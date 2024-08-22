@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useContext, useState, useMemo } from 'react';
 import { FaPause, FaPlay, FaEdit, FaTrashAlt } from 'react-icons/fa';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 import { Table } from '../../../../utils/Table';
 import Modals from '../../../../utils/Modals';
 import ProductForm from './SupplierForm';
@@ -10,6 +8,7 @@ import { ProductContext } from '../../../../context/ProductContext';
 import { Button } from 'react-bootstrap';
 import { useSupplierActions } from '../../../../hooks/useSupplierActions.js';
 import Loader from '../../../../utils/Loader';
+import useModal from '../../../../hooks/useModal.js';
 
 export const SupplierDashboard = () => {
 	const { state } = useContext(ProductContext);
@@ -19,8 +18,6 @@ export const SupplierDashboard = () => {
 		enableSupplierAction,
 		deleteSupplierAction,
 	} = useSupplierActions();
-	const [openEditModal, setOpenEditModal] = useState(false);
-	const [openAddModal, setOpenAddModal] = useState(false);
 	const [rowId, setRowId] = useState(null);
 
 	// CARGA LOS DATOS DE PROVEEDORES
@@ -28,23 +25,18 @@ export const SupplierDashboard = () => {
 		dataSuppliers();
 	}, []);
 
-	// ABRE MODAL P AGREGAR
-	const handleOpenAddModal = (rowId) => {
-		setOpenAddModal(true);
-		setRowId(rowId);
-	};
+	// APERTURA Y CIERRE DE MODALES
+	const {
+		isOpen: isEditModalOpen,
+		openModal: openEditModal,
+		closeModal: closeEditModal,
+	} = useModal();
 
-	// ABRE MODAL P EDITAR
-	const handleOpenEditModal = (rowId) => {
-		setOpenEditModal(true);
-		setRowId(rowId);
-	};
-
-	// CIERRA MODALES
-	const handleCloseModal = () => {
-		setOpenEditModal(false);
-		setOpenAddModal(false);
-	};
+	const {
+		isOpen: isAddModalOpen,
+		openModal: openAddModal,
+		closeModal: closeAddModal,
+	} = useModal();
 
 	// CONFIGURA COLUMNS PARA LA TABLE
 	const columns = useMemo(
@@ -120,7 +112,8 @@ export const SupplierDashboard = () => {
 			text: 'Editar',
 			icon: <FaEdit />,
 			onClick: (row) => {
-				handleOpenEditModal(row.original._id);
+				setRowId(row.original._id);
+				openEditModal();
 			},
 		},
 		{
@@ -132,58 +125,41 @@ export const SupplierDashboard = () => {
 		},
 	];
 
-	const darkTheme = createTheme({
-		palette: {
-			mode: 'light',
-		},
-	});
-
 	return (
 		<>
+			<div className='px-5 shadowIndex rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-around sm:justify-between'>
+				<h3 className=' text-white text-xl font-semibold'>Proveedores</h3>
+				<Button
+					onClick={openAddModal}
+					className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:bg-gradient-to-b hover:from-slate-800 hover:to-slate-500 text-white  font-bold py-2 px-4 rounded'>
+					<i className='pe-2 fa-solid fa-plus hover:text-slate-600'></i>
+					Agregar Proveedor
+				</Button>
+			</div>
 			{state.loading ? (
 				<Loader />
 			) : (
-				<>
-					<div className='px-5 shadowIndex rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-around sm:justify-between'>
-						<h3 className=' text-white text-xl font-semibold'>
-							Proveedores
-						</h3>{' '}
-						<Button
-							onClick={handleOpenAddModal}
-							className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:bg-gradient-to-b hover:from-slate-800 hover:to-slate-500 text-white  font-bold py-2 px-4 rounded'>
-							<i className='pe-2 fa-solid fa-plus hover:text-slate-600'></i>
-							Agregar Proveedor
-						</Button>
-					</div>
-					<div className='table-responsive'>
-						<ThemeProvider theme={darkTheme}>
-							<CssBaseline />
-							<Table
-								columns={columns}
-								data={state.suppliers}
-								actions={actions}
-								initialSortColumn='name'
-							/>
-						</ThemeProvider>
-					</div>
-					<Modals
-						isOpen={openEditModal}
-						onClose={handleCloseModal}
-						title='Editar Proveedor'>
-						<ProductForm
-							rowId={rowId}
-							onClose={handleCloseModal}
-							mode='edit'
-						/>
-					</Modals>
-					<Modals
-						isOpen={openAddModal}
-						onClose={handleCloseModal}
-						title='Agregar Nuevo Proveedor'>
-						<ProductForm onClose={handleCloseModal} mode='create' />
-					</Modals>
-				</>
+				<div className='table-responsive'>
+					<Table
+						columns={columns}
+						data={state.suppliers}
+						actions={actions}
+						initialSortColumn='name'
+					/>
+				</div>
 			)}
+			<Modals
+				isOpen={isEditModalOpen}
+				onClose={closeEditModal}
+				title='Editar Proveedor'>
+				<ProductForm rowId={rowId} onClose={closeEditModal} mode='edit' />
+			</Modals>
+			<Modals
+				isOpen={isAddModalOpen}
+				onClose={closeAddModal}
+				title='Agregar Nuevo Proveedor'>
+				<ProductForm onClose={closeAddModal} mode='create' />
+			</Modals>
 		</>
 	);
 };
