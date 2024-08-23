@@ -1,21 +1,26 @@
-import { useContext, useState, useMemo } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/prop-types */
+import { useContext, useState, useMemo, useEffect } from 'react';
 import { FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
-import { Table } from '../../../utils/Table';
-import Modals from '../../../utils/Modals';
-import { OrderContext } from '../../../context/OrderContext';
-import { useOrderActions } from '../../../hooks/useOrderActions.js';
-import Loader from '../../../utils/Loader';
-import CashForm from './CashForm';
+import { Table } from '../../../../utils/Table.jsx';
+import Modals from '../../../../utils/Modals.jsx';
+import { BillContext } from '../../../../context/BillContext.jsx';
+import { useBillActions } from '../../../../hooks/useBillActions.js';
+import Loader from '../../../../utils/Loader.jsx';
+import CashForm from './CashForm.jsx';
 import { DateTime } from 'luxon';
-import useModal from '../../../hooks/useModal.js';
+import useModal from '../../../../hooks/useModal.js';
+import { Button } from 'react-bootstrap';
 
-export const CashsDashboard = ({ data }) => {
-	const { state } = useContext(OrderContext);
-	const { deleteOrderAction } = useOrderActions();
-	const [activeButton, setActiveButton] = useState('');
+export const BillDashboard = () => {
+	const { state } = useContext(BillContext);
+	const { dataBills, deleteBillAction } = useBillActions();
 	const [rowId, setRowId] = useState(null);
 
-	console.log(data);
+	// CARGA LOS DATOS DE PROVEEDORES
+	useEffect(() => {
+		dataBills();
+	}, []);
 
 	// APERTURA Y CIERRE DE MODALES
 	const {
@@ -28,6 +33,12 @@ export const CashsDashboard = ({ data }) => {
 		isOpen: isViewModalOpen,
 		openModal: openViewModal,
 		closeModal: closeViewModal,
+	} = useModal();
+
+	const {
+		isOpen: isAddModalOpen,
+		openModal: openAddModal,
+		closeModal: closeAddModal,
 	} = useModal();
 
 	// CONFIGURA COLUMNAS PARA LA TABLA
@@ -103,7 +114,7 @@ export const CashsDashboard = ({ data }) => {
 			text: 'Eliminar',
 			icon: <FaTrashAlt />,
 			onClick: (row) => {
-				deleteOrderAction(row.original._id);
+				deleteBillAction(row.original._id);
 			},
 		},
 	];
@@ -111,29 +122,13 @@ export const CashsDashboard = ({ data }) => {
 	return (
 		<>
 			<section>
-				<div className='flex flex-wrap flex-row items-center justify-around m-3'>
-					<button
-						onClick={() => {
-							setActiveButton('typeFilter');
-						}}
-						className={`flex my-2 items-center text-sm font-bold py-2 px-4 rounded ${
-							activeButton === 'typeFilter'
-								? 'border-slate-500 border-2 bg-slate-300  text-slate-600 font-bold'
-								: 'border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:bg-gradient-to-b hover:from-slate-800 hover:to-slate-500 text-white shadowIndex font-bold'
-						}`}>
-						Flitrar por Tipo
-					</button>
-					<button
-						onClick={() => {
-							setActiveButton('chargeFilter');
-						}}
-						className={`flex my-2 items-center text-sm font-bold py-2 px-4 rounded ${
-							activeButton === 'chargeFilter'
-								? 'border-slate-500 border-2 bg-slate-300  text-slate-600 font-bold'
-								: 'border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:bg-gradient-to-b hover:from-slate-800 hover:to-slate-500 text-white shadowIndex font-bold'
-						}`}>
-						Flitrar por Cargos Adicionales
-					</button>
+				<div className=' border-2 border-slate-800 flex flex-wrap flex-row items-center justify-around m-3'>
+					<Button
+						onClick={openAddModal}
+						className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:bg-gradient-to-b hover:from-slate-800 hover:to-slate-500 text-white  font-bold py-2 px-4 rounded'>
+						<i className='pe-2 fa-solid fa-plus hover:text-slate-600'></i>
+						Nuevo Gasto
+					</Button>
 				</div>
 				{state.loading ? (
 					<Loader />
@@ -141,7 +136,7 @@ export const CashsDashboard = ({ data }) => {
 					<div className='table-responsive'>
 						<Table
 							columns={columns}
-							data={data}
+							data={state.bills}
 							actions={actions}
 							initialSortColumn='tableNum'
 						/>
@@ -158,6 +153,12 @@ export const CashsDashboard = ({ data }) => {
 					onClose={closeViewModal}
 					title='Ver Caja'>
 					<CashForm onClose={closeViewModal} rowId={rowId} mode='view' />
+				</Modals>
+				<Modals
+					isOpen={isAddModalOpen}
+					onClose={closeAddModal}
+					title='Ver Caja'>
+					<CashForm onClose={closeAddModal} rowId={rowId} mode='view' />
 				</Modals>
 			</section>
 		</>

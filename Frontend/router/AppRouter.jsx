@@ -14,6 +14,7 @@ import { OrderProvider } from '../src/context/OrderContext';
 import { PrimeReactProvider } from 'primereact/api';
 import PrivateRoute from './PrivateRoute';
 import { ModalProvider } from '../src/context/ModalContext';
+import { BillProvider } from '../src/context/BillContext';
 
 export const AppRouter = () => {
 	return (
@@ -26,29 +27,31 @@ export const AppRouter = () => {
 								<LoungeProvider>
 									<OrderProvider>
 										<ModalProvider>
-											<div className='bg-[#DBD7CF] min-h-screen'>
-												<Header />
-												<Routes>
-													<Route
-														path='/'
-														element={<Home />}></Route>
-													<Route
-														path='/home'
-														element={<Home />}></Route>
-													<Route element={<PrivateRoute />}>
+											<BillProvider>
+												<div className='bg-[#DBD7CF] min-h-screen'>
+													<Header />
+													<Routes>
 														<Route
-															path='/admin'
-															element={<Admin />}></Route>
+															path='/'
+															element={<Home />}></Route>
 														<Route
-															path='/server'
-															element={<Server />}></Route>
-														<Route
-															path='/kitchen'
-															element={<Kitcken />}></Route>
-													</Route>
-												</Routes>
-												<Footer />
-											</div>
+															path='/home'
+															element={<Home />}></Route>
+														<Route element={<PrivateRoute />}>
+															<Route
+																path='/admin'
+																element={<Admin />}></Route>
+															<Route
+																path='/server'
+																element={<Server />}></Route>
+															<Route
+																path='/kitchen'
+																element={<Kitcken />}></Route>
+														</Route>
+													</Routes>
+													<Footer />
+												</div>
+											</BillProvider>
 										</ModalProvider>
 									</OrderProvider>
 								</LoungeProvider>
