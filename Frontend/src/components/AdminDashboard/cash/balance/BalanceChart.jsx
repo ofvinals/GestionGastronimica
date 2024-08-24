@@ -13,7 +13,7 @@ export default function BalanceChart({ salesData, billsData, labels }) {
 			'--text-color-secondary'
 		);
 		const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
-
+console.log(billsData)
 		const data = {
 			labels,
 			datasets: [
@@ -65,7 +65,6 @@ export default function BalanceChart({ salesData, billsData, labels }) {
 				},
 			},
 		};
-
 		setChartData(data);
 		setChartOptions(options);
 	}, [salesData, billsData]);

@@ -2,7 +2,6 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable react/prop-types */
 export const OrderReducer = (state, action) => {
-	console.log(state, action);
 	switch (action.type) {
 		case 'DATA_ORDERS_PENDING':
 			return { ...state, loading: true, error: null };

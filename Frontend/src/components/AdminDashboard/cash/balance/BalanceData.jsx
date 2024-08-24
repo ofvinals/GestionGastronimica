@@ -56,10 +56,6 @@ export const BalanceData = ({
 			new Date(a.split('/').reverse().join('/')) -
 			new Date(b.split('/').reverse().join('/'))
 	);
-	console.log(labels);
-	console.log(billsMap);
-	console.log(salesMap);
-
 	const salesDataAligned = labels.map((label) => salesMap[label] || 0);
 	const billsDataAligned = labels.map((label) => billsMap[label] || 0);
 

@@ -73,3 +73,9 @@
 	box-shadow: none;
 
 }
+.p-accordion-content{
+	background-color: transparent;
+}
+.p-accordion-header-link{
+	background-color: #334155;
+}

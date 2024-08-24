@@ -9,13 +9,12 @@ import Loader from '../../../../utils/Loader.jsx';
 import CashForm from './SaleForm.jsx';
 import { DateTime } from 'luxon';
 import useModal from '../../../../hooks/useModal.js';
+import InfoSales from './InfoSales.jsx';
 
 export const SalesDashboard = ({ data, startDate, endDate }) => {
 	const { state } = useContext(OrderContext);
 	const { deleteOrderAction } = useOrderActions();
 	const [rowId, setRowId] = useState(null);
-
-	console.log(data);
 
 	// APERTURA Y CIERRE DE MODALES
 	const {
@@ -123,18 +122,24 @@ export const SalesDashboard = ({ data, startDate, endDate }) => {
 				year: 'numeric',
 		  })
 		: '';
-
+	// calcula la cantidad de ventas
 	const numberOfSales = data?.length;
+
+	// calcula la cantidad de personas en las fechas seleccionadas
 	const totalDiners = data?.reduce((acc, current) => acc + current.diners, 0);
+
+	// calcula el monto total de ventas en las fechas seleccionadas
 	const totalFinalPrice = data?.reduce((acc, current) => {
 		const price = parseFloat(current.finalPrice);
 		return acc + (isNaN(price) ? 0 : price);
 	}, 0);
 
+	// calcula el promedio de consumo por persona
 	const averageSalePerPerson = totalDiners
 		? Math.floor(totalFinalPrice / totalDiners)
 		: 0;
 
+	// calcula el promedio de venta por ordenes
 	const averageSale = numberOfSales
 		? Math.floor(totalFinalPrice / numberOfSales)
 		: 0;
@@ -181,6 +186,9 @@ export const SalesDashboard = ({ data, startDate, endDate }) => {
 						</span>
 					</div>
 				</div>
+				<div className='m-3'>
+					<InfoSales data={data} />
+				</div>
 				{state.loading ? (
 					<Loader />
 				) : (
@@ -189,7 +197,7 @@ export const SalesDashboard = ({ data, startDate, endDate }) => {
 							columns={columns}
 							data={data}
 							actions={actions}
-							initialSortColumn='date'
+							initialSortColumn='createdAt'
 						/>
 					</div>
 				)}

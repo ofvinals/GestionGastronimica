@@ -26,8 +26,8 @@ export const BalanceMenu = () => {
 		setSales(stateOrder.orders);
 		dataBills();
 		setBills(stateBill.bills);
+		handleDayBalance()
 	}, []);
-	console.log(bills, sales);
 
 	// ABRE DATEPICKER
 	const handleDayFilter = () => {
@@ -43,8 +43,8 @@ export const BalanceMenu = () => {
 		});
 		const filteredDaySale = stateOrder.orders.filter((order) => {
 			const saleDate = order.createdAt.split('T')[0];
-			return order.orderOpen === false && saleDate === today;
-		});
+			return !order.orderOpen && saleDate === today;
+		 });
 		setOpenDatePicker(false);
 		setBills(filteredDayBill);
 		setSales(filteredDaySale);
@@ -62,7 +62,9 @@ export const BalanceMenu = () => {
 			});
 			const filteredSale = stateOrder.orders.filter((order) => {
 				const saleDate = new Date(order.createdAt.split('T')[0]);
-				return order.orderOpen === false && saleDate >= start && saleDate <= end;
+				return (
+					order.orderOpen === false && saleDate >= start && saleDate <= end
+				);
 			});
 			setBills(filteredBill);
 			setSales(filteredSale);
