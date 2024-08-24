@@ -1,73 +1,100 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from 'react';
 import '../../../../css/Custom.css';
-import { useOrderActions } from '../../../../hooks/useOrderActions';
-import { SalesDashboard } from './SalesDashboard';
-import { OrderContext } from '../../../../context/OrderContext';
+import { useBillActions } from '../../../../hooks/useBillActions';
+import { BillContext } from '../../../../context/BillContext';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useOrderActions } from '../../../../hooks/useOrderActions';
+import { OrderContext } from '../../../../context/OrderContext';
+import { BalanceData } from './BalanceData';
 
-export const SaleMenu = () => {
-	const [activeButton, setActiveButton] = useState('dayCash');
-	const [data, setData] = useState([]);
+export const BalanceMenu = () => {
+	const [activeButton, setActiveButton] = useState('dayBalance');
+	const [sales, setSales] = useState([]);
+	const [bills, setBills] = useState([]);
 	const [openDatePicker, setOpenDatePicker] = useState(false);
 	const [startDate, setStartDate] = useState(new Date());
 	const [endDate, setEndDate] = useState(null);
+	const { dataBills } = useBillActions();
 	const { dataOrders } = useOrderActions();
-	const { state } = useContext(OrderContext);
+	const { state: stateOrder } = useContext(OrderContext);
+	const { state: stateBill } = useContext(BillContext);
 
 	useEffect(() => {
 		dataOrders();
-		setData(state.orders);
+		setSales(stateOrder.orders);
+		dataBills();
+		setBills(stateBill.bills);
 	}, []);
+	console.log(bills, sales);
 
 	// ABRE DATEPICKER
 	const handleDayFilter = () => {
 		setOpenDatePicker((prev) => !prev);
 	};
 
-	// FILTRA SOLO LAS ORDENES QUE ESTEN CERRADAS Y LAS DEL DIA ACTUAL
-	const handleDayCash = () => {
+	// FILTRA SOLO LAS DEL DIA ACTUAL
+	const handleDayBalance = () => {
 		const today = new Date().toISOString().split('T')[0];
-		const filteredDayCash = state.orders.filter((order) => {
-			const orderDate = order.createdAt.split('T')[0];
-			return order.orderOpen === false && orderDate === today;
+		const filteredDayBill = stateBill.bills.filter((bill) => {
+			const billDate = bill.date.split('T')[0];
+			return billDate === today;
+		});
+		const filteredDaySale = stateOrder.orders.filter((order) => {
+			const saleDate = order.createdAt.split('T')[0];
+			return order.orderOpen === false && saleDate === today;
 		});
 		setOpenDatePicker(false);
-		setData(filteredDayCash);
+		setBills(filteredDayBill);
+		setSales(filteredDaySale);
 	};
 
+	// si se selecciona fechas, filtra los gastos y ventas por esas fechas
 	const onChange = (dates) => {
 		const [start, end] = dates;
 		setStartDate(start);
 		setEndDate(end);
 		if (start && end) {
-			const filteredCash = state.orders.filter((order) => {
-				const orderDate = new Date(order.createdAt.split('T')[0]);
-				return (
-					order.orderOpen === false &&
-					orderDate >= start &&
-					orderDate <= end
-				);
+			const filteredBill = stateBill.bills.filter((bill) => {
+				const billDate = new Date(bill.date.split('T')[0]);
+				return billDate >= start && billDate <= end;
 			});
-			setData(filteredCash);
+			const filteredSale = stateOrder.orders.filter((order) => {
+				const saleDate = new Date(order.createdAt.split('T')[0]);
+				return order.orderOpen === false && saleDate >= start && saleDate <= end;
+			});
+			setBills(filteredBill);
+			setSales(filteredSale);
 		}
 	};
+
+	// calcula el total de ventas
+	const totalSales = sales?.reduce((acc, sale) => {
+		const price = parseFloat(sale.finalPrice);
+		return acc + (isNaN(price) ? 0 : price);
+	}, 0);
+
+	// calcula el total de gastos
+	const totalBills = bills?.reduce((acc, bill) => {
+		const price = parseFloat(bill.price);
+		return acc + (isNaN(price) ? 0 : price);
+	}, 0);
 
 	return (
 		<section>
 			<div className='py-2 shadowIndex w-full rounded-t-md bg-slate-700 flex flex-wrap flex-row items-center justify-around drop-shadow-3xl'>
 				<button
 					onClick={() => {
-						handleDayCash();
-						setActiveButton('dayCash');
+						handleDayBalance();
+						setActiveButton('dayBalance');
 					}}
 					className={`flex my-2 items-center text-sm font-bold py-2 px-4 rounded ${
-						activeButton === 'dayCash'
+						activeButton === 'dayBalance'
 							? 'border-slate-500 border-2 bg-slate-300  text-slate-600 font-bold'
 							: 'border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:bg-gradient-to-b hover:from-slate-800 hover:to-slate-500 text-white shadowIndex font-bold'
 					}`}>
-					Ventas del Dia
+					Balance del Dia
 				</button>
 				<button
 					onClick={() => {
@@ -100,11 +127,14 @@ export const SaleMenu = () => {
 					</>
 				)}
 			</div>
-			<div className='w-full'>
-				<SalesDashboard
-					data={data}
+			<div>
+				<BalanceData
+					totalSales={totalSales}
+					totalBills={totalBills}
 					startDate={startDate}
 					endDate={endDate}
+					sales={sales}
+					bills={bills}
 				/>
 			</div>
 		</section>

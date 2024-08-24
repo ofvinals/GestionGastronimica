@@ -6,7 +6,7 @@ import Modals from '../../../../utils/Modals.jsx';
 import { OrderContext } from '../../../../context/OrderContext.jsx';
 import { useOrderActions } from '../../../../hooks/useOrderActions.js';
 import Loader from '../../../../utils/Loader.jsx';
-import CashForm from './CashForm.jsx';
+import CashForm from './SaleForm.jsx';
 import { DateTime } from 'luxon';
 import useModal from '../../../../hooks/useModal.js';
 
@@ -123,47 +123,62 @@ export const SalesDashboard = ({ data, startDate, endDate }) => {
 				year: 'numeric',
 		  })
 		: '';
-	const numberOfSales = data.length;
+
+	const numberOfSales = data?.length;
 	const totalDiners = data?.reduce((acc, current) => acc + current.diners, 0);
-	const totalFinalPrice = data?.reduce(
-		(acc, current) => acc + current.finalPrice,
-		0
-	);
-	const averageSalePerPerson = Math.floor(totalFinalPrice / totalDiners);
-	const averageSale = Math.floor(totalFinalPrice / numberOfSales);
+	const totalFinalPrice = data?.reduce((acc, current) => {
+		const price = parseFloat(current.finalPrice);
+		return acc + (isNaN(price) ? 0 : price);
+	}, 0);
+
+	const averageSalePerPerson = totalDiners
+		? Math.floor(totalFinalPrice / totalDiners)
+		: 0;
+
+	const averageSale = numberOfSales
+		? Math.floor(totalFinalPrice / numberOfSales)
+		: 0;
 
 	return (
 		<>
 			<section>
-				<div className=' border-2 border-slate-800 flex flex-wrap flex-row items-center justify-around m-3'>
-					<div className='flex flex-wrap flex-col w-1/5 items-center justify-center text-center p-2 min-h-[160px]'>
-						<p className='font-semibold my-2 min-h-[50px]'>
-							Fecha/s Seleccionada/s
-						</p>
-						<p>
-							Del <span>{formattedStartDate}</span> al{' '}
-							<span className='min-h-[75px]'>{formattedEndDate}</span>
+				<div className=' border-2 border-slate-800 flex flex-wrap flex-row items-center justify-around text-center m-3'>
+					<div className='flex flex-wrap flex-col w-1/5 items-center justify-center  p-2 min-h-[160px]'>
+						<p className='my-2 min-h-[50px]'>Fecha/s Seleccionada/s</p>
+						<p className='flex items-center min-h-[75px]'>
+							<span className='font-semibold'>{formattedStartDate}</span>{' '}
+							- <span className='font-semibold'>{formattedEndDate}</span>
 						</p>
 					</div>
-					<div className='flex flex-wrap flex-col w-1/5 items-center justify-center text-center min-h-[160px]'>
-						<p className='font-semibold my-2 min-h-[50px] '>Personas</p>
-						<span className='min-h-[75px]'>{totalDiners}</span>
+					<div className='flex flex-wrap flex-col w-1/5 items-center justify-center min-h-[160px]'>
+						<p className='flex items-center my-2 min-h-[50px] '>
+							Personas
+						</p>
+						<span className='flex items-center font-semibold min-h-[75px]'>
+							{totalDiners}
+						</span>
 					</div>
-					<div className='flex flex-wrap flex-col w-1/5 items-center justify-center text-center min-h-[160px]'>
-						<p className='font-semibold my-2 min-h-[50px]'>
+					<div className='flex flex-wrap flex-col w-1/5 items-center justify-center min-h-[160px]'>
+						<p className='flex items-center my-2 min-h-[50px]'>
 							Promedio por persona
 						</p>
-						<span className='min-h-[75px]'>$ {averageSalePerPerson}</span>
+						<span className='flex items-center font-semibold min-h-[75px]'>
+							$ {averageSalePerPerson}
+						</span>
 					</div>
-					<div className='flex flex-wrap flex-col w-1/5 items-center justify-center text-center min-h-[160px]'>
-						<p className='font-semibold my-2 min-h-[50px]'>
+					<div className='flex flex-wrap flex-col w-1/5 items-center justify-center min-h-[160px]'>
+						<p className='flex items-center my-2 min-h-[50px]'>
 							Promedio por venta
 						</p>
-						<span className='min-h-[75px]'>$ {averageSale}</span>
+						<span className='flex items-center font-semibold min-h-[75px]'>
+							$ {averageSale}
+						</span>
 					</div>
-					<div className='flex flex-wrap flex-col w-1/5 items-center justify-center text-center min-h-[160px]'>
-						<p className='font-semibold my-2 min-h-[50px]'>Total</p>
-						<span className='min-h-[75px]'>$ {totalFinalPrice}</span>
+					<div className='flex flex-wrap flex-col w-1/5 items-center justify-center min-h-[160px]'>
+						<p className='flex items-center my-2 min-h-[50px]'>Total</p>
+						<span className='flex items-center font-semibold min-h-[75px]'>
+							$ {totalFinalPrice}
+						</span>
 					</div>
 				</div>
 				{state.loading ? (
@@ -174,7 +189,7 @@ export const SalesDashboard = ({ data, startDate, endDate }) => {
 							columns={columns}
 							data={data}
 							actions={actions}
-							initialSortColumn='tableNum'
+							initialSortColumn='date'
 						/>
 					</div>
 				)}

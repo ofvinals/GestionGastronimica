@@ -1,26 +1,22 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-import { useContext, useState, useMemo, useEffect } from 'react';
+import { useContext, useState, useMemo } from 'react';
 import { FaEye, FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { Table } from '../../../../utils/Table.jsx';
 import Modals from '../../../../utils/Modals.jsx';
 import { BillContext } from '../../../../context/BillContext.jsx';
 import { useBillActions } from '../../../../hooks/useBillActions.js';
 import Loader from '../../../../utils/Loader.jsx';
-import CashForm from './CashForm.jsx';
+import BillForm from './BillForm.jsx';
 import { DateTime } from 'luxon';
 import useModal from '../../../../hooks/useModal.js';
 import { Button } from 'react-bootstrap';
 
-export const BillDashboard = () => {
+export const BillDashboard = ({ data, startDate, endDate }) => {
 	const { state } = useContext(BillContext);
-	const { dataBills, deleteBillAction } = useBillActions();
+	const { deleteBillAction } = useBillActions();
 	const [rowId, setRowId] = useState(null);
-
-	// CARGA LOS DATOS DE PROVEEDORES
-	useEffect(() => {
-		dataBills();
-	}, []);
 
 	// APERTURA Y CIERRE DE MODALES
 	const {
@@ -46,45 +42,45 @@ export const BillDashboard = () => {
 		() => [
 			{
 				header: 'Fecha',
-				accessorKey: 'createdAt',
+				accessorKey: 'date',
 				enableColumnOrdering: false,
 				size: 10,
 				Cell: ({ row }) => {
-					const createdAt = DateTime.fromISO(row.original.createdAt, {
+					const date = DateTime.fromISO(row.original.date, {
 						zone: 'utc',
 					})
 						.setZone('America/Argentina/Buenos_Aires')
-						.toLocaleString(DateTime.DATETIME_SHORT);
-					return createdAt;
+						.toLocaleString(DateTime.DATE_SHORT);
+					return date;
 				},
 			},
 			{
-				header: 'Mesa',
-				accessorKey: 'tableNum',
+				header: 'Proveedor',
+				accessorKey: 'supplier',
 				enableColumnOrdering: false,
 				size: 5,
 			},
 			{
-				header: 'Server',
-				accessorKey: 'server',
+				header: 'Monto',
+				accessorKey: 'price',
 				enableColumnOrdering: false,
 				size: 10,
 			},
 			{
-				header: 'Monto Total',
-				accessorKey: 'finalPrice',
+				header: 'Comprobante Tipo',
+				accessorKey: 'receiptType',
+				enableColumnOrdering: false,
+				size: 10,
+			},
+			{
+				header: 'Comprobante Nº',
+				accessorKey: 'receiptNum',
 				enableColumnOrdering: false,
 				size: 10,
 			},
 			{
 				header: 'Forma de Pago',
-				accessorKey: 'orderCash',
-				enableColumnOrdering: false,
-				size: 10,
-			},
-			{
-				header: 'Tipo de Factura',
-				accessorKey: 'receipt',
+				accessorKey: 'formPay',
 				enableColumnOrdering: false,
 				size: 10,
 			},
@@ -119,46 +115,97 @@ export const BillDashboard = () => {
 		},
 	];
 
+	const formattedStartDate = startDate
+		? startDate.toLocaleDateString('es-AR', {
+				day: 'numeric',
+				month: 'long',
+				year: 'numeric',
+		  })
+		: '';
+
+	const formattedEndDate = endDate
+		? endDate.toLocaleDateString('es-AR', {
+				day: 'numeric',
+				month: 'long',
+				year: 'numeric',
+		  })
+		: '';
+
+	const numberOfBills = data?.length;
+	const totalPrice = data?.reduce(
+		(acc, current) => acc + current.price,
+		0
+	);
+
 	return (
 		<>
 			<section>
-				<div className=' border-2 border-slate-800 flex flex-wrap flex-row items-center justify-around m-3'>
+				<div className='flex flex-wrap flex-row items-center justify-around m-3'>
 					<Button
 						onClick={openAddModal}
 						className='flex my-2 items-center text-sm border border-slate-800 bg-gradient-to-b from-slate-500 to-slate-800 hover:bg-gradient-to-b hover:from-slate-800 hover:to-slate-500 text-white  font-bold py-2 px-4 rounded'>
-						<i className='pe-2 fa-solid fa-plus hover:text-slate-600'></i>
+						<i className='pe-2 pi pi-plus hover:text-slate-600'></i>
 						Nuevo Gasto
 					</Button>
 				</div>
+				<div className=' border-2 border-slate-800 flex flex-wrap flex-row items-center justify-around m-3'>
+					<div className='flex flex-wrap flex-col w-1/5 items-center justify-center text-center p-2 min-h-[160px]'>
+						<p className='flex items-center my-2 min-h-[50px]'>
+							Fecha/s Seleccionada/s
+						</p>
+						<p className='flex items-center font-semibold min-h-[75px]'>
+							<span>{formattedStartDate}</span> -{' '}
+							<span>{formattedEndDate}</span>
+						</p>
+					</div>
+					<div className='flex flex-wrap flex-col w-1/5 items-center justify-center text-center min-h-[160px]'>
+						<p className='flex items-center my-2 min-h-[50px] '>
+							Cantidad de Comprobantes
+						</p>
+						<span className='flex items-center font-semibold min-h-[75px]'>
+							{numberOfBills}
+						</span>
+					</div>
+
+					<div className='flex flex-wrap flex-col w-1/5 items-center justify-center text-center min-h-[160px]'>
+						<p className='flex items-center my-2 min-h-[50px]'>
+							Total de Gastos
+						</p>
+						<span className='flex items-center font-semibold min-h-[75px]'>
+							$ {totalPrice}
+						</span>
+					</div>
+				</div>
+
 				{state.loading ? (
 					<Loader />
 				) : (
 					<div className='table-responsive'>
 						<Table
 							columns={columns}
-							data={state.bills}
+							data={data}
 							actions={actions}
-							initialSortColumn='tableNum'
+							initialSortColumn='date'
 						/>
 					</div>
 				)}
 				<Modals
 					isOpen={isEditModalOpen}
 					onClose={closeEditModal}
-					title='Editar Caja'>
-					<CashForm rowId={rowId} onClose={closeEditModal} mode='edit' />
+					title='Editar Gasto'>
+					<BillForm rowId={rowId} onClose={closeEditModal} mode='edit' />
 				</Modals>
 				<Modals
 					isOpen={isViewModalOpen}
 					onClose={closeViewModal}
-					title='Ver Caja'>
-					<CashForm onClose={closeViewModal} rowId={rowId} mode='view' />
+					title='Ver Gasto'>
+					<BillForm onClose={closeViewModal} rowId={rowId} mode='view' />
 				</Modals>
 				<Modals
 					isOpen={isAddModalOpen}
 					onClose={closeAddModal}
-					title='Ver Caja'>
-					<CashForm onClose={closeAddModal} rowId={rowId} mode='view' />
+					title='Nuevo Gasto'>
+					<BillForm onClose={closeAddModal} rowId={rowId} mode='create' />
 				</Modals>
 			</section>
 		</>

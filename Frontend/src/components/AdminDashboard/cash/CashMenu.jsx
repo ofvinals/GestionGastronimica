@@ -2,7 +2,8 @@ import { useState } from 'react';
 import '../../../css/Custom.css';
 import { SaleMenu } from './sales/SaleMenu';
 import 'react-datepicker/dist/react-datepicker.css';
-import { BillDashboard } from './bills/BillDashboard';
+import { BillMenu } from './bills/BillMenu';
+import { BalanceMenu } from './balance/BalanceMenu';
 
 export const CashMenu = () => {
 	const [activeButton, setActiveButton] = useState('sale');
@@ -13,9 +14,9 @@ export const CashMenu = () => {
 			case 'sale':
 				return <SaleMenu />;
 			case 'bills':
-				return <BillDashboard />;
+				return <BillMenu />;
 			case 'balance':
-				return <BalanceDashboard />;
+				return <BalanceMenu />;
 			default:
 				return null;
 		}

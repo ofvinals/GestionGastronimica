@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const billSchema = new mongoose.Schema(
 	{
-		date: { type: String, require: true },
-		price: { type: String, require: true },
+		date: { type: Date, require: true },
+		price: { type: Number, require: true },
 		formPay: { type: String, require: true },
 		supplier: { type: String },
 		receiptNum: { type: String, require: true },

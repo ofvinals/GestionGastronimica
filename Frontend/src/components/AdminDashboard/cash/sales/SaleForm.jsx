@@ -1,14 +1,14 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from 'react';
-import { OrderContext } from '../../../../context/OrderContext';
+import { OrderContext } from '../../../../context/OrderContext.jsx';
 import { useForm } from 'react-hook-form';
 import { useOrderActions } from '../../../../hooks/useOrderActions.js';
 import { Form, FormSelect } from 'react-bootstrap';
 import { DateTime } from 'luxon';
 import { Button } from 'primereact/button';
 
-const CashForm = ({ rowId, onClose, mode = 'edit' }) => {
+const SaleForm = ({ rowId, onClose, mode = 'edit' }) => {
 	const [order, setOrder] = useState({});
 	const { state } = useContext(OrderContext);
 	const { editOrderAction, addOrderAction } = useOrderActions();
@@ -332,4 +332,4 @@ const CashForm = ({ rowId, onClose, mode = 'edit' }) => {
 	);
 };
 
-export default CashForm;
+export default SaleForm;

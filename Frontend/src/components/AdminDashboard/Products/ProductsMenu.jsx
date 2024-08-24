@@ -15,7 +15,7 @@ export const ProductsMenu = () => {
 				return <SupplierDashboard />;
 			case 'controlStock':
 				return <UnderConstruction />;
-			case 'order':
+			case 'pedidos':
 				return <PurchaseDashboard />;
 			case 'productos':
 				return <ProductDashboard />;
